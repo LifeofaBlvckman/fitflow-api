@@ -130,3 +130,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
+# Add django_filters to INSTALLED_APPS if not already there
+if 'django_filters' not in INSTALLED_APPS:
+    INSTALLED_APPS.append('django_filters')
+
+# Template directories for django-filter
+import django_filters
+TEMPLATES[0]['DIRS'].append(os.path.join(os.path.dirname(django_filters.__file__), 'templates'))
