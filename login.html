@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFlow · Login</title>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface2: #222222;
+            --accent: #e8f040;
+            --accent2: #f5a623;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background */
+        .background-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        /* Logo */
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+        }
+
+        .logo p {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            width: 20px;
+            height: 20px;
+            opacity: 0.5;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(232, 240, 64, 0.1);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .remember input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+        }
+
+        .forgot-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Login Button */
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent);
+            border: none;
+            border-radius: 16px;
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(232, 240, 64, 0.2);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        .login-btn.loading .spinner {
+            display: inline-block;
+        }
+
+        /* Error Message */
+        .error {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid #ff4444;
+            border-radius: 12px;
+            padding: 0.75rem;
+            color: #ff4444;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        /* Sign Up Link */
+        .signup {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .signup a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup a:hover {
+            text-decoration: underline;
+        }
+
+        /* Demo Credentials */
+        .demo {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .demo p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-credentials {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .demo-credentials span {
+            color: var(--accent);
+            font-family: monospace;
+            background: var(--surface2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 30px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 1.5rem;
+            }
+            
+            .logo h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <dotlottie-wc 
+            src="https://lottie.host/380885b7-975a-4169-8d23-e352c1385dd6/3ys2OM2UTm.lottie" 
+            style="width: 100%; height: 100%;" autoplay loop>
+        </dotlottie-wc>
+    </div>
+
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo">
+            <h1>fit<span style="color: var(--accent2);">flow</span></h1>
+            <p>Your fitness journey starts here</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Welcome back</h2>
+                <p>Log in to continue your fitness journey</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error" id="error"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">👤</div>
+                        <input type="text" id="username" placeholder="Enter your username" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">🔒</div>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                </div>
+
+                <div class="options">
+                    <label class="remember">
+                        <input type="checkbox" id="remember"> Remember me
+                    </label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span>Log In</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+
+            <div class="signup">
+                Don't have an account? <a href="register.html">Sign up</a>
+            </div>
+
+            <!-- Demo Credentials -->
+            <div class="demo">
+                <p>Demo credentials</p>
+                <div class="demo-credentials">
+                    <span>testuser</span>
+                    <span>••••••••</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        const loginBtn = document.getElementById('loginBtn');
+        const errorDiv = document.getElementById('error');
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Show loading state
+            loginBtn.classList.add('loading');
+            loginBtn.disabled = true;
+            errorDiv.classList.remove('show');
+            
+            try {
+                const result = await login(username, password);
+                
+                if (result.token) {
+                    // Save remember me preference
+                    if (document.getElementById('remember').checked) {
+                        localStorage.setItem('remember_me', 'true');
+                    }
+                    
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    showError('Invalid username or password');
+                }
+            } catch (error) {
+                showError('Login failed. Please try again.');
+                console.error('Login error:', error);
+            } finally {
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
+            }
+        });
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 3000);
+        }
+
+        // Pre-fill demo credentials if needed
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if we should show demo credentials
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('demo') === 'true') {
+                document.getElementById('username').value = 'testuser';
+                document.getElementById('password').value = 'test123';
+            }
+        });
+    </script>
+</body>
+</html>

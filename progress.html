@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFlow · Progress</title>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface2: #222222;
+            --accent: #e8f040;
+            --accent2: #f5a623;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--accent);
+        }
+
+        .profile-mini {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Page Title */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-change {
+            color: #4caf50;
+            font-size: 0.85rem;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.5rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-header h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chart-period {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .period-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .period-btn:hover,
+        .period-btn.active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* PR Section */
+        .pr-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.5rem;
+        }
+
+        .pr-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pr-header h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .pr-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .pr-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface2);
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+
+        .pr-item:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .pr-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .pr-info {
+            flex: 1;
+        }
+
+        .pr-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .pr-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .pr-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent2);
+        }
+
+        /* Recent Activity */
+        .recent-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .recent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .recent-header h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .recent-list {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .recent-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface2);
+            border-radius: 12px;
+        }
+
+        .recent-date {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            min-width: 80px;
+        }
+
+        .recent-desc {
+            flex: 1;
+        }
+
+        .recent-type {
+            font-weight: 500;
+        }
+
+        .recent-value {
+            font-weight: 700;
+            color: var(--accent2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .chart-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <div class="header">
+            <a href="dashboard.html" class="logo">FitFlow</a>
+            <div class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="workouts.html">Workouts</a>
+                <a href="progress.html" class="active">Progress</a>
+                <a href="profile.html">Profile</a>
+            </div>
+            <div class="profile-mini" onclick="window.location.href='profile.html'" id="miniAvatar">👤</div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Progress Tracking</h1>
+            <p>Monitor your fitness journey and achievements</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <dotlottie-wc src="https://lottie.host/9bd84be5-f6ed-464b-972f-96f95d8e3b1c/xQX15HPFZb.lottie" style="width: 40px; height: 40px;" autoplay loop></dotlottie-wc>
+                </div>
+                <div class="stat-label">Current Weight</div>
+                <div class="stat-value" id="currentWeight">82.5</div>
+                <div class="stat-change" id="weightChange">↓ 2.3 kg this month</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width: 40px; height: 40px;" autoplay loop></dotlottie-wc>
+                </div>
+                <div class="stat-label">Total Volume</div>
+                <div class="stat-value" id="totalVolume">45,678</div>
+                <div class="stat-change">↑ 5,432 kg</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <dotlottie-wc src="https://lottie.host/58f778cd-1c8e-47cf-9cc0-ff22a1cbfea8/FfQGJVTIHC.lottie" style="width: 40px; height: 40px;" autoplay loop></dotlottie-wc>
+                </div>
+                <div class="stat-label">Personal Records</div>
+                <div class="stat-value" id="prCount">12</div>
+                <div class="stat-change">↑ 3 this month</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <dotlottie-wc src="https://lottie.host/a579a952-df2f-4078-ab5e-8c19f1607a1f/oF6NuUpOkS.lottie" style="width: 40px; height: 40px;" autoplay loop></dotlottie-wc>
+                </div>
+                <div class="stat-label">Workout Streak</div>
+                <div class="stat-value" id="streakCount">21</div>
+                <div class="stat-change">days 🔥</div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-section">
+            <!-- Weight Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Weight Progress</h3>
+                    <div class="chart-period">
+                        <button class="period-btn active" onclick="changePeriod('week')">Week</button>
+                        <button class="period-btn" onclick="changePeriod('month')">Month</button>
+                        <button class="period-btn" onclick="changePeriod('year')">Year</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="weightChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Personal Records -->
+            <div class="pr-section">
+                <div class="pr-header">
+                    <h3>🏆 Personal Records</h3>
+                    <span style="color: var(--accent2);">View all →</span>
+                </div>
+                <div class="pr-grid" id="prList">
+                    <!-- PR items will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-section">
+            <div class="recent-header">
+                <h3>Recent Activity</h3>
+                <span style="color: var(--accent2);">View all →</span>
+            </div>
+            <div class="recent-list" id="recentActivity">
+                <!-- Recent activity will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        let weightChart;
+        
+        // Initialize chart
+        function initChart(data = [82.5, 82.1, 81.8, 81.5, 81.2, 80.9, 80.5]) {
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            
+            if (weightChart) {
+                weightChart.destroy();
+            }
+            
+            weightChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Weight (kg)',
+                        data: data,
+                        borderColor: '#e8f040',
+                        backgroundColor: 'rgba(232, 240, 64, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#f5a623',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#888888'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#888888'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load progress data
+        async function loadProgress() {
+            try {
+                const token = getToken();
+                if (!token) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Update avatar
+                const user = getUser();
+                if (user) {
+                    document.getElementById('miniAvatar').textContent = user.username.substring(0, 2).toUpperCase();
+                }
+
+                // Fetch weight entries
+                const weights = await fetchWeightEntries();
+                if (weights && weights.length > 0) {
+                    const latestWeight = weights[0].weight_kg;
+                    document.getElementById('currentWeight').textContent = latestWeight;
+                    
+                    // Calculate weight change
+                    if (weights.length > 1) {
+                        const change = (latestWeight - weights[weights.length - 1].weight_kg).toFixed(1);
+                        document.getElementById('weightChange').innerHTML = 
+                            `${change > 0 ? '↑' : '↓'} ${Math.abs(change)} kg this month`;
+                    }
+                    
+                    // Update chart with real data
+                    const last7Weights = weights.slice(0, 7).map(w => w.weight_kg).reverse();
+                    initChart(last7Weights);
+                }
+
+                // Fetch personal records
+                const prs = await fetchPersonalRecords();
+                displayPRs(prs);
+
+                // Fetch workouts for volume
+                const workouts = await fetchWorkouts();
+                if (workouts && workouts.results) {
+                    let totalVolume = 0;
+                    workouts.results.forEach(workout => {
+                        if (workout.sets) {
+                            workout.sets.forEach(set => {
+                                totalVolume += (set.weight_kg || 0) * set.sets * set.reps;
+                            });
+                        }
+                    });
+                    document.getElementById('totalVolume').textContent = totalVolume.toLocaleString();
+                    document.getElementById('prCount').textContent = prs?.length || 12;
+                    document.getElementById('streakCount').textContent = calculateStreak(workouts.results);
+                    
+                    // Display recent activity
+                    displayRecentActivity(workouts.results);
+                }
+
+            } catch (error) {
+                console.log('Using demo data:', error);
+                // Demo data
+                const demoPRs = [
+                    { exercise: 'Bench Press', value: 100.5, date: '2026-02-24', unit: 'kg' },
+                    { exercise: 'Deadlift', value: 140, date: '2026-02-20', unit: 'kg' },
+                    { exercise: 'Squat', value: 120, date: '2026-02-18', unit: 'kg' }
+                ];
+                displayPRs(demoPRs);
+                
+                const demoActivities = [
+                    { date: '2026-02-27', type: 'Workout', description: 'Full Body', value: '3,615 kg' },
+                    { date: '2026-02-26', type: 'PR', description: 'Bench Press', value: '100.5 kg' },
+                    { date: '2026-02-25', type: 'Workout', description: 'Cardio', value: '5.2 km' }
+                ];
+                displayRecentActivity(demoActivities);
+            }
+        }
+
+        function displayPRs(prs) {
+            const prList = document.getElementById('prList');
+            if (!prs || prs.length === 0) {
+                prList.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 2rem;">No personal records yet</div>';
+                return;
+            }
+            
+            prList.innerHTML = prs.slice(0, 3).map(pr => `
+                <div class="pr-item">
+                    <div class="pr-icon">
+                        <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width: 40px; height: 40px;" autoplay loop></dotlottie-wc>
+                    </div>
+                    <div class="pr-info">
+                        <div class="pr-name">${pr.exercise || 'Exercise'}</div>
+                        <div class="pr-meta">
+                            <span>${new Date(pr.date).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    <div class="pr-value">${pr.value}${pr.unit || 'kg'}</div>
+                </div>
+            `).join('');
+        }
+
+        function displayRecentActivity(activities) {
+            const recentList = document.getElementById('recentActivity');
+            if (!activities || activities.length === 0) {
+                recentList.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 2rem;">No recent activity</div>';
+                return;
+            }
+            
+            recentList.innerHTML = activities.slice(0, 5).map(activity => {
+                const date = new Date(activity.date || activity.created_at);
+                return `
+                    <div class="recent-item">
+                        <span class="recent-date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                        <span class="recent-desc">${activity.type || 'Workout'} · ${activity.description || activity.exercise || 'Training'}</span>
+                        <span class="recent-value">${activity.value || activity.duration_minutes + ' min' || ''}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function calculateStreak(workouts) {
+            // Simple streak calculation
+            return workouts?.length || 21;
+        }
+
+        function changePeriod(period) {
+            document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update chart data based on period
+            if (period === 'week') {
+                weightChart.data.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                weightChart.data.datasets[0].data = [82.5, 82.1, 81.8, 81.5, 81.2, 80.9, 80.5];
+            } else if (period === 'month') {
+                weightChart.data.labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                weightChart.data.datasets[0].data = [82.5, 81.8, 81.2, 80.5];
+            } else {
+                weightChart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+                weightChart.data.datasets[0].data = [85, 84, 83, 82, 81, 80];
+            }
+            weightChart.update();
+        }
+
+        // Initialize
+        initChart();
+        loadProgress();
+    </script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFlow · Challenges</title>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface2: #222222;
+            --accent: #e8f040;
+            --accent2: #f5a623;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--accent);
+        }
+
+        .profile-mini {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+        }
+
+        .create-btn {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+
+        .filter-tab:hover {
+            background: var(--surface2);
+        }
+
+        .filter-tab.active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* Challenges Grid */
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 5rem;
+        }
+
+        .challenge-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(232, 240, 64, 0.1);
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .challenge-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .challenge-difficulty {
+            padding: 0.25rem 0.75rem;
+            background: var(--surface2);
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .challenge-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .challenge-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .challenge-meta span {
+            color: var(--text-muted);
+        }
+
+        .challenge-meta strong {
+            color: var(--accent2);
+            margin-right: 0.25rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--surface2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .challenge-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .participants {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .join-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .join-btn:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .join-btn.joined {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <div class="header">
+            <a href="dashboard.html" class="logo">fit<span style="color: var(--accent2);">flow</span></a>
+            <div class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="workouts.html">Workouts</a>
+                <a href="progress.html">Progress</a>
+                <a href="social.html">Social</a>
+                <a href="challenges.html" class="active">Challenges</a>
+                <a href="profile.html">Profile</a>
+            </div>
+            <div class="profile-mini" onclick="window.location.href='profile.html'" id="miniAvatar">👤</div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Challenges</h1>
+            <button class="create-btn" onclick="showCreateModal()">+ Create Challenge</button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <span class="filter-tab active" onclick="filterChallenges('all')">All</span>
+            <span class="filter-tab" onclick="filterChallenges('active')">Active</span>
+            <span class="filter-tab" onclick="filterChallenges('joined')">Joined</span>
+            <span class="filter-tab" onclick="filterChallenges('completed')">Completed</span>
+        </div>
+
+        <!-- Challenges Grid -->
+        <div class="challenges-grid" id="challengesGrid">
+            <div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">Loading challenges...</div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon">🏋️</span>
+                <span>Home</span>
+            </a>
+            <a href="workouts.html" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span>Workouts</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Progress</span>
+            </a>
+            <a href="social.html" class="nav-item">
+                <span class="nav-icon">👥</span>
+                <span>Social</span>
+            </a>
+            <a href="challenges.html" class="nav-item active">
+                <span class="nav-icon">🏆</span>
+                <span>Challenges</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        let allChallenges = [];
+        let currentFilter = 'all';
+
+        async function loadChallenges() {
+            const token = getToken();
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/social/challenges/`, {
+                    headers: { 'Authorization': `Token ${token}` }
+                });
+                const data = await response.json();
+                allChallenges = data.results || data || [];
+                displayChallenges(allChallenges);
+            } catch (error) {
+                console.log('Using demo data:', error);
+                // Demo challenges
+                allChallenges = [
+                    {
+                        id: 1,
+                        title: '30-Day Pushup Challenge',
+                        description: 'Complete 100 pushups daily for 30 days',
+                        challenge_type: 'workouts',
+                        difficulty: 'beginner',
+                        target_value: 3000,
+                        start_date: '2026-03-01',
+                        end_date: '2026-03-30',
+                        participants_count: 156,
+                        is_participating: false,
+                        user_progress: { current_value: 0, progress_percentage: 0 }
+                    },
+                    {
+                        id: 2,
+                        title: 'Summer Shred',
+                        description: 'Lose 5kg in 8 weeks with cardio and strength',
+                        challenge_type: 'weight_loss',
+                        difficulty: 'intermediate',
+                        target_value: 5,
+                        start_date: '2026-03-15',
+                        end_date: '2026-05-10',
+                        participants_count: 89,
+                        is_participating: true,
+                        user_progress: { current_value: 1.2, progress_percentage: 24 }
+                    },
+                    {
+                        id: 3,
+                        title: '10,000 Steps Daily',
+                        description: 'Hit 10,000 steps every day for a month',
+                        challenge_type: 'steps',
+                        difficulty: 'beginner',
+                        target_value: 300000,
+                        start_date: '2026-03-01',
+                        end_date: '2026-03-31',
+                        participants_count: 234,
+                        is_participating: false,
+                        user_progress: { current_value: 0, progress_percentage: 0 }
+                    },
+                    {
+                        id: 4,
+                        title: 'Deadlift PR',
+                        description: 'Increase your deadlift by 20kg',
+                        challenge_type: 'volume',
+                        difficulty: 'advanced',
+                        target_value: 20,
+                        start_date: '2026-03-10',
+                        end_date: '2026-04-10',
+                        participants_count: 45,
+                        is_participating: false,
+                        user_progress: { current_value: 0, progress_percentage: 0 }
+                    }
+                ];
+                displayChallenges(allChallenges);
+            }
+        }
+
+        function displayChallenges(challenges) {
+            const grid = document.getElementById('challengesGrid');
+            
+            if (challenges.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">No challenges found</div>';
+                return;
+            }
+
+            grid.innerHTML = challenges.map(challenge => {
+                const isJoined = challenge.is_participating;
+                const progress = challenge.user_progress?.progress_percentage || 0;
+                const startDate = new Date(challenge.start_date).toLocaleDateString();
+                const endDate = new Date(challenge.end_date).toLocaleDateString();
+                
+                return `
+                    <div class="challenge-card" data-id="${challenge.id}">
+                        <div class="challenge-header">
+                            <div class="challenge-icon">
+                                <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width: 60px; height: 60px;" autoplay loop></dotlottie-wc>
+                            </div>
+                            <span class="challenge-difficulty">${challenge.difficulty}</span>
+                        </div>
+                        
+                        <h3 class="challenge-title">${challenge.title}</h3>
+                        <p class="challenge-description">${challenge.description}</p>
+                        
+                        <div class="challenge-meta">
+                            <span>🎯 Target: <strong>${challenge.target_value}</strong></span>
+                            <span>📅 ${startDate} - ${endDate}</span>
+                        </div>
+                        
+                        ${isJoined ? `
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                <span>Your progress: ${challenge.user_progress?.current_value || 0}/${challenge.target_value}</span>
+                                <span>${progress}%</span>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="challenge-footer">
+                            <div class="participants">
+                                <span>👥</span>
+                                <span>${challenge.participants_count} participants</span>
+                            </div>
+                            <button class="join-btn ${isJoined ? 'joined' : ''}" onclick="toggleJoin(${challenge.id}, this)">
+                                ${isJoined ? 'Joined' : 'Join Challenge'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function toggleJoin(challengeId, btn) {
+            const token = getToken();
+            const isJoined = btn.classList.contains('joined');
+            
+            try {
+                if (isJoined) {
+                    // Leave challenge
+                    const response = await fetch(`${API_BASE}/social/challenges/${challengeId}/leave/`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Token ${token}` }
+                    });
+                    if (response.ok) {
+                        btn.textContent = 'Join Challenge';
+                        btn.classList.remove('joined');
+                        loadChallenges(); // Reload to update progress
+                    }
+                } else {
+                    // Join challenge
+                    const response = await fetch(`${API_BASE}/social/challenges/${challengeId}/join/`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Token ${token}` }
+                    });
+                    if (response.ok) {
+                        btn.textContent = 'Joined';
+                        btn.classList.add('joined');
+                        loadChallenges(); // Reload to update progress
+                    }
+                }
+            } catch (error) {
+                console.error('Error toggling challenge:', error);
+            }
+        }
+
+        function filterChallenges(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            let filtered = allChallenges;
+            const now = new Date();
+            
+            if (filter === 'active') {
+                filtered = allChallenges.filter(c => new Date(c.end_date) >= now);
+            } else if (filter === 'joined') {
+                filtered = allChallenges.filter(c => c.is_participating);
+            } else if (filter === 'completed') {
+                filtered = allChallenges.filter(c => c.user_progress?.progress_percentage >= 100);
+            }
+            
+            displayChallenges(filtered);
+        }
+
+        function showCreateModal() {
+            alert('Challenge creation coming soon!');
+        }
+
+        // Initialize
+        loadChallenges();
+    </script>
+</body>
+</html>

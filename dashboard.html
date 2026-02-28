@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFlow · Dashboard</title>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface2: #222222;
+            --accent: #e8f040;
+            --accent2: #f5a623;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--accent);
+        }
+
+        .profile-mini {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+
+        .greeting {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .date {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(232, 240, 64, 0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+        }
+
+        .stat-title {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-trend {
+            font-size: 0.9rem;
+            color: #4caf50;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-header h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+        }
+
+        .chart-period {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .period-btn {
+            padding: 0.25rem 1rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .period-btn:hover,
+        .period-btn.active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .activity-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(232, 240, 64, 0.1);
+        }
+
+        .activity-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .activity-value {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--accent2);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .action-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .action-btn span:first-child {
+            font-size: 1.5rem;
+        }
+
+        /* Social Preview */
+        .social-preview {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .social-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .social-header h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+        }
+
+        .view-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .social-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: var(--surface2);
+            border-radius: 12px;
+        }
+
+        .social-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .social-content {
+            flex: 1;
+        }
+
+        .social-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .social-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .social-time {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card { animation: fadeInUp 0.4s ease both; }
+        .chart-section { animation: fadeInUp 0.5s 0.1s ease both; }
+        .activity-card { animation: fadeInUp 0.5s 0.2s ease both; }
+        .quick-actions { animation: fadeInUp 0.5s 0.3s ease both; }
+        .social-preview { animation: fadeInUp 0.5s 0.4s ease both; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .activity-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .greeting {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <div class="header">
+            <a href="dashboard.html" class="logo">fit<span style="color: var(--accent2);">flow</span></a>
+            <div class="nav">
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="workouts.html">Workouts</a>
+                <a href="progress.html">Progress</a>
+                <a href="social.html">Social</a>
+                <a href="profile.html">Profile</a>
+            </div>
+            <div class="profile-mini" onclick="window.location.href='profile.html'" id="miniAvatar">👤</div>
+        </div>
+
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="greeting" id="greeting">Good morning, Olaoluwa</h1>
+            <p class="date" id="date">February 28, 2026 · Ready to crush your goals</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card" onclick="window.location.href='progress.html'">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <dotlottie-wc src="https://lottie.host/9bd84be5-f6ed-464b-972f-96f95d8e3b1c/xQX15HPFZb.lottie" style="width: 48px; height: 48px;" autoplay loop></dotlottie-wc>
+                    </div>
+                    <div>
+                        <div class="stat-title">Weight</div>
+                        <div class="stat-value" id="userWeight">82.5</div>
+                    </div>
+                </div>
+                <div class="stat-trend">↓ 2 kg this month</div>
+            </div>
+
+            <div class="stat-card" onclick="window.location.href='progress.html'">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <dotlottie-wc src="https://lottie.host/01a89aaf-ba91-4896-aa0f-70fd404a0a6d/Oi7rXFIXZA.lottie" style="width: 48px; height: 48px;" autoplay loop></dotlottie-wc>
+                    </div>
+                    <div>
+                        <div class="stat-title">Calories</div>
+                        <div class="stat-value" id="caloriesBurned">5,423</div>
+                    </div>
+                </div>
+                <div class="stat-trend">This week</div>
+            </div>
+
+            <div class="stat-card" onclick="window.location.href='workouts.html'">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width: 48px; height: 48px;" autoplay loop></dotlottie-wc>
+                    </div>
+                    <div>
+                        <div class="stat-title">Workouts</div>
+                        <div class="stat-value" id="totalWorkouts">21</div>
+                    </div>
+                </div>
+                <div class="stat-trend">↑ 5 this month</div>
+            </div>
+
+            <div class="stat-card" onclick="window.location.href='social.html'">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <dotlottie-wc src="https://lottie.host/58f778cd-1c8e-47cf-9cc0-ff22a1cbfea8/FfQGJVTIHC.lottie" style="width: 48px; height: 48px;" autoplay loop></dotlottie-wc>
+                    </div>
+                    <div>
+                        <div class="stat-title">Followers</div>
+                        <div class="stat-value" id="followersCount">12</div>
+                    </div>
+                </div>
+                <div class="stat-trend">↑ 3 new</div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h3>Weight Progress</h3>
+                <div class="chart-period">
+                    <button class="period-btn active" onclick="changePeriod('week')">Week</button>
+                    <button class="period-btn" onclick="changePeriod('month')">Month</button>
+                    <button class="period-btn" onclick="changePeriod('year')">Year</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="weightChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="log-workout.html" class="action-btn">
+                <span>💪</span>
+                <span>Log Workout</span>
+            </a>
+            <a href="social.html" class="action-btn">
+                <span>👥</span>
+                <span>Social</span>
+            </a>
+            <a href="challenges.html" class="action-btn">
+                <span>🏆</span>
+                <span>Challenges</span>
+            </a>
+            <a href="profile.html" class="action-btn">
+                <span>👤</span>
+                <span>Profile</span>
+            </a>
+        </div>
+
+        <!-- Today's Activities -->
+        <h2 style="margin: 2rem 0 1rem;">Today's Activities</h2>
+        
+        <div class="activity-grid">
+            <div class="activity-card" onclick="window.location.href='workouts.html'">
+                <div class="activity-icon">
+                    <dotlottie-wc src="https://lottie.host/b12c8254-f48d-42f4-a4ad-fcc2889ffd16/1FpVhxOkds.lottie" style="width: 60px; height: 60px;" autoplay loop></dotlottie-wc>
+                </div>
+                <div class="activity-info">
+                    <h3>Morning Run</h3>
+                    <p>5.2 km · 320 kcal</p>
+                </div>
+                <div class="activity-value">Complete</div>
+            </div>
+
+            <div class="activity-card" onclick="window.location.href='workouts.html'">
+                <div class="activity-icon">
+                    <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width: 60px; height: 60px;" autoplay loop></dotlottie-wc>
+                </div>
+                <div class="activity-info">
+                    <h3>Upper Body</h3>
+                    <p>Bench Press · 60.5 kg</p>
+                </div>
+                <div class="activity-value">3×10</div>
+            </div>
+        </div>
+
+        <!-- Social Preview -->
+        <div class="social-preview">
+            <div class="social-header">
+                <h3>Social Feed</h3>
+                <a href="social.html" class="view-all">View all →</a>
+            </div>
+            <div class="social-feed" id="socialPreview">
+                <div style="text-align: center; padding: 1rem; color: var(--text-muted);">Loading social activity...</div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="dashboard.html" class="nav-item active">
+                <span class="nav-icon">🏋️</span>
+                <span>Home</span>
+            </a>
+            <a href="workouts.html" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span>Workouts</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Progress</span>
+            </a>
+            <a href="social.html" class="nav-item">
+                <span class="nav-icon">👥</span>
+                <span>Social</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        // Weight Chart
+        const ctx = document.getElementById('weightChart').getContext('2d');
+        let weightChart;
+
+        function initChart(data = [82.5, 82.1, 81.8, 81.5, 81.2, 80.9, 80.5]) {
+            if (weightChart) {
+                weightChart.destroy();
+            }
+            
+            weightChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Weight (kg)',
+                        data: data,
+                        borderColor: '#e8f040',
+                        backgroundColor: 'rgba(232, 240, 64, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#f5a623',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#888888' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#888888' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function changePeriod(period) {
+            document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (period === 'week') {
+                weightChart.data.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                weightChart.data.datasets[0].data = [82.5, 82.1, 81.8, 81.5, 81.2, 80.9, 80.5];
+            } else if (period === 'month') {
+                weightChart.data.labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                weightChart.data.datasets[0].data = [82.5, 81.8, 81.2, 80.5];
+            } else {
+                weightChart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+                weightChart.data.datasets[0].data = [85, 84, 83, 82, 81, 80];
+            }
+            weightChart.update();
+        }
+
+        // Set greeting based on time
+        function setGreeting() {
+            const hour = new Date().getHours();
+            const greeting = document.getElementById('greeting');
+            if (hour < 12) greeting.textContent = 'Good morning, Olaoluwa';
+            else if (hour < 18) greeting.textContent = 'Good afternoon, Olaoluwa';
+            else greeting.textContent = 'Good evening, Olaoluwa';
+        }
+
+        // Set current date
+        function setDate() {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date').textContent = new Date().toLocaleDateString(undefined, options) + ' · Ready to crush your goals';
+        }
+
+        // Load dashboard data
+        async function loadDashboard() {
+            const token = getToken();
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const user = getUser();
+                if (user) {
+                    document.getElementById('greeting').textContent = `Good ${getTimeOfDay()}, ${user.username}`;
+                }
+
+                const data = await fetchDashboard();
+                if (data) {
+                    if (data.current_weight) document.getElementById('userWeight').textContent = data.current_weight;
+                    if (data.total_workouts) document.getElementById('totalWorkouts').textContent = data.total_workouts;
+                    if (data.weight_history) {
+                        const weights = data.weight_history.map(w => w.weight).slice(-7);
+                        initChart(weights);
+                    }
+                }
+
+                // Fetch social data
+                const followersRes = await fetch(`${API_BASE}/social/friends/followers/`, {
+                    headers: { 'Authorization': `Token ${token}` }
+                });
+                const followers = await followersRes.json();
+                document.getElementById('followersCount').textContent = followers.length || 0;
+
+                // Fetch social feed preview
+                const feedRes = await fetch(`${API_BASE}/social/feed/`, {
+                    headers: { 'Authorization': `Token ${token}` }
+                });
+                const feed = await feedRes.json();
+                displaySocialPreview(feed.slice(0, 3));
+
+            } catch (error) {
+                console.log('Using demo data:', error);
+                initChart();
+            }
+        }
+
+        function getTimeOfDay() {
+            const hour = new Date().getHours();
+            if (hour < 12) return 'morning';
+            if (hour < 18) return 'afternoon';
+            return 'evening';
+        }
+
+        function displaySocialPreview(posts) {
+            const container = document.getElementById('socialPreview');
+            
+            if (!posts || posts.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 1rem; color: var(--text-muted);">No recent activity</div>';
+                return;
+            }
+
+            container.innerHTML = posts.map(post => `
+                <div class="social-item">
+                    <div class="social-avatar">${post.user?.username[0].toUpperCase() || 'U'}</div>
+                    <div class="social-content">
+                        <div class="social-name">${post.user?.username || 'User'}</div>
+                        <div class="social-text">${post.content || 'Shared a post'}</div>
+                    </div>
+                    <div class="social-time">${new Date(post.created_at).toLocaleDateString()}</div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        setGreeting();
+        setDate();
+        initChart();
+        loadDashboard();
+    </script>
+</body>
+</html>

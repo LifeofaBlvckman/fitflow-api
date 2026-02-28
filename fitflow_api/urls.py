@@ -1,3 +1,6 @@
+"""
+URL configuration for fitflow_api project.
+"""
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -8,6 +11,7 @@ urlpatterns = [
     path('api/auth/', include('users.urls')),
     path('api/workouts/', include('workouts.urls')),
     path('api/progress/', include('progress.urls')),
+    path('api/social/', include('social.urls')),
 ]
 
 if settings.DEBUG:

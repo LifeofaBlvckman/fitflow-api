@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Connection Test</h1>
+    <div id="status">Testing connection...</div>
+    <button onclick="testConnection()">Test Again</button>
+    
+    <div id="details" style="margin-top: 20px; padding: 10px; background: #f0f0f0;"></div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000/api/auth/register/';
+        const details = document.getElementById('details');
+        
+        async function testConnection() {
+            const status = document.getElementById('status');
+            status.innerHTML = 'Testing...';
+            details.innerHTML = '';
+            
+            try {
+                details.innerHTML += 'Attempting to fetch: ' + API_URL + '<br>';
+                
+                const response = await fetch(API_URL, {
+                    method: 'OPTIONS',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                details.innerHTML += 'Response status: ' + response.status + '<br>';
+                details.innerHTML += 'Response ok: ' + response.ok + '<br>';
+                
+                status.innerHTML = '✅ Server connected! Status: ' + response.status;
+                status.style.color = 'green';
+            } catch (error) {
+                details.innerHTML += 'Error name: ' + error.name + '<br>';
+                details.innerHTML += 'Error message: ' + error.message + '<br>';
+                details.innerHTML += 'Error stack: ' + error.stack + '<br>';
+                
+                status.innerHTML = '❌ Failed: ' + error.message;
+                status.style.color = 'red';
+                console.error(error);
+            }
+        }
+        
+        testConnection();
+    </script>
+</body>
+</html>

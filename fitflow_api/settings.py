@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-fitflow-dev-key-2026'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -29,16 +29,18 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'django_filters',
     
     # Local apps
     'users',
     'workouts',
     'progress',
+    'social',
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -127,14 +129,11 @@ REST_FRAMEWORK = {
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
 ]
 
-# Add django_filters to INSTALLED_APPS if not already there
-if 'django_filters' not in INSTALLED_APPS:
-    INSTALLED_APPS.append('django_filters')
-
-# Template directories for django-filter
-import django_filters
-TEMPLATES[0]['DIRS'].append(os.path.join(os.path.dirname(django_filters.__file__), 'templates'))
+CORS_ALLOW_ALL_ORIGINS = True  # For testing only
+CORS_ALLOW_CREDENTIALS = True

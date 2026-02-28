@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFlow · Workouts</title>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface2: #222222;
+            --accent: #e8f040;
+            --accent2: #f5a623;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--accent);
+        }
+
+        .profile-mini {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+        }
+
+        .new-workout-btn {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .workout-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1rem;
+            margin-bottom: 5rem;
+        }
+
+        .workout-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .workout-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .workout-date {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .workout-type {
+            color: var(--accent2);
+        }
+
+        .workout-exercises {
+            margin: 1rem 0;
+            color: var(--text-muted);
+        }
+
+        .workout-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .workout-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <a href="dashboard.html" class="logo">FitFlow</a>
+            <div class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="workouts.html" class="active">Workouts</a>
+                <a href="progress.html">Progress</a>
+                <a href="social.html">Social</a>
+                <a href="profile.html">Profile</a>
+            </div>
+            <div class="profile-mini" onclick="window.location.href='profile.html'" id="miniAvatar">👤</div>
+        </div>
+
+        <div class="page-header">
+            <h1>Workouts</h1>
+            <a href="log-workout.html" class="new-workout-btn">+ New Workout</a>
+        </div>
+
+        <div class="workout-grid" id="workoutGrid">
+            <div style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading workouts...</div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon">🏋️</span>
+                <span>Home</span>
+            </a>
+            <a href="workouts.html" class="nav-item active">
+                <span class="nav-icon">📋</span>
+                <span>Workouts</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Progress</span>
+            </a>
+            <a href="social.html" class="nav-item">
+                <span class="nav-icon">👥</span>
+                <span>Social</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        async function loadWorkouts() {
+            const token = getToken();
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/workouts/workouts/`, {
+                    headers: { 'Authorization': `Token ${token}` }
+                });
+                const data = await response.json();
+                displayWorkouts(data.results || []);
+            } catch (error) {
+                console.log('Using demo data:', error);
+                displayWorkouts([]);
+            }
+        }
+
+        function displayWorkouts(workouts) {
+            const grid = document.getElementById('workoutGrid');
+            
+            if (workouts.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--text-muted);">No workouts yet. Click "New Workout" to get started!</div>';
+                return;
+            }
+
+            grid.innerHTML = workouts.map(workout => `
+                <div class="workout-card" onclick="window.location.href='workout-detail.html?id=${workout.id}'">
+                    <div class="workout-header">
+                        <span class="workout-date">${new Date(workout.date).toLocaleDateString()}</span>
+                        <span class="workout-type">${workout.duration_minutes} min</span>
+                    </div>
+                    <div class="workout-exercises">
+                        ${workout.sets ? workout.sets.length + ' exercises' : 'No exercises'}
+                    </div>
+                    <div class="workout-footer">
+                        <span>💪 ${workout.sets ? workout.sets.length : 0} sets</span>
+                        <span>🔥 ${workout.total_volume || 0} kg</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        loadWorkouts();
+    </script>
+</body>
+</html>

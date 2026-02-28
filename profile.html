@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFlow · Profile</title>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface2: #222222;
+            --accent: #e8f040;
+            --accent2: #f5a623;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--accent);
+        }
+
+        .profile-mini {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--surface2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .profile-info h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-info p {
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent2);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+        }
+
+        .follow-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .follow-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .follow-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+
+        .follow-tab:hover {
+            background: var(--surface2);
+        }
+
+        .follow-tab.active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .follow-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .follow-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: var(--surface2);
+            border-radius: 12px;
+        }
+
+        .follow-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <a href="dashboard.html" class="logo">FitFlow</a>
+            <div class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="workouts.html">Workouts</a>
+                <a href="progress.html">Progress</a>
+                <a href="social.html">Social</a>
+                <a href="profile.html" class="active">Profile</a>
+            </div>
+            <div class="profile-mini" onclick="window.location.href='profile.html'" id="miniAvatar">👤</div>
+        </div>
+
+        <div class="profile-header">
+            <div class="profile-avatar" id="profileAvatar">OA</div>
+            <div class="profile-info">
+                <h2 id="profileName">Olaoluwa Adejumo</h2>
+                <p id="profileEmail">📧 prettykoke123@gmail.com</p>
+                <p id="profileJoined">📅 Member since Feb 2026</p>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value" id="statWorkouts">21</div>
+                <div class="stat-label">Workouts</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="statFollowers">12</div>
+                <div class="stat-label">Followers</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="statFollowing">8</div>
+                <div class="stat-label">Following</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="statPRs">5</div>
+                <div class="stat-label">PRs</div>
+            </div>
+        </div>
+
+        <div class="follow-section">
+            <div class="follow-tabs">
+                <span class="follow-tab active" onclick="loadFollowers()">Followers</span>
+                <span class="follow-tab" onclick="loadFollowing()">Following</span>
+            </div>
+            <div class="follow-list" id="followList">
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">Loading...</div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon">🏋️</span>
+                <span>Home</span>
+            </a>
+            <a href="workouts.html" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span>Workouts</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Progress</span>
+            </a>
+            <a href="social.html" class="nav-item">
+                <span class="nav-icon">👥</span>
+                <span>Social</span>
+            </a>
+            <a href="profile.html" class="nav-item active">
+                <span class="nav-icon">👤</span>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        async function loadProfile() {
+            const token = getToken();
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const user = getUser();
+                if (user) {
+                    document.getElementById('profileName').textContent = user.username || 'Athlete';
+                    document.getElementById('profileEmail').textContent = `📧 ${user.email || 'email@example.com'}`;
+                    const initials = (user.username || 'OA').substring(0, 2).toUpperCase();
+                    document.getElementById('profileAvatar').textContent = initials;
+                }
+
+                // Load followers and following counts
+                const followersRes = await fetch(`${API_BASE}/social/friends/followers/`, {
+                    headers: { 'Authorization': `Token ${token}` }
+                });
+                const followers = await followersRes.json();
+                document.getElementById('statFollowers').textContent = followers.length || 0;
+
+                const followingRes = await fetch(`${API_BASE}/social/friends/following/`, {
+                    headers: { 'Authorization': `Token ${token}` }
+                });
+                const following = await followingRes.json();
+                document.getElementById('statFollowing').textContent = following.length || 0;
+
+                loadFollowers();
+            } catch (error) {
+                console.log('Using demo data:', error);
+            }
+        }
+
+        async function loadFollowers() {
+            document.querySelectorAll('.follow-tab').forEach(t => t.classList.remove('active'));
+            event?.target.classList.add('active');
+            
+            try {
+                const response = await fetch(`${API_BASE}/social/friends/followers/`, {
+                    headers: { 'Authorization': `Token ${getToken()}` }
+                });
+                const followers = await response.json();
+                displayFollowList(followers);
+            } catch (error) {
+                console.error('Error loading followers:', error);
+            }
+        }
+
+        async function loadFollowing() {
+            document.querySelectorAll('.follow-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            try {
+                const response = await fetch(`${API_BASE}/social/friends/following/`, {
+                    headers: { 'Authorization': `Token ${getToken()}` }
+                });
+                const following = await response.json();
+                displayFollowList(following);
+            } catch (error) {
+                console.error('Error loading following:', error);
+            }
+        }
+
+        function displayFollowList(users) {
+            const list = document.getElementById('followList');
+            
+            if (users.length === 0) {
+                list.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No users found</div>';
+                return;
+            }
+
+            list.innerHTML = users.map(user => `
+                <div class="follow-item">
+                    <div class="follow-avatar">${user.from_user?.username[0].toUpperCase() || 'U'}</div>
+                    <div>${user.from_user?.username || 'User'}</div>
+                </div>
+            `).join('');
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>

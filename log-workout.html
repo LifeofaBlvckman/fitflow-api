@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFlow · Log Workout</title>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface2: #222222;
+            --accent: #e8f040;
+            --accent2: #f5a623;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .back-btn {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .back-btn:hover {
+            color: var(--accent);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .workout-form {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(232, 240, 64, 0.1);
+        }
+
+        .exercises-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .exercise-card {
+            background: var(--surface2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-header h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .remove-exercise {
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .sets-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .set-header {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .set-input {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .add-set-btn {
+            background: var(--surface);
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 0.75rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .add-set-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .add-exercise-btn {
+            background: transparent;
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .add-exercise-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(232, 240, 64, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+        }
+
+        .close-modal {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .exercise-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .exercise-option {
+            padding: 1rem;
+            background: var(--surface2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .exercise-option:hover {
+            border: 1px solid var(--accent);
+            transform: translateX(4px);
+        }
+
+        .exercise-option h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .exercise-option p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sets-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <a href="dashboard.html" class="logo">FitFlow</a>
+            <a href="workouts.html" class="back-btn">← Back to Workouts</a>
+        </div>
+
+        <div class="page-header">
+            <h1>Log New Workout</h1>
+        </div>
+
+        <div class="workout-form">
+            <div class="form-section">
+                <h2>📋 Workout Details</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="workoutDate" value="2026-02-28">
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (minutes)</label>
+                        <input type="number" id="duration" value="60" min="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="notes" rows="2" placeholder="How was your workout? (optional)"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercises-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="font-family: 'Syne', sans-serif; font-size: 1.2rem;">💪 Exercises</h2>
+                <span style="color: var(--text-muted);" id="exerciseCount">0 exercises</span>
+            </div>
+
+            <div id="exercisesContainer"></div>
+
+            <button class="add-exercise-btn" onclick="showExerciseModal()">
+                <span>+</span> Add Exercise
+            </button>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-secondary" onclick="window.location.href='workouts.html'">Cancel</button>
+            <button class="btn-primary" onclick="saveWorkout()">Save Workout</button>
+        </div>
+    </div>
+
+    <div class="modal" id="exerciseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select Exercise</h2>
+                <span class="close-modal" onclick="closeExerciseModal()">✕</span>
+            </div>
+            <div class="exercise-list" id="exerciseList">
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">Loading exercises...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        let exercises = [];
+        let exerciseCounter = 0;
+
+        async function loadExercises() {
+            try {
+                const data = await fetchExercises();
+                exercises = data.results || [];
+                displayExerciseList();
+            } catch (error) {
+                console.log('Using demo exercises:', error);
+                exercises = [
+                    { id: 68, name: 'Bench Press', muscle_group: 'Chest' },
+                    { id: 69, name: 'Bench Press Narrow Grip', muscle_group: 'Triceps' },
+                    { id: 66, name: 'Dumbbell Press', muscle_group: 'Chest' },
+                    { id: 73, name: 'Bent High Pulls', muscle_group: 'Traps' },
+                    { id: 4, name: 'Squat', muscle_group: 'Legs' },
+                    { id: 5, name: 'Deadlift', muscle_group: 'Back' }
+                ];
+                displayExerciseList();
+            }
+        }
+
+        function displayExerciseList() {
+            const list = document.getElementById('exerciseList');
+            list.innerHTML = exercises.map(ex => `
+                <div class="exercise-option" onclick="addExercise(${ex.id}, '${ex.name}')">
+                    <h4>${ex.name}</h4>
+                    <p>${ex.muscle_group || 'General'}</p>
+                </div>
+            `).join('');
+        }
+
+        function addExercise(exerciseId, exerciseName) {
+            const container = document.getElementById('exercisesContainer');
+            const exerciseId_num = ++exerciseCounter;
+            
+            const exerciseHtml = `
+                <div class="exercise-card" id="exercise-${exerciseId_num}" data-exercise-id="${exerciseId}" data-exercise-name="${exerciseName}">
+                    <div class="exercise-header">
+                        <h3>${exerciseName}</h3>
+                        <span class="remove-exercise" onclick="removeExercise(${exerciseId_num})">✕</span>
+                    </div>
+                    
+                    <div class="sets-container" id="sets-${exerciseId_num}">
+                        <div class="sets-grid" style="margin-bottom: 0.5rem;">
+                            <div class="set-header">Set</div>
+                            <div class="set-header">Weight (kg)</div>
+                            <div class="set-header">Reps</div>
+                            <div class="set-header">Rest (s)</div>
+                            <div></div>
+                        </div>
+                        
+                        <div class="set-row" id="set-${exerciseId_num}-1">
+                            <div class="sets-grid">
+                                <input type="text" class="set-input" value="1" readonly>
+                                <input type="number" class="set-input weight-input" value="60" step="0.5" min="0">
+                                <input type="number" class="set-input reps-input" value="10" min="1">
+                                <input type="number" class="set-input rest-input" value="60" min="0">
+                                <span class="remove-exercise" onclick="removeSet(${exerciseId_num}, 1)" style="font-size: 1rem;">✕</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="add-set-btn" onclick="addSet(${exerciseId_num})">
+                        <span>+</span> Add Set
+                    </button>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', exerciseHtml);
+            updateExerciseCount();
+            closeExerciseModal();
+        }
+
+        function addSet(exerciseId) {
+            const container = document.getElementById(`sets-${exerciseId}`);
+            const setCount = container.querySelectorAll('.set-row').length + 1;
+            
+            const setHtml = `
+                <div class="set-row" id="set-${exerciseId}-${setCount}" style="margin-top: 0.5rem;">
+                    <div class="sets-grid">
+                        <input type="text" class="set-input" value="${setCount}" readonly>
+                        <input type="number" class="set-input weight-input" value="60" step="0.5" min="0">
+                        <input type="number" class="set-input reps-input" value="10" min="1">
+                        <input type="number" class="set-input rest-input" value="60" min="0">
+                        <span class="remove-exercise" onclick="removeSet(${exerciseId}, ${setCount})" style="font-size: 1rem;">✕</span>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', setHtml);
+        }
+
+        function removeExercise(exerciseId) {
+            document.getElementById(`exercise-${exerciseId}`).remove();
+            updateExerciseCount();
+        }
+
+        function removeSet(exerciseId, setId) {
+            document.getElementById(`set-${exerciseId}-${setId}`).remove();
+        }
+
+        function updateExerciseCount() {
+            const count = document.querySelectorAll('.exercise-card').length;
+            document.getElementById('exerciseCount').textContent = `${count} exercises`;
+        }
+
+        function showExerciseModal() {
+            document.getElementById('exerciseModal').classList.add('active');
+        }
+
+        function closeExerciseModal() {
+            document.getElementById('exerciseModal').classList.remove('active');
+        }
+
+        async function saveWorkout() {
+            try {
+                // Validate at least one exercise
+                const exerciseCards = document.querySelectorAll('.exercise-card');
+                if (exerciseCards.length === 0) {
+                    alert('Please add at least one exercise');
+                    return;
+                }
+
+                // Get workout basic info
+                const workoutData = {
+                    date: document.getElementById('workoutDate').value,
+                    duration_minutes: parseInt(document.getElementById('duration').value) || 60,
+                    notes: document.getElementById('notes').value || ''
+                };
+
+                console.log('Creating workout:', workoutData);
+                
+                // Create workout
+                const workout = await createWorkout(workoutData);
+                console.log('Workout created:', workout);
+                
+                if (!workout || !workout.id) {
+                    throw new Error('Failed to create workout');
+                }
+                
+                // Add sets for each exercise
+                for (const card of exerciseCards) {
+                    const exerciseId = card.dataset.exerciseId;
+                    const exerciseName = card.dataset.exerciseName;
+                    
+                    console.log(`Adding sets for ${exerciseName} (ID: ${exerciseId})`);
+                    
+                    const sets = card.querySelectorAll('.set-row');
+                    let orderIndex = 1;
+                    
+                    for (const set of sets) {
+                        const weight = set.querySelector('.weight-input').value;
+                        const reps = set.querySelector('.reps-input').value;
+                        const rest = set.querySelector('.rest-input').value;
+                        
+                        const setData = {
+                            exercise: parseInt(exerciseId),
+                            sets: 1,
+                            reps: parseInt(reps),
+                            weight_kg: parseFloat(weight),
+                            rest_seconds: parseInt(rest) || 60,
+                            order_index: orderIndex++
+                        };
+                        
+                        console.log('Adding set:', setData);
+                        
+                        const result = await addSet(workout.id, setData);
+                        console.log('Set added:', result);
+                    }
+                }
+                
+                // Success - redirect to workouts page
+                window.location.href = 'workouts.html?success=true';
+                
+            } catch (error) {
+                console.error('Save error details:', error);
+                alert('Error saving workout. Check console for details.');
+            }
+        }
+
+        document.getElementById('workoutDate').value = new Date().toISOString().split('T')[0];
+        loadExercises();
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('exerciseModal');
+            if (event.target === modal) {
+                closeExerciseModal();
+            }
+        }
+    </script>
+</body>
+</html>
