@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: fitflow-api
+    runtime: python
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput --settings=fitflow_api.render_settings
+    startCommand: |
+      python manage.py migrate --settings=fitflow_api.render_settings && 
+      gunicorn fitflow_api.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: .onrender.com,localhost,127.0.0.1
