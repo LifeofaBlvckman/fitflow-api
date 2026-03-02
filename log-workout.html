@@ -1,614 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitFlow · Log Workout</title>
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FitFlow · Log Workout</title>
+<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--surface:#141414;--surface2:#1c1c1c;--surface3:#242424;--accent:#d4f542;--accent-dim:rgba(212,245,66,.07);--accent-glow:rgba(212,245,66,.18);--orange:#ff6b2b;--blue:#4f8ef7;--text:#f0f0ea;--text-muted:#5a5a5a;--text-soft:#909090;--border:rgba(255,255,255,.055);--border-accent:rgba(212,245,66,.28);--radius:22px;--radius-sm:14px;--sw:248px}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
-        :root {
-            --bg: #0f0f0f;
-            --surface: #1a1a1a;
-            --surface2: #222222;
-            --accent: #e8f040;
-            --accent2: #f5a623;
-            --text: #ffffff;
-            --text-muted: #888888;
-            --border: #2a2a2a;
-        }
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.ambient::before{content:'';position:absolute;top:-300px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(212,245,66,.05) 0%,transparent 65%)}
+.ambient::after{content:'';position:absolute;bottom:-200px;left:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,107,43,.04) 0%,transparent 65%)}
+.app{position:relative;z-index:1;display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh}
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 1rem;
-        }
+/* Sidebar */
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:1.75rem 1rem 1.5rem;border-right:1px solid var(--border);background:rgba(10,10,10,.93);backdrop-filter:blur(24px);animation:slideIn .4s ease both}
+@keyframes slideIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+.logo{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;letter-spacing:-.02em;color:var(--accent);text-decoration:none;display:block;margin-bottom:2.5rem;line-height:1}
+.logo em{color:var(--orange);font-style:normal}
+.nav-label{font-size:.62rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--text-muted);padding:0 .5rem;margin:1.25rem 0 .35rem;display:block}
+.nav-link{display:flex;align-items:center;gap:.75rem;padding:.68rem .875rem;border-radius:var(--radius-sm);color:var(--text-soft);text-decoration:none;font-size:.875rem;font-weight:500;transition:all .18s ease;margin-bottom:.1rem}
+.nav-link .ni{width:18px;text-align:center;font-size:.95rem;flex-shrink:0}
+.nav-link:hover{color:var(--text);background:var(--surface2)}
+.nav-link.active{color:#000;background:var(--accent);font-weight:700}
+.badge{margin-left:auto;background:var(--orange);color:#fff;font-size:.6rem;font-weight:800;padding:.1rem .45rem;border-radius:99px}
+.sidebar-bottom{margin-top:auto}
+.user-card{display:flex;align-items:center;gap:.75rem;padding:.75rem .875rem;background:var(--surface2);border-radius:var(--radius-sm);cursor:pointer;border:1px solid var(--border);transition:background .2s;text-decoration:none}
+.user-card:hover{background:var(--surface3)}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--orange));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#000;flex-shrink:0}
+.user-name{font-size:.825rem;font-weight:600;color:var(--text)}.user-sub{font-size:.68rem;color:var(--text-muted)}
 
-        .app {
-            width: 100%;
-            max-width: 800px;
-        }
+/* Main */
+.main{padding:2.25rem 2.5rem 6rem;max-width:860px;overflow-x:hidden}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.25rem;gap:1rem}
+.back-btn{display:flex;align-items:center;gap:.5rem;color:var(--text-muted);text-decoration:none;font-size:.875rem;font-weight:600;transition:color .2s;padding:.5rem 0}
+.back-btn:hover{color:var(--accent)}
+.page-title{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+.page-sub{color:var(--text-soft);font-size:.875rem;margin-top:.35rem}
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem 0;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 2rem;
-        }
+.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.6rem 1.25rem;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.825rem;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{background:#c8e532;transform:translateY(-1px);box-shadow:0 6px 22px var(--accent-glow)}
+.btn-ghost{background:var(--surface2);color:var(--text-soft);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface3);color:var(--text)}
+.btn-danger{background:rgba(248,113,113,.1);color:#f87171;border:1px solid rgba(248,113,113,.2)}
+.btn-danger:hover{background:rgba(248,113,113,.18)}
 
-        .logo {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-decoration: none;
-        }
+/* Panel */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;margin-bottom:1.25rem;animation:fadeUp .4s ease both}
+.panel:nth-child(1){animation-delay:.05s}.panel:nth-child(2){animation-delay:.1s}.panel:nth-child(3){animation-delay:.15s}
+.panel-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem}
 
-        .back-btn {
-            color: var(--text-muted);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: color 0.2s;
-        }
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.45rem}
+.form-input{width:100%;padding:.75rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:all .2s}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(212,245,66,.1)}
+.form-input::placeholder{color:var(--text-muted);opacity:.6}
 
-        .back-btn:hover {
-            color: var(--accent);
-        }
+/* Exercise cards */
+.exercises-list{display:flex;flex-direction:column;gap:.875rem;margin-bottom:1rem}
 
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
+.exercise-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.25rem;position:relative;animation:fadeUp .35s ease both}
+.exercise-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.exercise-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
+.exercise-muscle{font-size:.7rem;padding:.2rem .625rem;border-radius:99px;background:var(--accent-dim);color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
 
-        .page-header h1 {
-            font-family: 'Syne', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-        }
+/* Sets table */
+.sets-header{display:grid;grid-template-columns:40px 1fr 1fr 1fr 36px;gap:.5rem;margin-bottom:.4rem;padding:0 .25rem}
+.sh-label{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);text-align:center}
+.set-row{display:grid;grid-template-columns:40px 1fr 1fr 1fr 36px;gap:.5rem;align-items:center;margin-bottom:.4rem}
+.set-num{font-size:.75rem;font-weight:700;color:var(--text-muted);text-align:center}
+.set-input{padding:.5rem .625rem;background:var(--surface3);border:1px solid var(--border);border-radius:var(--radius-xs, 8px);font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;text-align:center;transition:all .18s;width:100%}
+.set-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(212,245,66,.1)}
+.remove-set-btn{width:28px;height:28px;border-radius:50%;background:transparent;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .18s;flex-shrink:0}
+.remove-set-btn:hover{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3);color:#f87171}
 
-        .workout-form {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
+.add-set-btn{width:100%;padding:.6rem;background:transparent;border:1px dashed var(--border);border-radius:var(--radius-sm);color:var(--text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;transition:all .2s;margin-top:.25rem;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.add-set-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-        .form-section {
-            margin-bottom: 2rem;
-        }
+.remove-exercise-btn{padding:.35rem .75rem;border-radius:99px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.15);color:#f87171;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.remove-exercise-btn:hover{background:rgba(248,113,113,.15)}
 
-        .form-section h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+/* Add exercise button */
+.add-exercise-btn{width:100%;padding:1.25rem;background:transparent;border:2px dashed var(--border);border-radius:var(--radius-sm);color:var(--text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.add-exercise-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
+/* Save row */
+.save-row{display:flex;gap:.875rem;justify-content:flex-end;align-items:center;margin-top:1.5rem}
+.exercise-count-badge{font-size:.82rem;color:var(--text-muted);margin-right:auto}
+.exercise-count-badge strong{color:var(--text);font-family:'Syne',sans-serif}
 
-        .form-group {
-            margin-bottom: 1rem;
-        }
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:1000;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;width:100%;max-width:520px;max-height:80vh;display:flex;flex-direction:column;animation:fadeUp .3s ease both}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.modal-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700}
+.modal-close{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--text-soft);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .2s}
+.modal-close:hover{background:var(--surface3);color:var(--text)}
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
+.modal-search{padding:.65rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:all .2s;width:100%;margin-bottom:1rem}
+.modal-search:focus{border-color:var(--accent)}
+.modal-search::placeholder{color:var(--text-muted);opacity:.7}
 
-        input, select, textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-            color: var(--text);
-            transition: all 0.2s;
-        }
+.exercise-list-modal{overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:.4rem}
+.exercise-option{padding:.875rem 1rem;background:var(--surface2);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;border:1px solid transparent}
+.exercise-option:hover{border-color:var(--border-accent);background:var(--surface3);transform:translateX(3px)}
+.ex-opt-name{font-size:.875rem;font-weight:600;margin-bottom:.2rem}
+.ex-opt-muscle{font-size:.72rem;color:var(--text-muted)}
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(232, 240, 64, 0.1);
-        }
+/* Success toast */
+.toast{position:fixed;bottom:2rem;right:2rem;padding:.875rem 1.25rem;background:var(--accent);color:#000;border-radius:var(--radius-sm);font-weight:700;font-size:.875rem;z-index:2000;transform:translateY(100px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1)}
+.toast.show{transform:translateY(0);opacity:1}
 
-        .exercises-section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-        .exercise-card {
-            background: var(--surface2);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-        }
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,10,.96);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:.625rem 1.5rem 1.1rem;justify-content:space-around;z-index:100}
+.mobile-item{display:flex;flex-direction:column;align-items:center;gap:.2rem;color:var(--text-muted);text-decoration:none;font-size:.6rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:color .2s}
+.mobile-item.active,.mobile-item:hover{color:var(--accent)}
+.mobile-icon{font-size:1.15rem}
 
-        .exercise-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .exercise-header h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.1rem;
-        }
-
-        .remove-exercise {
-            color: #ff4444;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
-        .sets-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr) auto;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .set-header {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            text-align: center;
-        }
-
-        .set-input {
-            text-align: center;
-            padding: 0.5rem;
-        }
-
-        .add-set-btn {
-            background: var(--surface);
-            border: 1px dashed var(--border);
-            border-radius: 12px;
-            padding: 0.75rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
-            margin-top: 0.5rem;
-            width: 100%;
-        }
-
-        .add-set-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .add-exercise-btn {
-            background: transparent;
-            border: 2px dashed var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
-            width: 100%;
-            font-size: 1rem;
-        }
-
-        .add-exercise-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: #000;
-            border: none;
-            border-radius: 12px;
-            padding: 1rem 2rem;
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(232, 240, 64, 0.2);
-        }
-
-        .btn-secondary {
-            background: var(--surface2);
-            color: var(--text);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1rem 2rem;
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-secondary:hover {
-            background: var(--surface);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-header h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.3rem;
-        }
-
-        .close-modal {
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-
-        .exercise-list {
-            display: grid;
-            gap: 0.5rem;
-        }
-
-        .exercise-option {
-            padding: 1rem;
-            background: var(--surface2);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .exercise-option:hover {
-            border: 1px solid var(--accent);
-            transform: translateX(4px);
-        }
-
-        .exercise-option h4 {
-            margin-bottom: 0.25rem;
-        }
-
-        .exercise-option p {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .sets-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:flex}.main{padding:1.5rem 1.25rem 5.5rem;max-width:100%}.form-grid{grid-template-columns:1fr}.sets-header,.set-row{grid-template-columns:32px 1fr 1fr 28px}.sh-label:nth-child(3){display:none}.set-input:nth-child(3){display:none}.page-title{font-size:1.8rem}}
+</style>
 </head>
 <body>
-    <div class="app">
-        <div class="header">
-            <a href="dashboard.html" class="logo">FitFlow</a>
-            <a href="workouts.html" class="back-btn">← Back to Workouts</a>
-        </div>
+<div class="ambient"></div>
+<div class="app">
 
-        <div class="page-header">
-            <h1>Log New Workout</h1>
-        </div>
+<!-- Sidebar -->
+<aside class="sidebar">
+  <a href="dashboard.html" class="logo">Fit<em>flow</em></a>
+  <span class="nav-label">Main</span>
+  <a href="dashboard.html" class="nav-link"><span class="ni">⚡</span> Dashboard</a>
+  <a href="workouts.html"  class="nav-link active"><span class="ni">🏋️</span> Workouts</a>
+  <a href="exercises.html" class="nav-link"><span class="ni">📋</span> Exercises</a>
+  <a href="progress.html"  class="nav-link"><span class="ni">📈</span> Progress</a>
+  <span class="nav-label">Community</span>
+  <a href="social.html"     class="nav-link"><span class="ni">👥</span> Social Feed <span class="badge">3</span></a>
+  <a href="challenges.html" class="nav-link"><span class="ni">🏆</span> Challenges</a>
+  <div class="sidebar-bottom">
+    <a href="profile.html" class="user-card">
+      <div class="avatar" id="sidebarAvatar">OA</div>
+      <div><div class="user-name" id="sidebarName">Athlete</div><div class="user-sub">View profile →</div></div>
+    </a>
+  </div>
+</aside>
 
-        <div class="workout-form">
-            <div class="form-section">
-                <h2>📋 Workout Details</h2>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Date</label>
-                        <input type="date" id="workoutDate" value="2026-02-28">
-                    </div>
-                    <div class="form-group">
-                        <label>Duration (minutes)</label>
-                        <input type="number" id="duration" value="60" min="1">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Notes</label>
-                    <textarea id="notes" rows="2" placeholder="How was your workout? (optional)"></textarea>
-                </div>
-            </div>
-        </div>
-
-        <div class="exercises-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h2 style="font-family: 'Syne', sans-serif; font-size: 1.2rem;">💪 Exercises</h2>
-                <span style="color: var(--text-muted);" id="exerciseCount">0 exercises</span>
-            </div>
-
-            <div id="exercisesContainer"></div>
-
-            <button class="add-exercise-btn" onclick="showExerciseModal()">
-                <span>+</span> Add Exercise
-            </button>
-        </div>
-
-        <div class="action-buttons">
-            <button class="btn-secondary" onclick="window.location.href='workouts.html'">Cancel</button>
-            <button class="btn-primary" onclick="saveWorkout()">Save Workout</button>
-        </div>
+<!-- Main -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <a href="workouts.html" class="back-btn">← Back to Workouts</a>
+      <div class="page-title">Log Workout</div>
+      <div class="page-sub">Record your session, sets, and reps</div>
     </div>
+  </div>
 
-    <div class="modal" id="exerciseModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Select Exercise</h2>
-                <span class="close-modal" onclick="closeExerciseModal()">✕</span>
-            </div>
-            <div class="exercise-list" id="exerciseList">
-                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">Loading exercises...</div>
-            </div>
-        </div>
+  <!-- Details panel -->
+  <div class="panel">
+    <div class="panel-title">📋 Workout Details</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input class="form-input" type="date" id="workoutDate"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Duration (minutes)</label>
+        <input class="form-input" type="number" id="duration" value="60" min="1" max="600"/>
+      </div>
     </div>
+    <div class="form-group">
+      <label class="form-label">Workout Name / Notes</label>
+      <textarea class="form-input" id="notes" rows="2" placeholder="e.g. Upper Body Push — felt strong today!"></textarea>
+    </div>
+  </div>
 
-    <script src="api.js"></script>
-    <script>
-        let exercises = [];
-        let exerciseCounter = 0;
+  <!-- Exercises panel -->
+  <div class="panel">
+    <div class="panel-title">💪 Exercises <span id="exerciseCount" style="font-family:'DM Sans',sans-serif;font-weight:400;color:var(--text-muted);font-size:.8rem;margin-left:.25rem"></span></div>
+    <div class="exercises-list" id="exercisesList"></div>
+    <button class="add-exercise-btn" onclick="openModal()">＋ Add Exercise</button>
+  </div>
 
-        async function loadExercises() {
-            try {
-                const data = await fetchExercises();
-                exercises = data.results || [];
-                displayExerciseList();
-            } catch (error) {
-                console.log('Using demo exercises:', error);
-                exercises = [
-                    { id: 68, name: 'Bench Press', muscle_group: 'Chest' },
-                    { id: 69, name: 'Bench Press Narrow Grip', muscle_group: 'Triceps' },
-                    { id: 66, name: 'Dumbbell Press', muscle_group: 'Chest' },
-                    { id: 73, name: 'Bent High Pulls', muscle_group: 'Traps' },
-                    { id: 4, name: 'Squat', muscle_group: 'Legs' },
-                    { id: 5, name: 'Deadlift', muscle_group: 'Back' }
-                ];
-                displayExerciseList();
-            }
-        }
+  <!-- Save row -->
+  <div class="save-row">
+    <button class="btn btn-ghost" onclick="location.href='workouts.html'">Cancel</button>
+    <button class="btn btn-primary" id="saveBtn" onclick="saveWorkout()">💾 Save Workout</button>
+  </div>
+</main>
+</div>
 
-        function displayExerciseList() {
-            const list = document.getElementById('exerciseList');
-            list.innerHTML = exercises.map(ex => `
-                <div class="exercise-option" onclick="addExercise(${ex.id}, '${ex.name}')">
-                    <h4>${ex.name}</h4>
-                    <p>${ex.muscle_group || 'General'}</p>
-                </div>
-            `).join('');
-        }
+<!-- Mobile nav -->
+<nav class="mobile-nav">
+  <a href="dashboard.html" class="mobile-item"><span class="mobile-icon">⚡</span>Home</a>
+  <a href="workouts.html"  class="mobile-item active"><span class="mobile-icon">🏋️</span>Workouts</a>
+  <a href="progress.html"  class="mobile-item"><span class="mobile-icon">📈</span>Progress</a>
+  <a href="social.html"    class="mobile-item"><span class="mobile-icon">👥</span>Social</a>
+  <a href="profile.html"   class="mobile-item"><span class="mobile-icon">👤</span>Profile</a>
+</nav>
 
-        function addExercise(exerciseId, exerciseName) {
-            const container = document.getElementById('exercisesContainer');
-            const exerciseId_num = ++exerciseCounter;
-            
-            const exerciseHtml = `
-                <div class="exercise-card" id="exercise-${exerciseId_num}" data-exercise-id="${exerciseId}" data-exercise-name="${exerciseName}">
-                    <div class="exercise-header">
-                        <h3>${exerciseName}</h3>
-                        <span class="remove-exercise" onclick="removeExercise(${exerciseId_num})">✕</span>
-                    </div>
-                    
-                    <div class="sets-container" id="sets-${exerciseId_num}">
-                        <div class="sets-grid" style="margin-bottom: 0.5rem;">
-                            <div class="set-header">Set</div>
-                            <div class="set-header">Weight (kg)</div>
-                            <div class="set-header">Reps</div>
-                            <div class="set-header">Rest (s)</div>
-                            <div></div>
-                        </div>
-                        
-                        <div class="set-row" id="set-${exerciseId_num}-1">
-                            <div class="sets-grid">
-                                <input type="text" class="set-input" value="1" readonly>
-                                <input type="number" class="set-input weight-input" value="60" step="0.5" min="0">
-                                <input type="number" class="set-input reps-input" value="10" min="1">
-                                <input type="number" class="set-input rest-input" value="60" min="0">
-                                <span class="remove-exercise" onclick="removeSet(${exerciseId_num}, 1)" style="font-size: 1rem;">✕</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button class="add-set-btn" onclick="addSet(${exerciseId_num})">
-                        <span>+</span> Add Set
-                    </button>
-                </div>
-            `;
-            
-            container.insertAdjacentHTML('beforeend', exerciseHtml);
-            updateExerciseCount();
-            closeExerciseModal();
-        }
+<!-- Exercise picker modal -->
+<div class="modal-overlay" id="exerciseModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Select Exercise</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <input class="modal-search" id="exerciseSearch" placeholder="Search exercises…" oninput="filterExercises(this.value)"/>
+    <div class="exercise-list-modal" id="exerciseListModal">
+      <div style="color:var(--text-muted);font-size:.85rem;padding:1rem 0;text-align:center">Loading exercises…</div>
+    </div>
+  </div>
+</div>
 
-        function addSet(exerciseId) {
-            const container = document.getElementById(`sets-${exerciseId}`);
-            const setCount = container.querySelectorAll('.set-row').length + 1;
-            
-            const setHtml = `
-                <div class="set-row" id="set-${exerciseId}-${setCount}" style="margin-top: 0.5rem;">
-                    <div class="sets-grid">
-                        <input type="text" class="set-input" value="${setCount}" readonly>
-                        <input type="number" class="set-input weight-input" value="60" step="0.5" min="0">
-                        <input type="number" class="set-input reps-input" value="10" min="1">
-                        <input type="number" class="set-input rest-input" value="60" min="0">
-                        <span class="remove-exercise" onclick="removeSet(${exerciseId}, ${setCount})" style="font-size: 1rem;">✕</span>
-                    </div>
-                </div>
-            `;
-            
-            container.insertAdjacentHTML('beforeend', setHtml);
-        }
+<!-- Success toast -->
+<div class="toast" id="toast">✅ Workout saved!</div>
 
-        function removeExercise(exerciseId) {
-            document.getElementById(`exercise-${exerciseId}`).remove();
-            updateExerciseCount();
-        }
+<script src="api.js"></script>
+<script>
+const API_BASE='https://fitflow-api-k10o.onrender.com/api';
+function getToken(){return localStorage.getItem('fitflow_token')}
+function getUser(){try{return JSON.parse(localStorage.getItem('fitflow_user'))}catch{return null}}
 
-        function removeSet(exerciseId, setId) {
-            document.getElementById(`set-${exerciseId}-${setId}`).remove();
-        }
+// Auth guard
+if(!getToken()){location.href='login.html'}
 
-        function updateExerciseCount() {
-            const count = document.querySelectorAll('.exercise-card').length;
-            document.getElementById('exerciseCount').textContent = `${count} exercises`;
-        }
+// Init user info
+const u=getUser();
+if(u){
+  document.getElementById('sidebarAvatar').textContent=(u.username||'OA').substring(0,2).toUpperCase();
+  document.getElementById('sidebarName').textContent=u.username?.split(' ')[0]||'Athlete';
+}
 
-        function showExerciseModal() {
-            document.getElementById('exerciseModal').classList.add('active');
-        }
+// Set today's date
+document.getElementById('workoutDate').value=new Date().toISOString().split('T')[0];
 
-        function closeExerciseModal() {
-            document.getElementById('exerciseModal').classList.remove('active');
-        }
+let exercises=[];
+let exerciseCounter=0;
+let allExercises=[];
 
-        async function saveWorkout() {
-            try {
-                // Validate at least one exercise
-                const exerciseCards = document.querySelectorAll('.exercise-card');
-                if (exerciseCards.length === 0) {
-                    alert('Please add at least one exercise');
-                    return;
-                }
+const DEMO_EXERCISES=[
+  {id:68,name:'Bench Press',muscle_group:'Chest'},
+  {id:4,name:'Squat',muscle_group:'Legs'},
+  {id:5,name:'Deadlift',muscle_group:'Back'},
+  {id:101,name:'Pull-up',muscle_group:'Back'},
+  {id:102,name:'Overhead Press',muscle_group:'Shoulders'},
+  {id:103,name:'Barbell Row',muscle_group:'Back'},
+  {id:104,name:'Incline Dumbbell Press',muscle_group:'Chest'},
+  {id:105,name:'Leg Press',muscle_group:'Legs'},
+  {id:106,name:'Romanian Deadlift',muscle_group:'Legs'},
+  {id:107,name:'Dumbbell Curl',muscle_group:'Arms'},
+  {id:108,name:'Tricep Pushdown',muscle_group:'Arms'},
+  {id:109,name:'Lateral Raise',muscle_group:'Shoulders'},
+  {id:110,name:'Cable Fly',muscle_group:'Chest'},
+  {id:111,name:'Face Pull',muscle_group:'Shoulders'},
+  {id:112,name:'Leg Curl',muscle_group:'Legs'},
+  {id:113,name:'Hip Thrust',muscle_group:'Glutes'},
+  {id:114,name:'Plank',muscle_group:'Core'},
+  {id:115,name:'Ab Rollout',muscle_group:'Core'},
+];
 
-                // Get workout basic info
-                const workoutData = {
-                    date: document.getElementById('workoutDate').value,
-                    duration_minutes: parseInt(document.getElementById('duration').value) || 60,
-                    notes: document.getElementById('notes').value || ''
-                };
+async function loadExercises(){
+  const token=getToken();
+  try{
+    const r=await fetch(`${API_BASE}/workouts/exercises/?limit=100`,token?{headers:{'Authorization':`Token ${token}`}}:{});
+    if(r.ok){const d=await r.json();allExercises=d.results||d;renderExerciseList(allExercises);return}
+  }catch(e){}
+  allExercises=DEMO_EXERCISES;
+  renderExerciseList(allExercises);
+}
 
-                console.log('Creating workout:', workoutData);
-                
-                // Create workout
-                const workout = await createWorkout(workoutData);
-                console.log('Workout created:', workout);
-                
-                if (!workout || !workout.id) {
-                    throw new Error('Failed to create workout');
-                }
-                
-                // Add sets for each exercise
-                for (const card of exerciseCards) {
-                    const exerciseId = card.dataset.exerciseId;
-                    const exerciseName = card.dataset.exerciseName;
-                    
-                    console.log(`Adding sets for ${exerciseName} (ID: ${exerciseId})`);
-                    
-                    const sets = card.querySelectorAll('.set-row');
-                    let orderIndex = 1;
-                    
-                    for (const set of sets) {
-                        const weight = set.querySelector('.weight-input').value;
-                        const reps = set.querySelector('.reps-input').value;
-                        const rest = set.querySelector('.rest-input').value;
-                        
-                        const setData = {
-                            exercise: parseInt(exerciseId),
-                            sets: 1,
-                            reps: parseInt(reps),
-                            weight_kg: parseFloat(weight),
-                            rest_seconds: parseInt(rest) || 60,
-                            order_index: orderIndex++
-                        };
-                        
-                        console.log('Adding set:', setData);
-                        
-                        const result = await addSet(workout.id, setData);
-                        console.log('Set added:', result);
-                    }
-                }
-                
-                // Success - redirect to workouts page
-                window.location.href = 'workouts.html?success=true';
-                
-            } catch (error) {
-                console.error('Save error details:', error);
-                alert('Error saving workout. Check console for details.');
-            }
-        }
+function renderExerciseList(list){
+  const el=document.getElementById('exerciseListModal');
+  if(!list.length){el.innerHTML='<div style="color:var(--text-muted);font-size:.85rem;text-align:center;padding:1rem">No exercises found</div>';return}
+  el.innerHTML=list.map(ex=>`
+    <div class="exercise-option" onclick="addExercise(${ex.id},'${ex.name.replace(/'/g,"\\'")}','${ex.muscle_group||'General'}')">
+      <div class="ex-opt-name">${ex.name}</div>
+      <div class="ex-opt-muscle">${ex.muscle_group||'General'}</div>
+    </div>`).join('');
+}
 
-        document.getElementById('workoutDate').value = new Date().toISOString().split('T')[0];
-        loadExercises();
+function filterExercises(q){
+  const filtered=allExercises.filter(e=>e.name.toLowerCase().includes(q.toLowerCase())||e.muscle_group?.toLowerCase().includes(q.toLowerCase()));
+  renderExerciseList(filtered);
+}
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('exerciseModal');
-            if (event.target === modal) {
-                closeExerciseModal();
-            }
-        }
-    </script>
+function openModal(){document.getElementById('exerciseModal').classList.add('open');document.getElementById('exerciseSearch').focus();loadExercises()}
+function closeModal(){document.getElementById('exerciseModal').classList.remove('open')}
+
+function addExercise(id,name,muscle){
+  closeModal();
+  exerciseCounter++;
+  exercises.push({localId:exerciseCounter,id,name,muscle,sets:[{weight:'',reps:'',rest:90}]});
+  renderExercises();
+}
+
+function removeExercise(localId){
+  exercises=exercises.filter(e=>e.localId!==localId);
+  renderExercises();
+}
+
+function addSet(localId){
+  const ex=exercises.find(e=>e.localId===localId);
+  if(ex)ex.sets.push({weight:'',reps:'',rest:90});
+  renderExercises();
+}
+
+function removeSet(localId,setIdx){
+  const ex=exercises.find(e=>e.localId===localId);
+  if(ex&&ex.sets.length>1)ex.sets.splice(setIdx,1);
+  renderExercises();
+}
+
+function updateSet(localId,setIdx,field,val){
+  const ex=exercises.find(e=>e.localId===localId);
+  if(ex&&ex.sets[setIdx])ex.sets[setIdx][field]=val;
+}
+
+function renderExercises(){
+  const el=document.getElementById('exercisesList');
+  document.getElementById('exerciseCount').textContent=exercises.length?`(${exercises.length})` : '';
+  if(!exercises.length){el.innerHTML='';return}
+  el.innerHTML=exercises.map((ex,ei)=>`
+    <div class="exercise-card" style="animation-delay:${ei*.05}s">
+      <div class="exercise-card-header">
+        <div class="exercise-name">
+          <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width:30px;height:30px" autoplay loop></dotlottie-wc>
+          ${ex.name}
+          <span class="exercise-muscle">${ex.muscle}</span>
+        </div>
+        <button class="remove-exercise-btn" onclick="removeExercise(${ex.localId})">Remove</button>
+      </div>
+      <div class="sets-header">
+        <div class="sh-label">Set</div>
+        <div class="sh-label">Weight (kg)</div>
+        <div class="sh-label">Reps</div>
+        <div class="sh-label">Rest (s)</div>
+        <div></div>
+      </div>
+      ${ex.sets.map((s,si)=>`
+        <div class="set-row">
+          <div class="set-num">${si+1}</div>
+          <input class="set-input" type="number" value="${s.weight}" placeholder="0" min="0" step="0.5" onchange="updateSet(${ex.localId},${si},'weight',this.value)"/>
+          <input class="set-input" type="number" value="${s.reps}" placeholder="0" min="0" onchange="updateSet(${ex.localId},${si},'reps',this.value)"/>
+          <input class="set-input" type="number" value="${s.rest}" placeholder="90" min="0" onchange="updateSet(${ex.localId},${si},'rest',this.value)"/>
+          <button class="remove-set-btn" onclick="removeSet(${ex.localId},${si})">✕</button>
+        </div>`).join('')}
+      <button class="add-set-btn" onclick="addSet(${ex.localId})">＋ Add Set</button>
+    </div>`).join('');
+}
+
+function showToast(msg,ok=true){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.background=ok?'var(--accent)':'#f87171';
+  t.style.color=ok?'#000':'#fff';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+async function saveWorkout(){
+  if(exercises.length===0){showToast('⚠️ Add at least one exercise',false);return}
+  const token=getToken();
+  if(!token){location.href='login.html';return}
+
+  const btn=document.getElementById('saveBtn');
+  btn.textContent='Saving…';btn.disabled=true;
+
+  const workoutData={
+    date:document.getElementById('workoutDate').value,
+    duration_minutes:parseInt(document.getElementById('duration').value)||60,
+    notes:document.getElementById('notes').value||''
+  };
+
+  try{
+    const wr=await fetch(`${API_BASE}/workouts/workouts/`,{
+      method:'POST',
+      headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+      body:JSON.stringify(workoutData)
+    });
+
+    if(!wr.ok){const e=await wr.json();throw new Error(JSON.stringify(e))}
+    const workout=await wr.json();
+
+    // Save each set
+    const setPromises=[];
+    for(const ex of exercises){
+      for(let i=0;i<ex.sets.length;i++){
+        const s=ex.sets[i];
+        setPromises.push(fetch(`${API_BASE}/workouts/workouts/${workout.id}/add_set/`,{
+          method:'POST',
+          headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+          body:JSON.stringify({exercise:ex.id,sets:1,reps:parseInt(s.reps)||0,weight_kg:parseFloat(s.weight)||0,rest_seconds:parseInt(s.rest)||90,order_index:i})
+        }));
+      }
+    }
+    await Promise.all(setPromises);
+
+    showToast('✅ Workout saved!');
+    setTimeout(()=>location.href='workouts.html',1400);
+  }catch(e){
+    console.error(e);
+    showToast('❌ Failed to save. Check connection.',false);
+    btn.textContent='💾 Save Workout';btn.disabled=false;
+  }
+}
+
+// Close modal on background click
+document.getElementById('exerciseModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+// Close modal on Escape
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+</script>
 </body>
 </html>

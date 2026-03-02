@@ -1,306 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitFlow · Register</title>
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        /* Same styles as login.html */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FitFlow · Create Account</title>
+<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;--surface:#141414;--surface2:#1c1c1c;--surface3:#242424;
+  --accent:#d4f542;--accent-glow:rgba(212,245,66,.18);--orange:#ff6b2b;
+  --text:#f0f0ea;--text-muted:#5a5a5a;--text-soft:#909090;
+  --border:rgba(255,255,255,.055);--border-accent:rgba(212,245,66,.3);
+  --radius:22px;--radius-sm:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
 
-        :root {
-            --bg: #0f0f0f;
-            --surface: #1a1a1a;
-            --surface2: #222222;
-            --accent: #e8f040;
-            --accent2: #f5a623;
-            --text: #ffffff;
-            --text-muted: #888888;
-            --border: #2a2a2a;
-        }
+.left-panel{position:relative;display:flex;flex-direction:column;justify-content:center;padding:4rem;background:var(--surface);border-right:1px solid var(--border);overflow:hidden}
+.left-panel::before{content:'';position:absolute;top:-200px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(212,245,66,.08) 0%,transparent 65%);pointer-events:none}
+.left-panel::after{content:'';position:absolute;bottom:-150px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,107,43,.06) 0%,transparent 65%);pointer-events:none}
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            position: relative;
-            overflow: hidden;
-        }
+.brand{margin-bottom:3rem;position:relative;z-index:1}
+.brand-logo{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-.03em;color:var(--accent);line-height:1;display:block;margin-bottom:.5rem}
+.brand-logo em{color:var(--orange);font-style:normal}
+.brand-tagline{font-size:.9rem;color:var(--text-muted);font-weight:500}
 
-        .background-animation {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.15;
-            pointer-events: none;
-        }
+.hero-lottie{position:relative;z-index:1;display:flex;justify-content:center;margin-bottom:2.5rem;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 
-        .container {
-            width: 100%;
-            max-width: 440px;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.6s ease;
-        }
+.hero-copy{position:relative;z-index:1}
+.hero-title{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-bottom:.875rem}
+.hero-title em{color:var(--accent);font-style:normal}
+.hero-sub{font-size:.9rem;color:var(--text-muted);line-height:1.6;max-width:380px}
 
-        .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-top:2rem}
+.stat-pill{padding:.875rem;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent)}
+.stat-lbl{font-size:.65rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem}
 
-        .logo h1 {
-            font-family: 'Syne', sans-serif;
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--accent);
-        }
+.right-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2.5rem 4rem;overflow-y:auto;position:relative}
+.right-panel::before{content:'';position:absolute;top:-200px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(212,245,66,.04) 0%,transparent 65%);pointer-events:none}
 
-        .register-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 2.5rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
+.form-box{width:100%;max-width:420px;animation:fadeUp .5s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-        .register-header {
-            margin-bottom: 2rem;
-        }
+.form-header{margin-bottom:1.75rem}
+.form-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.4rem}
+.form-sub{font-size:.875rem;color:var(--text-muted)}
+.form-sub a{color:var(--accent);text-decoration:none;font-weight:600}
+.form-sub a:hover{text-decoration:underline}
 
-        .register-header h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.45rem}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-icon{position:absolute;left:1rem;font-size:.95rem;pointer-events:none;opacity:.5}
+.form-input{width:100%;padding:.8rem 1rem .8rem 2.75rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:all .2s}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(212,245,66,.1)}
+.form-input::placeholder{color:var(--text-muted);opacity:.6}
+.form-input.valid{border-color:rgba(74,222,128,.4)}
+.form-input.invalid{border-color:rgba(248,113,113,.4)}
 
-        .register-header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
+/* Password strength */
+.password-strength{height:3px;background:var(--surface3);border-radius:99px;margin-top:.4rem;overflow:hidden}
+.strength-bar{height:100%;border-radius:99px;transition:all .3s;width:0}
+.strength-weak{background:#f87171;width:33%}
+.strength-medium{background:var(--orange);width:66%}
+.strength-strong{background:#4ade80;width:100%}
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+.submit-btn{width:100%;padding:.875rem;background:var(--accent);border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:all .2s;margin-top:1.25rem;margin-bottom:1rem;letter-spacing:.02em}
+.submit-btn:hover:not(:disabled){background:#c8e532;transform:translateY(-1px);box-shadow:0 8px 24px var(--accent-glow)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.spinner{width:18px;height:18px;border:2.5px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.submit-btn.loading .spinner{display:block}
+.submit-btn.loading .btn-text{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
+.terms{font-size:.72rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;line-height:1.5}
+.terms a{color:var(--accent);text-decoration:none}
 
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+.error-msg{display:none;padding:.75rem 1rem;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:var(--radius-sm);font-size:.825rem;color:#f87171;margin-bottom:1rem;animation:fadeUp .3s ease}
+.error-msg.show{display:block}
+.success-msg{display:none;padding:.75rem 1rem;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:var(--radius-sm);font-size:.825rem;color:#4ade80;margin-bottom:1rem}
+.success-msg.show{display:block}
 
-        .input-icon {
-            position: absolute;
-            left: 1rem;
-            width: 20px;
-            height: 20px;
-            opacity: 0.5;
-        }
+.login-link{text-align:center;font-size:.825rem;color:var(--text-muted)}
+.login-link a{color:var(--accent);text-decoration:none;font-weight:700}
+.login-link a:hover{text-decoration:underline}
 
-        input {
-            width: 100%;
-            padding: 1rem 1rem 1rem 3rem;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-            color: var(--text);
-            transition: all 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(232, 240, 64, 0.1);
-        }
-
-        .register-btn {
-            width: 100%;
-            padding: 1rem;
-            background: var(--accent);
-            border: none;
-            border-radius: 16px;
-            font-family: 'Syne', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #000;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
-            margin: 1.5rem 0;
-        }
-
-        .register-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(232, 240, 64, 0.2);
-        }
-
-        .error {
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid #ff4444;
-            border-radius: 12px;
-            padding: 0.75rem;
-            color: #ff4444;
-            font-size: 0.9rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .error.show {
-            display: block;
-        }
-
-        .login-link {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .login-link a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+@media(max-width:768px){
+  body{grid-template-columns:1fr}
+  .left-panel{display:none}
+  .right-panel{padding:2rem 1.5rem;justify-content:flex-start;padding-top:3rem}
+  .form-row-2{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
-    <div class="background-animation">
-        <dotlottie-wc 
-            src="https://lottie.host/b12c8254-f48d-42f4-a4ad-fcc2889ffd16/1FpVhxOkds.lottie" 
-            style="width: 100%; height: 100%;" autoplay loop>
-        </dotlottie-wc>
+
+<!-- Left panel -->
+<div class="left-panel">
+  <div class="brand">
+    <span class="brand-logo">Fit<em>flow</em></span>
+    <div class="brand-tagline">Your fitness operating system</div>
+  </div>
+  <div class="hero-lottie">
+    <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width:200px;height:200px" autoplay loop></dotlottie-wc>
+  </div>
+  <div class="hero-copy">
+    <div class="hero-title">Join <em>thousands</em><br/>getting stronger.</div>
+    <div class="hero-sub">Create your free account and start tracking workouts, breaking personal records, and competing with friends today.</div>
+    <div class="stats-row">
+      <div class="stat-pill"><div class="stat-num">10k+</div><div class="stat-lbl">Athletes</div></div>
+      <div class="stat-pill"><div class="stat-num">500k+</div><div class="stat-lbl">Workouts</div></div>
+      <div class="stat-pill"><div class="stat-num">100+</div><div class="stat-lbl">Exercises</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Right panel -->
+<div class="right-panel">
+  <div class="form-box">
+    <div class="form-header">
+      <div class="form-title">Create your account 💪</div>
+      <div class="form-sub">Already have one? <a href="login.html">Log in here</a></div>
     </div>
 
-    <div class="container">
-        <div class="logo">
-            <h1>fit<span style="color: var(--accent2);">flow</span></h1>
-            <p>Start your fitness journey today</p>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="success-msg" id="successMsg">Account created! Redirecting to dashboard…</div>
+
+    <div class="form-row-2">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon">👤</span>
+          <input class="form-input" type="text" id="username" placeholder="athletename" required autocomplete="username" oninput="validateField(this)"/>
         </div>
-
-        <div class="register-card">
-            <div class="register-header">
-                <h2>Create account</h2>
-                <p>Join the FitFlow community</p>
-            </div>
-
-            <div class="error" id="error"></div>
-
-            <form id="registerForm">
-                <div class="form-group">
-                    <label>Username</label>
-                    <div class="input-wrapper">
-                        <div class="input-icon">👤</div>
-                        <input type="text" id="username" placeholder="Choose a username" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Email</label>
-                    <div class="input-wrapper">
-                        <div class="input-icon">📧</div>
-                        <input type="email" id="email" placeholder="Enter your email" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Password</label>
-                    <div class="input-wrapper">
-                        <div class="input-icon">🔒</div>
-                        <input type="password" id="password" placeholder="Create a password" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <div class="input-wrapper">
-                        <div class="input-icon">✓</div>
-                        <input type="password" id="password2" placeholder="Confirm your password" required>
-                    </div>
-                </div>
-
-                <button type="submit" class="register-btn" id="registerBtn">
-                    <span>Create Account</span>
-                </button>
-            </form>
-
-            <div class="login-link">
-                Already have an account? <a href="login.html">Log in</a>
-            </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <div class="input-wrap">
+          <span class="input-icon">📧</span>
+          <input class="form-input" type="email" id="email" placeholder="you@example.com" required oninput="validateField(this)"/>
         </div>
+      </div>
     </div>
 
-    <script src="api.js"></script>
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const userData = {
-                username: document.getElementById('username').value,
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
-                password2: document.getElementById('password2').value
-            };
-            
-            const errorDiv = document.getElementById('error');
-            errorDiv.classList.remove('show');
-            
-            if (userData.password !== userData.password2) {
-                errorDiv.textContent = 'Passwords do not match';
-                errorDiv.classList.add('show');
-                return;
-            }
-            
-            try {
-                const result = await register(userData);
-                if (result.token) {
-                    window.location.href = 'dashboard.html';
-                } else {
-                    errorDiv.textContent = 'Registration failed. Username may already exist.';
-                    errorDiv.classList.add('show');
-                }
-            } catch (error) {
-                errorDiv.textContent = 'Registration failed. Please try again.';
-                errorDiv.classList.add('show');
-            }
-        });
-    </script>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="input-wrap">
+        <span class="input-icon">🔒</span>
+        <input class="form-input" type="password" id="password" placeholder="Create a strong password" required oninput="checkStrength(this.value)"/>
+      </div>
+      <div class="password-strength"><div class="strength-bar" id="strengthBar"></div></div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Confirm Password</label>
+      <div class="input-wrap">
+        <span class="input-icon">✓</span>
+        <input class="form-input" type="password" id="password2" placeholder="Repeat your password" required oninput="checkMatch()"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Fitness Goal</label>
+      <div class="input-wrap">
+        <span class="input-icon">🎯</span>
+        <select class="form-input" id="fitnessGoal" style="padding-left:2.75rem;cursor:pointer">
+          <option value="build_muscle">Build Muscle</option>
+          <option value="lose_weight">Lose Weight</option>
+          <option value="improve_fitness">Improve Fitness</option>
+          <option value="maintain">Maintain</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="terms">By signing up you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</div>
+
+    <button class="submit-btn" id="registerBtn" onclick="doRegister()">
+      <span class="btn-text">Create Account →</span>
+      <div class="spinner"></div>
+    </button>
+
+    <div class="login-link">Already have an account? <a href="login.html">Log in</a></div>
+  </div>
+</div>
+
+<script src="api.js"></script>
+<script>
+if(localStorage.getItem('fitflow_token')){location.href='dashboard.html'}
+
+function showError(msg){const el=document.getElementById('errorMsg');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),5000)}
+function showSuccess(){document.getElementById('successMsg').classList.add('show')}
+
+function validateField(input){
+  if(input.value.trim().length>=2)input.classList.add('valid');
+  else input.classList.remove('valid');
+}
+
+function checkStrength(pw){
+  const bar=document.getElementById('strengthBar');
+  bar.className='strength-bar';
+  if(!pw){bar.style.width='0';return}
+  const strong=/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}/.test(pw);
+  const medium=/(?=.*[a-zA-Z])(?=.*\d).{6,}/.test(pw);
+  if(strong)bar.classList.add('strength-strong');
+  else if(medium)bar.classList.add('strength-medium');
+  else bar.classList.add('strength-weak');
+}
+
+function checkMatch(){
+  const p2=document.getElementById('password2');
+  const p1=document.getElementById('password').value;
+  if(p2.value&&p2.value===p1)p2.classList.add('valid');
+  else p2.classList.remove('valid');
+}
+
+async function doRegister(){
+  const btn=document.getElementById('registerBtn');
+  const username=document.getElementById('username').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const password2=document.getElementById('password2').value;
+  const fitness_goal=document.getElementById('fitnessGoal').value;
+
+  if(!username||!email||!password||!password2){showError('Please fill in all fields');return}
+  if(username.length<3){showError('Username must be at least 3 characters');return}
+  if(!/\S+@\S+\.\S+/.test(email)){showError('Please enter a valid email');return}
+  if(password.length<6){showError('Password must be at least 6 characters');return}
+  if(password!==password2){showError('Passwords do not match');return}
+
+  btn.classList.add('loading');btn.disabled=true;
+  try{
+    const result=await register({username,email,password,password2,fitness_goal});
+    if(result.token){
+      showSuccess();
+      setTimeout(()=>{location.href='dashboard.html'},1200);
+    }else{
+      const msg=typeof result==='object'?JSON.stringify(result):'Registration failed. Username or email may already exist.';
+      showError(msg);
+    }
+  }catch(e){
+    showError('Registration failed. Username or email may already exist.');
+  }
+  finally{btn.classList.remove('loading');btn.disabled=false}
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Enter')doRegister()});
+</script>
 </body>
 </html>
