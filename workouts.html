@@ -78,8 +78,50 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .mobile-item.active,.mobile-item:hover{color:var(--accent)}
 .mobile-icon{font-size:1.15rem}
 
-@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:flex}.main{padding:1.5rem 1.25rem 5.5rem;max-width:100%}.page-title{font-size:2rem}}
-@media(max-width:480px){.workout-grid{grid-template-columns:1fr}}
+
+}
+
+/* ── FULL MOBILE RESPONSIVE ── */
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .mobile-nav{display:flex}
+  .main{padding:1.25rem 1rem 5.5rem;max-width:100%}
+  .page-title{font-size:1.9rem;letter-spacing:-.02em}
+  .topbar{flex-direction:column;gap:.875rem;margin-bottom:1.5rem}
+  .topbar-actions{width:100%;justify-content:flex-start}
+  .charts-row,.bottom-row{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .panel{padding:1.1rem}
+  .filter-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:.25rem;-webkit-overflow-scrolling:touch}
+  .filter-row::-webkit-scrollbar{display:none}
+  .workout-grid{grid-template-columns:1fr}
+  .cards-grid{grid-template-columns:1fr}
+  .challenges-grid{grid-template-columns:1fr}
+  .profile-grid{grid-template-columns:1fr}
+  .social-grid{grid-template-columns:1fr}
+  .feed-layout{grid-template-columns:1fr}
+  .activity-grid{grid-template-columns:1fr}
+  .actions-grid{grid-template-columns:1fr 1fr}
+  .muscle-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .main{padding:1rem .875rem 5rem}
+  .page-title{font-size:1.6rem}
+  .stats-grid{grid-template-columns:1fr}
+  .stat-value{font-size:2rem}
+  .actions-grid{grid-template-columns:1fr}
+  .btn{font-size:.775rem;padding:.55rem 1rem}
+  .topbar-actions .btn{width:100%}
+  .panel-header{flex-direction:column;align-items:flex-start;gap:.5rem}
+  .period-pills{align-self:flex-start}
+  .wc-stats{flex-wrap:wrap;gap:.5rem}
+  .chart-wrap{height:140px}
+  .form-row-2{grid-template-columns:1fr}
+  .profile-hero{padding:1.5rem 1rem}
+  .hero-name{font-size:1.5rem}
+}
+
 </style>
 </head>
 <body>
@@ -122,7 +164,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="workout-grid" id="workoutGrid">
     <div class="empty-state">
       <span class="big-icon">⏳</span>
-      <h3>Loading workouts…</h3>
+      <h3>Loading…</h3>
+      <p>Fetching your workouts</p>
     </div>
   </div>
 </main>
@@ -138,7 +181,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <script src="api.js"></script>
 <script>
-const API_BASE='http://127.0.0.1:8000/api';
+
 function getToken(){return localStorage.getItem('fitflow_token')}
 function getUser(){try{return JSON.parse(localStorage.getItem('fitflow_user'))}catch{return null}}
 // Auth guard
@@ -188,13 +231,13 @@ function filter(btn,type){
 }
 
 async function load(){
-  renderWorkouts(DEMO);
   const token=getToken();
-  if(!token)return;
+  if(!token){renderWorkouts([]);return}
   try{
     const r=await fetch(`${API_BASE}/workouts/workouts/`,{headers:{'Authorization':`Token ${token}`}});
-    if(r.ok){const d=await r.json();if(d.results?.length)renderWorkouts(d.results)}
-  }catch(e){}
+    if(r.ok){const d=await r.json();renderWorkouts(d.results||d||[])}
+    else renderWorkouts([]);
+  }catch(e){renderWorkouts([])}
 }
 load();
 </script>

@@ -89,7 +89,49 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .mobile-item{display:flex;flex-direction:column;align-items:center;gap:.2rem;color:var(--text-muted);text-decoration:none;font-size:.6rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:color .2s}
 .mobile-item.active,.mobile-item:hover{color:var(--accent)}
 .mobile-icon{font-size:1.15rem}
-@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:flex}.main{padding:1.5rem 1.25rem 5.5rem;max-width:100%}.profile-hero{flex-direction:column;text-align:center}.profile-stats{grid-template-columns:1fr 1fr}.profile-layout{grid-template-columns:1fr}}
+
+
+/* ── FULL MOBILE RESPONSIVE ── */
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .mobile-nav{display:flex}
+  .main{padding:1.25rem 1rem 5.5rem;max-width:100%}
+  .page-title{font-size:1.9rem;letter-spacing:-.02em}
+  .topbar{flex-direction:column;gap:.875rem;margin-bottom:1.5rem}
+  .topbar-actions{width:100%;justify-content:flex-start}
+  .charts-row,.bottom-row{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .panel{padding:1.1rem}
+  .filter-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:.25rem;-webkit-overflow-scrolling:touch}
+  .filter-row::-webkit-scrollbar{display:none}
+  .workout-grid{grid-template-columns:1fr}
+  .cards-grid{grid-template-columns:1fr}
+  .challenges-grid{grid-template-columns:1fr}
+  .profile-grid{grid-template-columns:1fr}
+  .social-grid{grid-template-columns:1fr}
+  .feed-layout{grid-template-columns:1fr}
+  .activity-grid{grid-template-columns:1fr}
+  .actions-grid{grid-template-columns:1fr 1fr}
+  .muscle-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .main{padding:1rem .875rem 5rem}
+  .page-title{font-size:1.6rem}
+  .stats-grid{grid-template-columns:1fr}
+  .stat-value{font-size:2rem}
+  .actions-grid{grid-template-columns:1fr}
+  .btn{font-size:.775rem;padding:.55rem 1rem}
+  .topbar-actions .btn{width:100%}
+  .panel-header{flex-direction:column;align-items:flex-start;gap:.5rem}
+  .period-pills{align-self:flex-start}
+  .wc-stats{flex-wrap:wrap;gap:.5rem}
+  .chart-wrap{height:140px}
+  .form-row-2{grid-template-columns:1fr}
+  .profile-hero{padding:1.5rem 1rem}
+  .hero-name{font-size:1.5rem}
+}
+
 </style>
 </head>
 <body>
@@ -118,7 +160,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="big-avatar" id="bigAvatar">OA</div>
     <div class="profile-info">
       <div class="profile-name" id="profileName">Olaoluwa Adejumo</div>
-      <div class="profile-email" id="profileEmail">📧 prettykoke123@gmail.com</div>
+      <div class="profile-email" id="profileEmail">📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b1b190e1f1f120004000e5a59582b0c060a020745080406">[email&#160;protected]</a></div>
       <div class="profile-joined" id="profileJoined">📅 Member since Feb 2026</div>
       <div class="profile-goal" id="profileGoal">Goal: Build Muscle</div>
     </div>
@@ -196,9 +238,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <a href="profile.html"   class="mobile-item active"><span class="mobile-icon">👤</span>Profile</a>
 </nav>
 
-<script src="api.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="api.js"></script>
 <script>
-const API_BASE='http://127.0.0.1:8000/api';
+
 function getToken(){return localStorage.getItem('fitflow_token')}
 function getUser(){try{return JSON.parse(localStorage.getItem('fitflow_user'))}catch{return null}}
 
@@ -256,7 +298,39 @@ async function saveProfile(){
 function logout(){localStorage.removeItem('fitflow_token');localStorage.removeItem('fitflow_user');location.href='login.html'}
 
 async function load(){
-  const u=getUser();populateUser(u);
+  const u=getUser();
+// Load real profile from API
+async function loadProfile(){
+  const token=getToken();
+  if(!token)return;
+  try{
+    const r=await fetch(`${API_BASE}/auth/profile/`,{headers:{'Authorization':`Token ${token}`}});
+    if(r.ok){
+      const d=await r.json();
+      const nameEl=document.getElementById('heroName');
+      const unEl=document.getElementById('heroUsername');
+      const goalEl=document.getElementById('heroGoal');
+      const avEl=document.getElementById('heroAvatar');
+      const sAvEl=document.getElementById('sidebarAvatar');
+      const sNmEl=document.getElementById('sidebarName');
+      if(nameEl)nameEl.textContent=d.username||'Athlete';
+      if(unEl)unEl.textContent='@'+(d.username||'athlete');
+      if(goalEl)goalEl.textContent=d.fitness_goal||'No goal set';
+      if(avEl)avEl.textContent=(d.username||'OA').substring(0,2).toUpperCase();
+      if(sAvEl)sAvEl.textContent=(d.username||'OA').substring(0,2).toUpperCase();
+      if(sNmEl)sNmEl.textContent=d.username?.split(' ')[0]||'Athlete';
+    }
+    // Load workout stats
+    const wr=await fetch(`${API_BASE}/workouts/workouts/`,{headers:{'Authorization':`Token ${token}`}});
+    if(wr.ok){
+      const d=await wr.json();
+      const ws=d.results||d||[];
+      const wcEl=document.getElementById('workoutsCount');
+      if(wcEl)wcEl.textContent=ws.length||0;
+    }
+  }catch(e){}
+}
+loadProfile();populateUser(u);
   loadFollowers(document.querySelector('.follow-tab'));
   const token=getToken();if(!token)return;
   try{
@@ -269,11 +343,4 @@ async function load(){
     }
     const fl=await fetch(`${API_BASE}/social/friends/followers/`,{headers:{'Authorization':`Token ${token}`}});
     if(fl.ok){const d=await fl.json();document.getElementById('statFollowers').textContent=d.length||0}
-    const fw=await fetch(`${API_BASE}/social/friends/following/`,{headers:{'Authorization':`Token ${token}`}});
-    if(fw.ok){const d=await fw.json();document.getElementById('statFollowing').textContent=d.length||0}
-  }catch(e){}
-}
-load();
-</script>
-</body>
-</html>
+    const fw=await fetch(`${API_

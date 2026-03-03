@@ -8,7 +8,7 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0a0a0a;--surface:#141414;--surface2:#1c1c1c;--surface3:#242424;
+  --bg:#0a0a0a;--surface:#141414;--surface2:#1c1c1c;
   --accent:#d4f542;--accent-glow:rgba(212,245,66,.18);--orange:#ff6b2b;
   --text:#f0f0ea;--text-muted:#5a5a5a;--text-soft:#909090;
   --border:rgba(255,255,255,.055);--border-accent:rgba(212,245,66,.3);
@@ -17,125 +17,158 @@
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
 
-.left-panel{position:relative;display:flex;flex-direction:column;justify-content:center;padding:4rem;background:var(--surface);border-right:1px solid var(--border);overflow:hidden}
-.left-panel::before{content:'';position:absolute;top:-200px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(212,245,66,.08) 0%,transparent 65%);pointer-events:none}
-.left-panel::after{content:'';position:absolute;bottom:-150px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,107,43,.06) 0%,transparent 65%);pointer-events:none}
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.ambient::before{content:'';position:absolute;top:-200px;right:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(212,245,66,.06) 0%,transparent 65%)}
+.ambient::after{content:'';position:absolute;bottom:-150px;left:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,107,43,.05) 0%,transparent 65%)}
 
-.brand{margin-bottom:3rem;position:relative;z-index:1}
-.brand-logo{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-.03em;color:var(--accent);line-height:1;display:block;margin-bottom:.5rem}
+/* Left panel */
+.left-panel{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;padding:4rem;background:var(--surface);border-right:1px solid var(--border);overflow:hidden;animation:slideLeft .6s ease both}
+@keyframes slideLeft{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+
+.brand{margin-bottom:2rem}
+.brand-logo{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-.03em;color:var(--accent);line-height:1;display:block;margin-bottom:.4rem}
 .brand-logo em{color:var(--orange);font-style:normal}
-.brand-tagline{font-size:.9rem;color:var(--text-muted);font-weight:500}
+.brand-tagline{font-size:.875rem;color:var(--text-muted);font-weight:500}
 
-.hero-lottie{position:relative;z-index:1;display:flex;justify-content:center;margin-bottom:2.5rem;animation:float 4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero-lottie{display:flex;justify-content:center;margin-bottom:1.75rem;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 
-.hero-copy{position:relative;z-index:1}
-.hero-title{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-bottom:.875rem}
+.hero-title{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-bottom:.75rem}
 .hero-title em{color:var(--accent);font-style:normal}
-.hero-sub{font-size:.9rem;color:var(--text-muted);line-height:1.6;max-width:380px}
+.hero-sub{font-size:.875rem;color:var(--text-muted);line-height:1.65;max-width:360px;margin-bottom:1.75rem}
 
-.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-top:2rem}
-.stat-pill{padding:.875rem;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);text-align:center}
-.stat-num{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent)}
-.stat-lbl{font-size:.65rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem}
+.perks{display:flex;flex-direction:column;gap:.625rem}
+.perk{display:flex;align-items:center;gap:.75rem;font-size:.825rem;color:var(--text-soft)}
+.perk-icon{width:28px;height:28px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
 
-.right-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2.5rem 4rem;overflow-y:auto;position:relative}
-.right-panel::before{content:'';position:absolute;top:-200px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(212,245,66,.04) 0%,transparent 65%);pointer-events:none}
+/* Right panel */
+.right-panel{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2.5rem 4rem;overflow-y:auto}
 
-.form-box{width:100%;max-width:420px;animation:fadeUp .5s ease both}
+.form-box{width:100%;max-width:420px;animation:fadeUp .5s ease both;animation-delay:.15s;opacity:0}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-.form-header{margin-bottom:1.75rem}
-.form-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.4rem}
+.form-header{margin-bottom:1.5rem}
+.form-title{font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.3rem}
 .form-sub{font-size:.875rem;color:var(--text-muted)}
 .form-sub a{color:var(--accent);text-decoration:none;font-weight:600}
 .form-sub a:hover{text-decoration:underline}
 
-.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.form-group{margin-bottom:1rem}
-.form-label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.45rem}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:.875rem}
+.form-group{margin-bottom:.875rem}
+.form-label{display:block;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.4rem}
 .input-wrap{position:relative;display:flex;align-items:center}
-.input-icon{position:absolute;left:1rem;font-size:.95rem;pointer-events:none;opacity:.5}
-.form-input{width:100%;padding:.8rem 1rem .8rem 2.75rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:all .2s}
+.input-icon{position:absolute;left:.9rem;font-size:.9rem;pointer-events:none;opacity:.4}
+.form-input{width:100%;padding:.78rem 1rem .78rem 2.6rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:all .2s}
 .form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(212,245,66,.1)}
-.form-input::placeholder{color:var(--text-muted);opacity:.6}
 .form-input.valid{border-color:rgba(74,222,128,.4)}
-.form-input.invalid{border-color:rgba(248,113,113,.4)}
+.form-input::placeholder{color:var(--text-muted);opacity:.5}
+select.form-input{cursor:pointer}
+select.form-input option{background:var(--surface2)}
 
-/* Password strength */
-.password-strength{height:3px;background:var(--surface3);border-radius:99px;margin-top:.4rem;overflow:hidden}
-.strength-bar{height:100%;border-radius:99px;transition:all .3s;width:0}
-.strength-weak{background:#f87171;width:33%}
-.strength-medium{background:var(--orange);width:66%}
-.strength-strong{background:#4ade80;width:100%}
+.strength-wrap{margin-top:.4rem;height:3px;background:var(--border);border-radius:99px;overflow:hidden}
+.strength-bar{height:100%;width:0;border-radius:99px;transition:all .3s}
+.strength-bar.strength-weak{width:33%;background:#f87171}
+.strength-bar.strength-medium{width:66%;background:#fbbf24}
+.strength-bar.strength-strong{width:100%;background:#4ade80}
 
-.submit-btn{width:100%;padding:.875rem;background:var(--accent);border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:all .2s;margin-top:1.25rem;margin-bottom:1rem;letter-spacing:.02em}
-.submit-btn:hover:not(:disabled){background:#c8e532;transform:translateY(-1px);box-shadow:0 8px 24px var(--accent-glow)}
+.submit-btn{width:100%;padding:.875rem;background:var(--accent);border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:all .2s;margin-bottom:1rem;position:relative;overflow:hidden}
+.submit-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .5s}
+.submit-btn:hover::after{transform:translateX(100%)}
+.submit-btn:hover:not(:disabled){background:#c8e532;transform:translateY(-1px);box-shadow:0 8px 28px var(--accent-glow)}
 .submit-btn:disabled{opacity:.5;cursor:not-allowed}
 .spinner{width:18px;height:18px;border:2.5px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none}
 .submit-btn.loading .spinner{display:block}
 .submit-btn.loading .btn-text{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.terms{font-size:.72rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;line-height:1.5}
-.terms a{color:var(--accent);text-decoration:none}
-
-.error-msg{display:none;padding:.75rem 1rem;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:var(--radius-sm);font-size:.825rem;color:#f87171;margin-bottom:1rem;animation:fadeUp .3s ease}
-.error-msg.show{display:block}
-.success-msg{display:none;padding:.75rem 1rem;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:var(--radius-sm);font-size:.825rem;color:#4ade80;margin-bottom:1rem}
+.error-msg{display:none;padding:.7rem 1rem;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:var(--radius-sm);font-size:.8rem;color:#f87171;margin-bottom:.875rem}
+.error-msg.show{display:block;animation:fadeUp .3s ease}
+.success-msg{display:none;padding:.7rem 1rem;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:var(--radius-sm);font-size:.8rem;color:#4ade80;margin-bottom:.875rem;text-align:center}
 .success-msg.show{display:block}
 
+.terms{font-size:.75rem;color:var(--text-muted);text-align:center;margin-bottom:.875rem}
+.terms a{color:var(--accent);text-decoration:none}
 .login-link{text-align:center;font-size:.825rem;color:var(--text-muted)}
 .login-link a{color:var(--accent);text-decoration:none;font-weight:700}
 .login-link a:hover{text-decoration:underline}
 
+/* ── MOBILE ── */
 @media(max-width:768px){
-  body{grid-template-columns:1fr}
-  .left-panel{display:none}
-  .right-panel{padding:2rem 1.5rem;justify-content:flex-start;padding-top:3rem}
+  body{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+  .left-panel{
+    padding:2rem 1.5rem 1.75rem;
+    border-right:none;
+    border-bottom:1px solid var(--border);
+    animation:fadeUp .5s ease both;
+  }
+  .brand-logo{font-size:2.4rem}
+  .hero-lottie{margin-bottom:1.25rem}
+  .hero-lottie dotlottie-wc{width:140px!important;height:140px!important}
+  .hero-title{font-size:1.6rem}
+  .hero-sub{font-size:.825rem;margin-bottom:1.25rem}
+  .perks{flex-direction:row;flex-wrap:wrap;gap:.5rem}
+  .perk{font-size:.75rem}
+  .right-panel{
+    padding:2rem 1.5rem 3rem;
+    justify-content:flex-start;
+    overflow-y:visible;
+  }
+  .form-box{max-width:100%}
+}
+
+@media(max-width:480px){
+  .left-panel{padding:1.75rem 1.25rem 1.5rem}
+  .right-panel{padding:1.75rem 1.25rem 2.5rem}
+  .brand-logo{font-size:2rem}
+  .hero-title{font-size:1.4rem}
+  .hero-sub{display:none}
+  .perks{display:none}
+  .hero-lottie dotlottie-wc{width:110px!important;height:110px!important}
   .form-row-2{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
+<div class="ambient"></div>
 
-<!-- Left panel -->
 <div class="left-panel">
   <div class="brand">
     <span class="brand-logo">Fit<em>flow</em></span>
     <div class="brand-tagline">Your fitness operating system</div>
   </div>
   <div class="hero-lottie">
-    <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width:200px;height:200px" autoplay loop></dotlottie-wc>
+    <dotlottie-wc src="https://lottie.host/7c3ff79f-3a84-41c3-9969-0384f75ae7aa/mLhHpXr6LH.lottie" style="width:200px;height:200px" autoplay loop></dotlottie-wc>
   </div>
-  <div class="hero-copy">
-    <div class="hero-title">Join <em>thousands</em><br/>getting stronger.</div>
-    <div class="hero-sub">Create your free account and start tracking workouts, breaking personal records, and competing with friends today.</div>
-    <div class="stats-row">
-      <div class="stat-pill"><div class="stat-num">10k+</div><div class="stat-lbl">Athletes</div></div>
-      <div class="stat-pill"><div class="stat-num">500k+</div><div class="stat-lbl">Workouts</div></div>
-      <div class="stat-pill"><div class="stat-num">100+</div><div class="stat-lbl">Exercises</div></div>
-    </div>
+  <div class="hero-title">Start your<br/><em>fitness journey</em> today.</div>
+  <div class="hero-sub">Join thousands of athletes tracking workouts, crushing goals and building better habits with FitFlow.</div>
+  <div class="perks">
+    <div class="perk"><div class="perk-icon">⚡</div>Free forever</div>
+    <div class="perk"><div class="perk-icon">🔒</div>Private by default</div>
+    <div class="perk"><div class="perk-icon">📱</div>Works everywhere</div>
   </div>
 </div>
 
-<!-- Right panel -->
 <div class="right-panel">
   <div class="form-box">
     <div class="form-header">
-      <div class="form-title">Create your account 💪</div>
-      <div class="form-sub">Already have one? <a href="login.html">Log in here</a></div>
+      <div class="form-title">Create account 🚀</div>
+      <div class="form-sub">Already have one? <a href="login.html">Log in</a></div>
     </div>
 
     <div class="error-msg" id="errorMsg"></div>
-    <div class="success-msg" id="successMsg">Account created! Redirecting to dashboard…</div>
+    <div class="success-msg" id="successMsg">✅ Account created! Taking you to your dashboard…</div>
 
     <div class="form-row-2">
       <div class="form-group">
         <label class="form-label">Username</label>
         <div class="input-wrap">
           <span class="input-icon">👤</span>
-          <input class="form-input" type="text" id="username" placeholder="athletename" required autocomplete="username" oninput="validateField(this)"/>
+          <input class="form-input" type="text" id="username" placeholder="athlete123" required oninput="validateField(this)"/>
         </div>
       </div>
       <div class="form-group">
@@ -151,16 +184,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <label class="form-label">Password</label>
       <div class="input-wrap">
         <span class="input-icon">🔒</span>
-        <input class="form-input" type="password" id="password" placeholder="Create a strong password" required oninput="checkStrength(this.value)"/>
+        <input class="form-input" type="password" id="password" placeholder="Min. 8 characters" required oninput="checkStrength(this.value)"/>
       </div>
-      <div class="password-strength"><div class="strength-bar" id="strengthBar"></div></div>
+      <div class="strength-wrap"><div class="strength-bar" id="strengthBar"></div></div>
     </div>
 
     <div class="form-group">
       <label class="form-label">Confirm Password</label>
       <div class="input-wrap">
-        <span class="input-icon">✓</span>
-        <input class="form-input" type="password" id="password2" placeholder="Repeat your password" required oninput="checkMatch()"/>
+        <span class="input-icon">🔒</span>
+        <input class="form-input" type="password" id="password2" placeholder="Repeat password" required oninput="checkMatch()"/>
       </div>
     </div>
 
@@ -168,16 +201,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <label class="form-label">Fitness Goal</label>
       <div class="input-wrap">
         <span class="input-icon">🎯</span>
-        <select class="form-input" id="fitnessGoal" style="padding-left:2.75rem;cursor:pointer">
-          <option value="build_muscle">Build Muscle</option>
-          <option value="lose_weight">Lose Weight</option>
-          <option value="improve_fitness">Improve Fitness</option>
-          <option value="maintain">Maintain</option>
+        <select class="form-input" id="fitnessGoal">
+          <option value="">Select a goal…</option>
+          <option value="lose_weight">Lose weight</option>
+          <option value="build_muscle">Build muscle</option>
+          <option value="improve_endurance">Improve endurance</option>
+          <option value="stay_active">Stay active</option>
+          <option value="athletic_performance">Athletic performance</option>
         </select>
       </div>
     </div>
 
-    <div class="terms">By signing up you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</div>
+    <div class="terms">By creating an account you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></div>
 
     <button class="submit-btn" id="registerBtn" onclick="doRegister()">
       <span class="btn-text">Create Account →</span>

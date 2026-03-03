@@ -140,16 +140,50 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .mobile-item.active,.mobile-item:hover{color:var(--accent)}
 .mobile-icon{font-size:1.15rem}
 
+
+}
+
+/* ── FULL MOBILE RESPONSIVE ── */
 @media(max-width:900px){
   .app{grid-template-columns:1fr}
   .sidebar{display:none}
   .mobile-nav{display:flex}
-  .main{padding:1.5rem 1.25rem 5.5rem;max-width:100%}
-  .stats-grid{grid-template-columns:1fr 1fr}
+  .main{padding:1.25rem 1rem 5.5rem;max-width:100%}
+  .page-title{font-size:1.9rem;letter-spacing:-.02em}
+  .topbar{flex-direction:column;gap:.875rem;margin-bottom:1.5rem}
+  .topbar-actions{width:100%;justify-content:flex-start}
   .charts-row,.bottom-row{grid-template-columns:1fr}
-  .page-title{font-size:2rem}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .panel{padding:1.1rem}
+  .filter-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:.25rem;-webkit-overflow-scrolling:touch}
+  .filter-row::-webkit-scrollbar{display:none}
+  .workout-grid{grid-template-columns:1fr}
+  .cards-grid{grid-template-columns:1fr}
+  .challenges-grid{grid-template-columns:1fr}
+  .profile-grid{grid-template-columns:1fr}
+  .social-grid{grid-template-columns:1fr}
+  .feed-layout{grid-template-columns:1fr}
+  .activity-grid{grid-template-columns:1fr}
+  .actions-grid{grid-template-columns:1fr 1fr}
+  .muscle-grid{grid-template-columns:1fr}
 }
-@media(max-width:480px){.stats-grid{grid-template-columns:1fr}}
+@media(max-width:480px){
+  .main{padding:1rem .875rem 5rem}
+  .page-title{font-size:1.6rem}
+  .stats-grid{grid-template-columns:1fr}
+  .stat-value{font-size:2rem}
+  .actions-grid{grid-template-columns:1fr}
+  .btn{font-size:.775rem;padding:.55rem 1rem}
+  .topbar-actions .btn{width:100%}
+  .panel-header{flex-direction:column;align-items:flex-start;gap:.5rem}
+  .period-pills{align-self:flex-start}
+  .wc-stats{flex-wrap:wrap;gap:.5rem}
+  .chart-wrap{height:140px}
+  .form-row-2{grid-template-columns:1fr}
+  .profile-hero{padding:1.5rem 1rem}
+  .hero-name{font-size:1.5rem}
+}
+
 </style>
 </head>
 <body>
@@ -195,31 +229,31 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <dotlottie-wc src="https://lottie.host/b12c8254-f48d-42f4-a4ad-fcc2889ffd16/1FpVhxOkds.lottie" style="width:52px;height:52px" autoplay loop></dotlottie-wc>
       </div>
       <div class="stat-label">Week's Volume</div>
-      <div class="stat-value" id="weekVolume">8,420</div>
-      <div class="stat-trend">kg lifted <span style="opacity:.6">this week</span></div>
+      <div class="stat-value" id="weekVolume">—</div>
+      <div class="stat-trend">kg lifted this week</div>
     </div>
     <div class="stat-card" onclick="location.href='workouts.html'">
       <div class="stat-lottie">
         <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width:44px;height:44px" autoplay loop></dotlottie-wc>
       </div>
       <div class="stat-label">Total Workouts</div>
-      <div class="stat-value" id="totalWorkouts">21</div>
-      <div class="stat-trend"><span class="trend-up">↑ 3</span> this month</div>
+      <div class="stat-value" id="totalWorkouts">—</div>
+      <div class="stat-trend"><span id="workoutTrend">loading…</span></div>
     </div>
     <div class="stat-card" onclick="location.href='progress.html'">
       <div class="stat-lottie">
         <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width:44px;height:44px" autoplay loop></dotlottie-wc>
       </div>
       <div class="stat-label">Personal Records</div>
-      <div class="stat-value" id="totalPRs">5</div>
-      <div class="stat-trend"><span class="trend-up">↑ 2</span> this week</div>
+      <div class="stat-value" id="totalPRs">—</div>
+      <div class="stat-trend"><span id="prTrend">—</span></div>
     </div>
     <div class="stat-card" onclick="location.href='progress.html'">
       <div class="stat-lottie">
         <dotlottie-wc src="https://lottie.host/9bd84be5-f6ed-464b-972f-96f95d8e3b1c/xQX15HPFZb.lottie" style="width:44px;height:44px" autoplay loop></dotlottie-wc>
       </div>
       <div class="stat-label">Body Weight</div>
-      <div class="stat-value" id="bodyWeight">75.2</div>
+      <div class="stat-value" id="bodyWeight">—</div>
       <div class="stat-trend" id="weightTrend"><span class="trend-down">↓ 1.9</span> kg this month</div>
     </div>
   </div>
@@ -257,21 +291,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <span class="panel-title">Recent Workouts</span>
         <a href="workouts.html" class="btn btn-ghost" style="padding:.3rem .875rem;font-size:.75rem">View all →</a>
       </div>
-      <!-- Today's activities with Lottie -->
-      <div class="activity-grid">
-        <div class="activity-card" onclick="location.href='workouts.html'">
-          <dotlottie-wc src="https://lottie.host/b12c8254-f48d-42f4-a4ad-fcc2889ffd16/1FpVhxOkds.lottie" style="width:48px;height:48px;flex-shrink:0" autoplay loop></dotlottie-wc>
-          <div class="activity-info"><h4>Morning Run</h4><p>5.2 km · 320 kcal</p></div>
-          <div class="activity-value">Done ✓</div>
-        </div>
-        <div class="activity-card" onclick="location.href='workouts.html'">
-          <dotlottie-wc src="https://lottie.host/4e5cf296-850a-404f-be32-4a01e45dfa78/UMJMEMPrNu.lottie" style="width:48px;height:48px;flex-shrink:0" autoplay loop></dotlottie-wc>
-          <div class="activity-info"><h4>Upper Body</h4><p>Bench Press · 80 kg</p></div>
-          <div class="activity-value">3×10</div>
-        </div>
-      </div>
+
       <div class="workout-list" id="workoutList">
-        <div style="color:var(--text-muted);font-size:.85rem;padding:.5rem 0">Loading recent sessions…</div>
+        <div style="color:var(--text-muted);font-size:.85rem;padding:.5rem 0">Loading your sessions…</div>
       </div>
     </div>
 
@@ -300,7 +322,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <script src="api.js"></script>
 <script>
-const API_BASE='http://127.0.0.1:8000/api';
+
 function getToken(){return localStorage.getItem('fitflow_token')}
 function getUser(){try{return JSON.parse(localStorage.getItem('fitflow_user'))}catch{return null}}
 // Auth guard
@@ -365,7 +387,6 @@ async function load(){
     {id:3,date:'2026-02-24',duration_minutes:38,notes:'Pull Session',total_sets:9,sets:[{weight_kg:70,sets:3,reps:8}]},
     {id:4,date:'2026-02-22',duration_minutes:60,notes:'Full Body',total_sets:14,sets:[{weight_kg:80,sets:4,reps:10}]},
   ];
-  renderWorkouts(demoW);
   buildVolumeChart(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],[2100,0,3200,1800,0,4500,2820]);
   if(!token)return;
   try{
@@ -374,11 +395,24 @@ async function load(){
       fetch(`${API_BASE}/workouts/workouts/?limit=5`,{headers:{'Authorization':`Token ${token}`}})
     ]);
     if(dr.ok){const d=await dr.json();
-      if(d.current_weight)document.getElementById('bodyWeight').textContent=parseFloat(d.current_weight).toFixed(1);
-      if(d.total_workouts)document.getElementById('totalWorkouts').textContent=d.total_workouts;
-      if(d.personal_records)document.getElementById('totalPRs').textContent=d.personal_records;
+      document.getElementById('bodyWeight').textContent=d.current_weight?parseFloat(d.current_weight).toFixed(1):'—';
+      document.getElementById('totalWorkouts').textContent=d.total_workouts??'—';
+      document.getElementById('totalPRs').textContent=d.personal_records??'—';
+      const trend=document.getElementById('workoutTrend');
+      if(trend)trend.textContent=d.total_workouts?d.total_workouts+' total':'—';
     }
-    if(wr.ok){const d=await wr.json();if(d.results?.length)renderWorkouts(d.results)}
+    if(wr.ok){const d=await wr.json();
+      const ws=d.results||d;
+      if(ws.length){renderWorkouts(ws);
+        // Calculate weekly volume from real data
+        const now=new Date();const weekAgo=new Date(now-7*864e5);
+        const weekVol=ws.filter(w=>new Date(w.date)>=weekAgo).reduce((a,w)=>{
+          if(!w.sets)return a;
+          return a+w.sets.reduce((b,s)=>b+(parseFloat(s.weight_kg||0)*parseInt(s.sets||1)*parseInt(s.reps||1)),0);
+        },0);
+        document.getElementById('weekVolume').textContent=weekVol>0?Math.round(weekVol).toLocaleString():'0';
+      }
+    }
   }catch(e){}
 }
 
