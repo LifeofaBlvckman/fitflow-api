@@ -274,7 +274,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <!-- Success toast -->
 <div class="toast" id="toast">✅ Workout saved!</div>
 
-<script src="api.js"></script>
+<script>
+// Use your actual Render URL - MAKE SURE THIS IS CORRECT
+const API_BASE = 'https://fitflow-api-production-c25a.up.railway.app/api';
+// Rest of your code stays exactly the same...
+// ... (keep all your existing functions)
+
+</script>
 <script>
 
 function getToken(){return localStorage.getItem('fitflow_token')}

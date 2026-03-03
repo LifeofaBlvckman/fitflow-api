@@ -247,7 +247,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <a href="profile.html"   class="mobile-item"><span class="mobile-icon">👤</span>Profile</a>
 </nav>
 
-<script src="api.js"></script>
+<script>
+// Use your actual Render URL - MAKE SURE THIS IS CORRECT
+const API_BASE = 'https://fitflow-api-production-c25a.up.railway.app/api';
+// Rest of your code stays exactly the same...
+// ... (keep all your existing functions)
+
+</script>
 <script>
 
 function getToken(){return localStorage.getItem('fitflow_token')}
