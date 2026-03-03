@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>FitFlow · Login</title>
 <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
@@ -190,7 +190,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="demo-box">
       <div class="demo-label">Demo Account</div>
       <div class="demo-creds">
-        <div class="demo-user">testuser / test123</div>
+        <div class="demo-user">livetest01 / FitFlow2026!</div>
         <button class="demo-use-btn" onclick="fillDemo()">Use demo →</button>
       </div>
     </div>
@@ -215,7 +215,7 @@ async function doLogin(){
   }catch(e){showError('Login failed. Please check your credentials.')}
   finally{btn.classList.remove('loading');btn.disabled=false}
 }
-function fillDemo(){document.getElementById('username').value='testuser';document.getElementById('password').value='test123'}
+function fillDemo(){document.getElementById('username').value='livetest01';document.getElementById('password').value='FitFlow2026!'}
 document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 </script>
 </body>
