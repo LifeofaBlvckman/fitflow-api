@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>FitFlow · Progress</title>
+<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F4F4F0;--surface:#FFFFFF;--surface2:#F0F0EB;--surface3:#E8E8E2;
+  --accent:#FF6B35;--accent2:#FF8C5A;--accent-dim:rgba(255,107,53,.1);--accent-glow:rgba(255,107,53,.25);
+  --dark:#0D0D0D;--dark2:#1A1A1A;
+  --text:#0D0D0D;--text-soft:#6B6B6B;--text-muted:#A0A0A0;
+  --border:rgba(0,0,0,.07);--border-strong:rgba(0,0,0,.13);
+  --radius:22px;--radius-sm:14px;--radius-xs:9px;--sw:260px;
+  --shadow:0 2px 16px rgba(0,0,0,.05);--shadow-md:0 8px 32px rgba(0,0,0,.09);--shadow-lg:0 20px 60px rgba(0,0,0,.14);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{0%{opacity:0;transform:translateY(22px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+@keyframes slideIn{0%{opacity:0;transform:translateX(-18px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{0%{opacity:0;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(.96)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes countUp{0%{transform:translateY(8px);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes ripple{0%{transform:scale(0);opacity:.6}100%{transform:scale(4);opacity:0}}
+@keyframes bounceIn{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.08)}80%{transform:scale(.96)}100%{transform:scale(1);opacity:1}}
+@keyframes slideUp{0%{transform:translateY(100%);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(255,107,53,.2)}50%{box-shadow:0 0 40px rgba(255,107,53,.5)}}
+@keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ringFill{0%{stroke-dashoffset:283}100%{stroke-dashoffset:var(--offset)}}
+
+/* Stagger children */
+.stagger > *{animation:fadeUp .5s var(--ease) both}
+.stagger > *:nth-child(1){animation-delay:.05s}
+.stagger > *:nth-child(2){animation-delay:.1s}
+.stagger > *:nth-child(3){animation-delay:.15s}
+.stagger > *:nth-child(4){animation-delay:.2s}
+.stagger > *:nth-child(5){animation-delay:.25s}
+.stagger > *:nth-child(6){animation-delay:.3s}
+
+/* Skeleton loader */
+.skeleton{background:linear-gradient(90deg,#e8e8e2 25%,#f0f0eb 50%,#e8e8e2 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+
+/* ── SIDEBAR ── */
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:1.75rem 1.1rem;background:var(--dark);width:var(--sw);animation:slideIn .5s var(--ease) both}
+.logo{font-family:'Syne',sans-serif;font-size:1.65rem;font-weight:800;letter-spacing:-.03em;color:#fff;text-decoration:none;display:flex;align-items:center;gap:.55rem;margin-bottom:2.25rem}
+.logo-mark{width:32px;height:32px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:glow 3s ease-in-out infinite;font-size:.85rem}
+.nav-label{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:0 .75rem;margin:1.25rem 0 .4rem;display:block}
+.nav-link{display:flex;align-items:center;gap:.75rem;padding:.68rem .875rem;border-radius:var(--radius-xs);color:rgba(255,255,255,.45);text-decoration:none;font-size:.84rem;font-weight:500;transition:all .2s var(--ease);margin-bottom:.1rem;position:relative;overflow:hidden}
+.nav-link::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.06);transform:scaleX(0);transform-origin:left;transition:transform .2s var(--ease)}
+.nav-link:hover::before{transform:scaleX(1)}
+.nav-link:hover{color:#fff}
+.nav-link.active{color:#000;background:#fff;font-weight:700}
+.nav-link.active::before{display:none}
+.nav-link .ni{width:19px;text-align:center;font-size:.88rem;flex-shrink:0}
+.sidebar-bottom{margin-top:auto}
+.user-card{display:flex;align-items:center;gap:.75rem;padding:.875rem;background:rgba(255,255,255,.06);border-radius:var(--radius-sm);text-decoration:none;transition:all .2s;border:1px solid rgba(255,255,255,.07)}
+.user-card:hover{background:rgba(255,255,255,.11);transform:translateY(-1px)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#fff;flex-shrink:0;transition:transform .2s}
+.user-card:hover .avatar{transform:scale(1.1) rotate(-5deg)}
+.user-name{font-size:.81rem;font-weight:700;color:#fff}
+.user-sub{font-size:.65rem;color:rgba(255,255,255,.38)}
+
+/* ── LAYOUT ── */
+.app{display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh}
+.main{padding:2rem 2.25rem 5rem;max-width:1100px;overflow-x:hidden}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap;animation:fadeUp .5s var(--ease) both}
+.page-title{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;letter-spacing:-.03em;line-height:1.1;color:var(--dark)}
+.page-sub{color:var(--text-soft);font-size:.84rem;margin-top:.3rem}
+.topbar-actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.25rem;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.81rem;font-weight:700;cursor:pointer;border:none;transition:all .22s var(--ease);text-decoration:none;white-space:nowrap;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.15);transform:scale(0);border-radius:99px;transition:transform .3s}
+.btn:active::after{transform:scale(2);opacity:0;transition:transform .5s,opacity .4s}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(255,107,53,.35)}
+.btn-primary:hover{background:#e85d28;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,53,.45)}
+.btn-primary:active{transform:translateY(0)}
+.btn-ghost{background:var(--surface);color:var(--text-soft);border:1.5px solid var(--border);box-shadow:var(--shadow)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text);transform:translateY(-1px)}
+.btn-dark{background:var(--dark);color:#fff}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.btn-danger{background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2)}
+.btn-danger:hover{background:rgba(239,68,68,.15)}
+
+/* ── PANELS ── */
+.panel{background:var(--surface);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);transition:box-shadow .2s}
+.panel:hover{box-shadow:var(--shadow-md)}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;gap:.5rem;flex-wrap:wrap}
+.panel-title{font-family:'Syne',sans-serif;font-size:.93rem;font-weight:800;color:var(--dark)}
+
+/* ── STAT CARDS ── */
+.stat-card{background:var(--surface);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow);cursor:pointer;transition:all .25s var(--ease);position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;top:-50%;right:-50%;width:120%;height:120%;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 65%);pointer-events:none;opacity:0;transition:opacity .3s}
+.stat-card:hover::after{opacity:1}
+.stat-card:hover{transform:translateY(-4px) scale(1.01);box-shadow:var(--shadow-lg)}
+.stat-card:active{transform:translateY(-1px) scale(.99)}
+.stat-card.dark{background:var(--dark)}
+.stat-card.orange{background:var(--accent);box-shadow:0 8px 24px rgba(255,107,53,.3)}
+.stat-card.orange:hover{box-shadow:0 16px 40px rgba(255,107,53,.45)}
+.stat-label{font-size:.6rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.5rem}
+.stat-card.dark .stat-label,.stat-card.orange .stat-label{color:rgba(255,255,255,.55)}
+.stat-value{font-family:'Syne',sans-serif;font-size:2.3rem;font-weight:800;line-height:1;letter-spacing:-.025em;color:var(--dark);animation:countUp .6s var(--ease) both}
+.stat-card.dark .stat-value,.stat-card.orange .stat-value{color:#fff}
+.stat-trend{font-size:.73rem;color:var(--text-muted);margin-top:.3rem}
+.stat-card.dark .stat-trend,.stat-card.orange .stat-trend{color:rgba(255,255,255,.5)}
+.stat-icon{width:40px;height:40px;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:.75rem;transition:transform .3s var(--ease)}
+.stat-card:hover .stat-icon{transform:rotate(-8deg) scale(1.15)}
+.stat-card.dark .stat-icon{background:rgba(255,255,255,.1)}
+.stat-card.orange .stat-icon{background:rgba(255,255,255,.2)}
+
+/* ── FORM ── */
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:.61rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.4rem}
+.form-input{width:100%;padding:.78rem 1rem;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:all .2s var(--ease)}
+.form-input:focus{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px rgba(255,107,53,.1);transform:translateY(-1px)}
+.form-input::placeholder{color:var(--text-muted)}
+select.form-input{cursor:pointer}
+select.form-input option{background:#fff}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:3.5rem 2rem;animation:scaleIn .5s var(--ease) both}
+.empty-icon{font-size:3rem;display:block;margin-bottom:1rem;animation:float 3s ease-in-out infinite}
+.empty-state h3{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:var(--dark);margin-bottom:.4rem}
+.empty-state p{font-size:.82rem;color:var(--text-soft);margin-bottom:1.25rem}
+
+/* ── MOBILE NAV ── */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--dark);padding:.55rem 1rem calc(.55rem + env(safe-area-inset-bottom));justify-content:space-around;z-index:100;border-top:1px solid rgba(255,255,255,.06)}
+.mobile-item{display:flex;flex-direction:column;align-items:center;gap:.16rem;color:rgba(255,255,255,.35);text-decoration:none;font-size:.52rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transition:all .2s var(--ease);padding:.2rem .5rem;min-width:48px}
+.mobile-item.active,.mobile-item:hover{color:var(--accent)}
+.mobile-item.active .mobile-icon{transform:translateY(-2px) scale(1.15)}
+.mobile-icon{font-size:1.15rem;transition:transform .2s var(--ease)}
+.mobile-item.active .mobile-dot{display:block}
+.mobile-dot{display:none;width:4px;height:4px;border-radius:50%;background:var(--accent);margin:-2px auto 0}
+
+/* ── LOTTIE ── */
+.lottie-float{animation:float 4s ease-in-out infinite}
+.lottie-pulse{animation:pulse 2s ease-in-out infinite}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .app{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:flex}
+  .main{padding:1.25rem 1rem 5.5rem;max-width:100%}.page-title{font-size:1.75rem}
+  .charts-row,.bottom-row,.two-col{grid-template-columns:1fr!important}
+  .stats-grid{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:480px){
+  .main{padding:.875rem .875rem 5rem}.page-title{font-size:1.45rem}
+  .stat-value{font-size:1.85rem}.topbar-actions{width:100%}
+  .topbar-actions .btn{flex:1;justify-content:center}
+  .panel-header{flex-direction:column;align-items:flex-start}
+  .stats-grid{grid-template-columns:1fr 1fr!important}
+}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-bottom:1rem}
+.chart-wrap{height:195px;position:relative}
+.w-form{display:flex;gap:.5rem;align-items:flex-end;margin-bottom:.875rem;flex-wrap:wrap}
+.w-form .form-group{flex:1;min-width:120px;margin-bottom:0}
+.w-item{display:flex;align-items:center;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid var(--border)}
+.w-item:last-child{border-bottom:none}
+.pr-item{display:flex;align-items:center;justify-content:space-between;padding:.7rem .875rem;background:var(--surface2);border-radius:var(--radius-sm);margin-bottom:.375rem;transition:all .18s var(--ease)}
+.pr-item:hover{background:var(--surface3);transform:translateX(3px)}
+@media(max-width:960px){.two-col,.stats-grid{grid-template-columns:1fr 1fr!important}}
+</style>
+</head>
+<body>
+<div class="app"><aside class="sidebar">
+  <a href="dashboard.html" class="logo"><div class="logo-mark">🔥</div>FitFlow</a>
+  <span class="nav-label">Main</span>
+  <a href="dashboard.html" class="nav-link "><span class="ni">⚡</span>Dashboard</a><a href="workouts.html" class="nav-link "><span class="ni">🏋️</span>Workouts</a><a href="exercises.html" class="nav-link "><span class="ni">📋</span>Exercises</a><a href="progress.html" class="nav-link active"><span class="ni">📈</span>Progress</a><a href="log-workout.html" class="nav-link "><span class="ni">➕</span>Log Workout</a>
+  <span class="nav-label">Community</span>
+  <a href="social.html" class="nav-link "><span class="ni">👥</span>Social Feed</a><a href="challenges.html" class="nav-link "><span class="ni">🏆</span>Challenges</a>
+  <div class="sidebar-bottom">
+    <a href="profile.html" class="user-card">
+      <div class="avatar" id="sidebarAvatar">?</div>
+      <div><div class="user-name" id="sidebarName">…</div><div class="user-sub">View profile →</div></div>
+    </a>
+  </div>
+</aside><main class="main">
+<div class="topbar">
+  <div><div class="page-title">Progress</div><div class="page-sub">Track your fitness journey</div></div>
+</div>
+<div class="stats-grid stagger">
+  <div class="stat-card orange"><div class="stat-icon">⚖️</div><div class="stat-label">Weight</div><div class="stat-value" id="curW">—</div><div class="stat-trend">kg current</div></div>
+  <div class="stat-card dark"><div class="stat-icon">🏋️</div><div class="stat-label">Workouts</div><div class="stat-value" id="totW">—</div><div class="stat-trend">sessions</div></div>
+  <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-label">Records</div><div class="stat-value" id="prCnt">—</div><div class="stat-trend">personal bests</div></div>
+  <div class="stat-card"><div class="stat-icon">💪</div><div class="stat-label">Volume</div><div class="stat-value" id="totVol">—</div><div class="stat-trend">tonnes</div></div>
+</div>
+<div class="two-col stagger">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Weight History</span></div>
+    <div class="chart-wrap"><canvas id="wChart"></canvas></div>
+  </div>
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Log Weight</span></div>
+    <div class="w-form">
+      <div class="form-group"><label class="form-label">Weight (kg)</label><input class="form-input" type="number" id="wInput" placeholder="75.5" step="0.1"/></div>
+      <button class="btn btn-primary" style="margin-bottom:0" onclick="doLog()">Log</button>
+    </div>
+    <div id="wList"><div class="skeleton" style="height:100px;border-radius:var(--radius-sm)"></div></div>
+  </div>
+</div>
+<div class="panel stagger">
+  <div class="panel-header">
+    <span class="panel-title">Personal Records 🏆</span>
+    <div style="display:flex;align-items:center;gap:.4rem">
+      <dotlottie-wc src="https://lottie.host/9f2fed0e-68fb-4cd5-8e4c-c88f50d60783/trophy.lottie" style="width:36px;height:36px" autoplay loop onerror="this.style.display='none'"></dotlottie-wc>
+    </div>
+  </div>
+  <div id="prList"><div class="skeleton" style="height:100px;border-radius:var(--radius-sm)"></div></div>
+</div>
+</main></div>
+<nav class="mobile-nav"><a href="dashboard.html" class="mobile-item "><span class="mobile-icon">⚡</span>Home<span class="mobile-dot"></span></a><a href="workouts.html" class="mobile-item "><span class="mobile-icon">🏋️</span>Train<span class="mobile-dot"></span></a><a href="log-workout.html" class="mobile-item "><span class="mobile-icon">➕</span>Log<span class="mobile-dot"></span></a><a href="progress.html" class="mobile-item active"><span class="mobile-icon">📈</span>Stats<span class="mobile-dot"></span></a><a href="profile.html" class="mobile-item "><span class="mobile-icon">👤</span>Me<span class="mobile-dot"></span></a></nav>
+<script>
+const API_BASE = 'https://fitflow-api-production-c25a.up.railway.app/api';
+
+function getToken() { return localStorage.getItem('fitflow_token'); }
+function getUser() { try { return JSON.parse(localStorage.getItem('fitflow_user')); } catch { return null; } }
+function setAuth(token, user) { localStorage.setItem('fitflow_token', token); localStorage.setItem('fitflow_user', JSON.stringify(user)); }
+function clearAuth() { localStorage.removeItem('fitflow_token'); localStorage.removeItem('fitflow_user'); }
+function logout() { clearAuth(); location.href = 'login.html'; }
+
+async function login(username, password) {
+  const r = await fetch(`${API_BASE}/auth/login/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+  const data = await r.json();
+  if (data.token) setAuth(data.token, data.user);
+  return data;
+}
+
+async function register(payload) {
+  const r = await fetch(`${API_BASE}/auth/register/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const data = await r.json();
+  if (data.token) setAuth(data.token, data.user);
+  return data;
+}
+
+async function authFetch(path, options = {}) {
+  const token = getToken();
+  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (token) headers['Authorization'] = `Token ${token}`;
+  const r = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (r.status === 401) { clearAuth(); location.href = 'login.html'; return null; }
+  return r;
+}
+
+async function getWorkouts(params) {
+  const r = await authFetch('/workouts/workouts/' + (params || ''));
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function createWorkout(payload) {
+  const r = await authFetch('/workouts/workouts/', { method: 'POST', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function addExerciseSet(payload) {
+  const r = await authFetch('/workouts/sets/', { method: 'POST', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getExercises(params) {
+  const r = await authFetch('/workouts/exercises/' + (params || ''));
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getDashboard() {
+  const r = await authFetch('/progress/dashboard/');
+  if (!r || !r.ok) return {};
+  return r.json();
+}
+
+async function getWeightLogs() {
+  const r = await authFetch('/progress/weight/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function logWeight(weight_kg) {
+  const r = await authFetch('/progress/weight/', { method: 'POST', body: JSON.stringify({ weight_kg, date: new Date().toISOString().split('T')[0] }) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getPRs() {
+  const r = await authFetch('/progress/prs/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getProfile() {
+  const r = await authFetch('/auth/profile/');
+  if (!r || !r.ok) return null;
+  return r.json();
+}
+
+async function updateProfile(payload) {
+  const r = await authFetch('/auth/profile/', { method: 'PUT', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getSocialFeed() {
+  const r = await authFetch('/social/feed/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getChallenges() {
+  const r = await authFetch('/social/challenges/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+if(!getToken()){location.href='login.html'}
+const _u=getUser();if(_u){const _av=document.getElementById("sidebarAvatar"),_nm=document.getElementById("sidebarName");if(_av)_av.textContent=(_u.username||"?").substring(0,2).toUpperCase();if(_nm)_nm.textContent=_u.username||"Athlete";}
+
+let wc;
+function buildWChart(entries){
+  const ctx=document.getElementById('wChart').getContext('2d');
+  const g=ctx.createLinearGradient(0,0,0,195);g.addColorStop(0,'rgba(255,107,53,.22)');g.addColorStop(1,'rgba(255,107,53,0)');
+  const labels=entries.map(e=>new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}));
+  const data=entries.map(e=>parseFloat(e.weight_kg));
+  if(wc)wc.destroy();
+  wc=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:'#FF6B35',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#FF6B35',pointBorderColor:'#fff',pointBorderWidth:2,fill:true,backgroundColor:g,tension:.45}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#0D0D0D',bodyColor:'#fff',padding:10,cornerRadius:10,displayColors:false}},scales:{x:{grid:{display:false},ticks:{color:'#A0A0A0',font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{color:'#A0A0A0',font:{size:10}}}}}});
+}
+function renderWL(entries){
+  const el=document.getElementById('wList');
+  if(!entries.length){el.innerHTML='<div style="color:var(--text-muted);font-size:.82rem;padding:.5rem 0">No entries yet — log your first!</div>';return}
+  el.innerHTML=entries.slice(0,5).map(e=>`<div class="w-item"><div style="font-size:.81rem;font-weight:600">${new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div><div style="font-size:.83rem;font-weight:800;color:var(--accent)">${parseFloat(e.weight_kg).toFixed(1)} kg</div></div>`).join('');
+}
+function renderPRs(prs){
+  const el=document.getElementById('prList');
+  if(!prs.length){el.innerHTML='<div class="empty-state"><span class="empty-icon">🏆</span><h3>No PRs yet</h3><p>Keep training — your records will appear here!</p></div>';return}
+  el.innerHTML=prs.map((p,i)=>`<div class="pr-item" style="animation:fadeUp .4s ${i*.06}s both"><div><div style="font-size:.82rem;font-weight:700">${p.exercise_name||'Exercise'}</div><div style="font-size:.67rem;color:var(--text-muted)">${new Date(p.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div></div><div style="font-size:.9rem;font-weight:800;color:var(--accent)">${p.value} kg</div></div>`).join('');
+}
+async function doLog(){
+  const v=parseFloat(document.getElementById('wInput').value);
+  if(!v||v<20||v>500){alert('Enter a valid weight');return}
+  try{const r=await logWeight(v);if(r&&!r.detail){document.getElementById('curW').textContent=v.toFixed(1);document.getElementById('wInput').value='';await load();}else alert('Failed to log weight');}catch(e){alert('Error');}
+}
+async function load(){
+  try{
+    const [dash,wl,prs,ws]=await Promise.all([getDashboard(),getWeightLogs(),getPRs(),getWorkouts()]);
+    if(dash.current_weight)document.getElementById('curW').textContent=parseFloat(dash.current_weight).toFixed(1);
+    document.getElementById('totW').textContent=dash.total_workouts??ws.length;
+    document.getElementById('prCnt').textContent=dash.personal_records??prs.length;
+    const vol=ws.reduce((a,w)=>a+(w.sets||[]).reduce((b,s)=>b+(parseFloat(s.weight_kg||0)*parseInt(s.sets||1)*parseInt(s.reps||1)),0),0);
+    document.getElementById('totVol').textContent=vol>0?(vol/1000).toFixed(1):'0';
+    const sorted=wl.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    if(sorted.length)buildWChart(sorted);
+    renderWL([...sorted].reverse());renderPRs(prs);
+  }catch(e){console.error(e);}
+}
+load();
+
+</script>
+</body>
+</html>

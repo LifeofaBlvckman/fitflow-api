@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>FitFlow · Log Workout</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --body-bg:#F4F4F1;--card-bg:#FFFFFF;--card-bg2:#F0F0EC;
+  --sidebar-bg:#161616;--orange:#F55F2A;--orange-light:#FF7D4F;
+  --orange-dim:rgba(245,95,42,.12);--orange-glow:rgba(245,95,42,.3);
+  --dark:#161616;--dark-card:#1E1E1E;
+  --text:#161616;--text-soft:#6C6C6C;--text-muted:#A8A8A8;
+  --border:rgba(0,0,0,.07);
+  --r:22px;--r-sm:14px;--r-xs:9px;--r-pill:999px;
+  --shadow-sm:0 1px 4px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+  --shadow:0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08),0 16px 40px rgba(0,0,0,.1);
+  --shadow-orange:0 6px 20px rgba(245,95,42,.35);
+  --sidebar-w:248px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--body-bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;background:var(--sidebar-bg);display:flex;flex-direction:column;padding:1.75rem 1rem;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;margin-bottom:2.5rem;padding:0 .5rem}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:var(--orange);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark svg{width:18px;height:18px;fill:#fff}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;letter-spacing:-.02em}
+.nav-label{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.22);padding:.875rem .75rem .4rem;display:block}
+.nav-link{display:flex;align-items:center;gap:.7rem;padding:.6rem .75rem;border-radius:var(--r-sm);color:rgba(255,255,255,.45);text-decoration:none;font-size:.82rem;font-weight:500;transition:all .15s;margin-bottom:.1rem}
+.nav-link .icon{font-size:.95rem;width:20px;text-align:center;flex-shrink:0}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.06)}
+.nav-link.active{color:#161616;background:#fff;font-weight:700}
+.sidebar-footer{margin-top:auto;padding-top:1rem}
+.user-pill{display:flex;align-items:center;gap:.625rem;padding:.75rem;background:rgba(255,255,255,.06);border-radius:var(--r-sm);text-decoration:none;border:1px solid rgba(255,255,255,.07);transition:background .2s}
+.user-pill:hover{background:rgba(255,255,255,.1)}
+.user-avatar{width:34px;height:34px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;color:#fff;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif}
+.user-info-name{font-size:.8rem;font-weight:700;color:#fff}
+.user-info-role{font-size:.65rem;color:rgba(255,255,255,.38)}
+.main{padding:2rem 2rem 6rem;min-height:100vh;overflow-x:hidden}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.75rem;gap:1rem;flex-wrap:wrap}
+.page-eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem}
+.page-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.9rem;font-weight:800;letter-spacing:-.035em;line-height:1.1;color:var(--dark)}
+.page-sub{font-size:.82rem;color:var(--text-soft);margin-top:.3rem}
+.topbar-right{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.2rem;border-radius:var(--r-pill);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap}
+.btn-orange{background:var(--orange);color:#fff;box-shadow:var(--shadow-orange)}
+.btn-orange:hover{background:#e0521e;transform:translateY(-1px)}
+.btn-ghost{background:var(--card-bg);color:var(--text-soft);border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.btn-ghost:hover{background:var(--card-bg2);color:var(--text)}
+.btn-dark{background:var(--dark);color:#fff}
+.btn-dark:hover{background:#2a2a2a;transform:translateY(-1px)}
+.btn-danger{background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.15)}
+.card{background:var(--card-bg);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.card-dark{background:var(--dark-card);border-radius:var(--r);box-shadow:var(--shadow-md);overflow:hidden}
+.card-orange{background:var(--orange);border-radius:var(--r);overflow:hidden}
+.card-pad{padding:1.4rem}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;gap:.5rem}
+.card-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:800;color:var(--dark)}
+.stat-eyebrow{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem}
+.stat-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.8rem;font-weight:800;line-height:1;letter-spacing:-.04em}
+.stat-sub{font-size:.72rem;margin-top:.3rem;opacity:.5}
+.icon-badge{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.icon-badge-orange{background:var(--orange-dim)}
+.icon-badge-white{background:rgba(255,255,255,.15)}
+.chip{display:inline-flex;align-items:center;padding:.22rem .7rem;border-radius:var(--r-pill);font-size:.65rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.chip-orange{background:var(--orange-dim);color:var(--orange)}
+.chip-dark{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8)}
+.chip-green{background:rgba(34,197,94,.12);color:#16a34a}
+.form-group{margin-bottom:.875rem}
+.form-label{display:block;font-size:.6rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.4rem}
+.form-input{width:100%;padding:.75rem 1rem;background:var(--card-bg2);border:1.5px solid var(--border);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:all .2s}
+.form-input:focus{border-color:var(--orange);background:var(--card-bg);box-shadow:0 0 0 3px var(--orange-dim)}
+.form-input::placeholder{color:var(--text-muted)}
+select.form-input{cursor:pointer}
+.empty-state{text-align:center;padding:3rem 1.5rem}
+.empty-icon{font-size:2.5rem;display:block;margin-bottom:.75rem}
+.empty-state h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800;color:var(--dark);margin-bottom:.3rem}
+.empty-state p{font-size:.8rem;color:var(--text-soft);margin-bottom:1.1rem}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--sidebar-bg);padding:.625rem 1rem calc(.625rem + env(safe-area-inset-bottom));justify-content:space-around;z-index:100}
+.mob-item{display:flex;flex-direction:column;align-items:center;gap:.15rem;color:rgba(255,255,255,.35);text-decoration:none;font-size:.52rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transition:color .15s;min-width:44px}
+.mob-item.active,.mob-item:hover{color:var(--orange)}
+.mob-icon{font-size:1.1rem}
+@media(max-width:960px){.app{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:flex}.main{padding:1.25rem 1rem 5.5rem}.page-title{font-size:1.6rem}}
+@media(max-width:600px){.main{padding:1rem .875rem 5rem}.page-title{font-size:1.45rem}.stat-num{font-size:2.2rem}}
+
+.lw-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:1rem;align-items:start}
+.lib-panel{background:var(--card-bg);border-radius:var(--r);padding:1.35rem;box-shadow:var(--shadow);position:sticky;top:1rem}
+.lib-search{width:100%;padding:.65rem .875rem;background:var(--card-bg2);border:1.5px solid var(--border);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--text);outline:none;margin-bottom:.75rem}
+.lib-search:focus{border-color:var(--orange)}
+.lib-list{max-height:420px;overflow-y:auto}
+.lib-item{display:flex;align-items:center;justify-content:space-between;padding:.6rem .5rem;border-radius:var(--r-xs);transition:background .15s;cursor:pointer}
+.lib-item:hover{background:var(--card-bg2)}
+.lib-name{font-size:.81rem;font-weight:600;color:var(--dark)}
+.lib-mg{font-size:.67rem;color:var(--text-muted)}
+.lib-add{padding:.24rem .625rem;border-radius:var(--r-pill);background:var(--orange);color:#fff;font-size:.66rem;font-weight:700;border:none;cursor:pointer;white-space:nowrap}
+.log-panels{display:flex;flex-direction:column;gap:1rem}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:.625rem;margin-bottom:.875rem}
+.ex-card{background:var(--card-bg2);border-radius:var(--r-sm);padding:1rem}
+.ex-card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.ex-card-name{font-size:.87rem;font-weight:800;color:var(--dark);font-family:'Plus Jakarta Sans',sans-serif}
+.ex-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.78rem;padding:.2rem;transition:color .15s}
+.ex-remove:hover{color:#ef4444}
+.sets-tbl{width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:.5rem}
+.sets-tbl th{text-align:left;padding:.3rem .35rem;color:var(--text-muted);font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.sets-tbl td{padding:.35rem .35rem}
+.sets-tbl input{width:100%;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:.3rem .4rem;color:var(--text);font-size:.78rem;font-family:'DM Sans',sans-serif;outline:none;text-align:center}
+.sets-tbl input:focus{border-color:var(--orange)}
+.add-set-btn{font-size:.71rem;color:var(--orange);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700}
+.save-btn{width:100%;padding:.875rem;background:var(--orange);color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:var(--r-sm);cursor:pointer;transition:all .2s;box-shadow:var(--shadow-orange);margin-top:.5rem}
+.save-btn:hover{background:#e0521e;transform:translateY(-1px)}
+.save-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+@media(max-width:960px){.lw-layout{grid-template-columns:1fr}.lib-panel{position:static}.meta-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.meta-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app"><aside class="sidebar"><a href="dashboard.html" class="logo"><div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span class="logo-text">FitFlow</span></a><span class="nav-label">Main</span><a href="dashboard.html" class="nav-link "><span class="icon">⚡</span>Dashboard</a>
+<a href="workouts.html" class="nav-link "><span class="icon">🏋️</span>Workouts</a>
+<a href="exercises.html" class="nav-link "><span class="icon">📋</span>Exercises</a>
+<a href="progress.html" class="nav-link "><span class="icon">📈</span>Progress</a>
+<a href="log-workout.html" class="nav-link active"><span class="icon">➕</span>Log Workout</a><span class="nav-label">Community</span><a href="social.html" class="nav-link "><span class="icon">👥</span>Social</a>
+<a href="challenges.html" class="nav-link "><span class="icon">🏆</span>Challenges</a><div class="sidebar-footer"><a href="profile.html" class="user-pill"><div class="user-avatar" id="sidebarAvatar">?</div><div><div class="user-info-name" id="sidebarName">…</div><div class="user-info-role">Athlete · View profile</div></div></a></div></aside><main class="main">
+<div class="topbar">
+  <div><div class="page-eyebrow">Training</div><div class="page-title">Log Workout</div><div class="page-sub">Record your training session</div></div>
+  <div class="topbar-right"><a href="workouts.html" class="btn btn-ghost">← Back</a></div>
+</div>
+<div class="lw-layout">
+  <div class="lib-panel">
+    <div class="card-title" style="margin-bottom:.875rem">📋 Exercise Library</div>
+    <input class="lib-search" type="text" placeholder="Search exercises…" id="exQ" oninput="filterEx()"/>
+    <div class="lib-list" id="exList"><div style="color:var(--text-muted);font-size:.82rem">Loading…</div></div>
+  </div>
+  <div class="log-panels">
+    <div class="card card-pad">
+      <div class="card-title" style="margin-bottom:.875rem">📅 Session Details</div>
+      <div class="meta-grid">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Date</label><input class="form-input" type="date" id="wDate"/></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Duration (min)</label><input class="form-input" type="number" id="wDur" placeholder="60"/></div>
+      </div>
+      <div class="form-group" style="margin-top:.625rem;margin-bottom:0"><label class="form-label">Notes</label><input class="form-input" type="text" id="wNotes" placeholder="e.g. Upper body push day"/></div>
+    </div>
+    <div class="card card-pad">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div class="card-title">💪 Exercises</div>
+        <span id="exCnt" style="font-size:.74rem;color:var(--text-muted);font-weight:700">0 added</span>
+      </div>
+      <div id="selEx"><div style="color:var(--text-muted);font-size:.82rem;text-align:center;padding:1.5rem 0">← Add exercises from the library</div></div>
+      <button class="save-btn" onclick="saveWorkout()">💾 Save Workout</button>
+      <div id="saveStatus" style="margin-top:.625rem;text-align:center;font-size:.83rem;font-weight:700;display:none"></div>
+    </div>
+  </div>
+</div>
+</main></div>
+<nav class="mobile-nav">
+  <a href="dashboard.html" class="mob-item "><span class="mob-icon">⚡</span>Home</a>
+  <a href="workouts.html" class="mob-item "><span class="mob-icon">🏋️</span>Train</a>
+  <a href="log-workout.html" class="mob-item active"><span class="mob-icon">➕</span>Log</a>
+  <a href="progress.html" class="mob-item "><span class="mob-icon">📈</span>Stats</a>
+  <a href="profile.html" class="mob-item "><span class="mob-icon">👤</span>Me</a>
+</nav>
+<script>
+const API_BASE = 'https://fitflow-api-production-c25a.up.railway.app/api';
+
+function getToken() { return localStorage.getItem('fitflow_token'); }
+function getUser() { try { return JSON.parse(localStorage.getItem('fitflow_user')); } catch { return null; } }
+function setAuth(token, user) { localStorage.setItem('fitflow_token', token); localStorage.setItem('fitflow_user', JSON.stringify(user)); }
+function clearAuth() { localStorage.removeItem('fitflow_token'); localStorage.removeItem('fitflow_user'); }
+function logout() { clearAuth(); location.href = 'login.html'; }
+
+async function login(username, password) {
+  const r = await fetch(`${API_BASE}/auth/login/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+  const data = await r.json();
+  if (data.token) setAuth(data.token, data.user);
+  return data;
+}
+
+async function register(payload) {
+  const r = await fetch(`${API_BASE}/auth/register/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const data = await r.json();
+  if (data.token) setAuth(data.token, data.user);
+  return data;
+}
+
+async function authFetch(path, options = {}) {
+  const token = getToken();
+  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (token) headers['Authorization'] = `Token ${token}`;
+  const r = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (r.status === 401) { clearAuth(); location.href = 'login.html'; return null; }
+  return r;
+}
+
+async function getWorkouts(params) {
+  const r = await authFetch('/workouts/workouts/' + (params || ''));
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function createWorkout(payload) {
+  const r = await authFetch('/workouts/workouts/', { method: 'POST', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function addExerciseSet(payload) {
+  const r = await authFetch('/workouts/sets/', { method: 'POST', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getExercises(params) {
+  const r = await authFetch('/workouts/exercises/' + (params || ''));
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getDashboard() {
+  const r = await authFetch('/progress/dashboard/');
+  if (!r || !r.ok) return {};
+  return r.json();
+}
+
+async function getWeightLogs() {
+  const r = await authFetch('/progress/weight/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function logWeight(weight_kg) {
+  const r = await authFetch('/progress/weight/', { method: 'POST', body: JSON.stringify({ weight_kg, date: new Date().toISOString().split('T')[0] }) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getPRs() {
+  const r = await authFetch('/progress/prs/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getProfile() {
+  const r = await authFetch('/auth/profile/');
+  if (!r || !r.ok) return null;
+  return r.json();
+}
+
+async function updateProfile(payload) {
+  const r = await authFetch('/auth/profile/', { method: 'PUT', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getSocialFeed() {
+  const r = await authFetch('/social/feed/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getChallenges() {
+  const r = await authFetch('/social/challenges/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+if(!getToken()){location.href='login.html'}
+(function(){const u=getUser();if(!u)return;const av=document.getElementById("sidebarAvatar");const nm=document.getElementById("sidebarName");if(av)av.textContent=(u.username||"?").slice(0,2).toUpperCase();if(nm)nm.textContent=u.username||"Athlete";})();
+
+let allEx=[],selEx=[];
+document.getElementById('wDate').value=new Date().toISOString().split('T')[0];
+function filterEx(){const q=document.getElementById('exQ').value.toLowerCase();renderExList(q?allEx.filter(e=>(e.name||'').toLowerCase().includes(q)||(e.muscle_group||'').toLowerCase().includes(q)):allEx);}
+function renderExList(exs){
+  const el=document.getElementById('exList');
+  if(!exs.length){el.innerHTML='<div style="color:var(--text-muted);font-size:.81rem;padding:.5rem">No exercises found</div>';return}
+  el.innerHTML=exs.slice(0,60).map(e=>`<div class="lib-item"><div><div class="lib-name">${e.name||'Exercise'}</div><div class="lib-mg">${e.muscle_group||''}</div></div><button class="lib-add" onclick='addEx(${JSON.stringify(e)})'>+ Add</button></div>`).join('');
+}
+function addEx(ex){if(selEx.find(e=>e.id===ex.id))return;selEx.push({...ex,sets:[{reps:'',weight_kg:''}]});renderSel();}
+function removeEx(id){selEx=selEx.filter(e=>e.id!==id);renderSel();}
+function addSet(id){const e=selEx.find(e=>e.id===id);if(e){e.sets.push({reps:'',weight_kg:''});renderSel();}}
+function updateSet(id,si,f,v){const e=selEx.find(e=>e.id===id);if(e&&e.sets[si])e.sets[si][f]=v;}
+function renderSel(){
+  document.getElementById('exCnt').textContent=selEx.length+' added';
+  const el=document.getElementById('selEx');
+  if(!selEx.length){el.innerHTML='<div style="color:var(--text-muted);font-size:.82rem;text-align:center;padding:1.5rem 0">Add exercises from the library</div>';return}
+  el.innerHTML=selEx.map(ex=>`<div class="ex-card" style="margin-bottom:.625rem"><div class="ex-card-hdr"><div class="ex-card-name">${ex.name}</div><button class="ex-remove" onclick="removeEx(${ex.id})">✕ Remove</button></div><table class="sets-tbl"><tr><th>Set</th><th>Reps</th><th>Weight (kg)</th></tr>${ex.sets.map((s,si)=>`<tr><td style="color:var(--text-muted);font-weight:700;text-align:center">${si+1}</td><td><input type="number" value="${s.reps}" placeholder="12" min="1" onchange="updateSet(${ex.id},${si},'reps',this.value)"/></td><td><input type="number" value="${s.weight_kg}" placeholder="0" step="0.5" onchange="updateSet(${ex.id},${si},'weight_kg',this.value)"/></td></tr>`).join('')}</table><button class="add-set-btn" onclick="addSet(${ex.id})">+ Add Set</button></div>`).join('');
+}
+async function saveWorkout(){
+  if(!selEx.length){alert('Add at least one exercise');return}
+  const date=document.getElementById('wDate').value;
+  const dur=document.getElementById('wDur').value;
+  const notes=document.getElementById('wNotes').value;
+  const btn=document.querySelector('.save-btn');btn.disabled=true;btn.textContent='Saving…';
+  try{
+    const w=await createWorkout({date,duration_minutes:parseInt(dur)||0,notes});
+    if(!w||w.detail)throw new Error('Failed to create workout');
+    for(const ex of selEx){const s=ex.sets[0]||{};await addExerciseSet({workout:w.id,exercise:ex.id,sets:ex.sets.length,reps:parseInt(s.reps)||0,weight_kg:parseFloat(s.weight_kg)||0});}
+    const st=document.getElementById('saveStatus');st.style.display='block';st.style.color='#16a34a';st.textContent='✅ Workout saved!';
+    setTimeout(()=>location.href='workouts.html',1200);
+  }catch(e){btn.disabled=false;btn.textContent='💾 Save Workout';alert('Error: '+e.message);}
+}
+async function load(){try{allEx=await getExercises();renderExList(allEx);}catch(e){document.getElementById('exList').innerHTML='<div style="color:var(--text-muted);font-size:.82rem">Could not load exercises</div>';}}
+load();
+
+</script>
+</body>
+</html>

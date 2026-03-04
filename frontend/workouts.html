@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>FitFlow · Workouts</title>
+<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F4F4F0;--surface:#FFFFFF;--surface2:#F0F0EB;--surface3:#E8E8E2;
+  --accent:#FF6B35;--accent2:#FF8C5A;--accent-dim:rgba(255,107,53,.1);--accent-glow:rgba(255,107,53,.25);
+  --dark:#0D0D0D;--dark2:#1A1A1A;
+  --text:#0D0D0D;--text-soft:#6B6B6B;--text-muted:#A0A0A0;
+  --border:rgba(0,0,0,.07);--border-strong:rgba(0,0,0,.13);
+  --radius:22px;--radius-sm:14px;--radius-xs:9px;--sw:260px;
+  --shadow:0 2px 16px rgba(0,0,0,.05);--shadow-md:0 8px 32px rgba(0,0,0,.09);--shadow-lg:0 20px 60px rgba(0,0,0,.14);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{0%{opacity:0;transform:translateY(22px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+@keyframes slideIn{0%{opacity:0;transform:translateX(-18px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{0%{opacity:0;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(.96)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes countUp{0%{transform:translateY(8px);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes ripple{0%{transform:scale(0);opacity:.6}100%{transform:scale(4);opacity:0}}
+@keyframes bounceIn{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.08)}80%{transform:scale(.96)}100%{transform:scale(1);opacity:1}}
+@keyframes slideUp{0%{transform:translateY(100%);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(255,107,53,.2)}50%{box-shadow:0 0 40px rgba(255,107,53,.5)}}
+@keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ringFill{0%{stroke-dashoffset:283}100%{stroke-dashoffset:var(--offset)}}
+
+/* Stagger children */
+.stagger > *{animation:fadeUp .5s var(--ease) both}
+.stagger > *:nth-child(1){animation-delay:.05s}
+.stagger > *:nth-child(2){animation-delay:.1s}
+.stagger > *:nth-child(3){animation-delay:.15s}
+.stagger > *:nth-child(4){animation-delay:.2s}
+.stagger > *:nth-child(5){animation-delay:.25s}
+.stagger > *:nth-child(6){animation-delay:.3s}
+
+/* Skeleton loader */
+.skeleton{background:linear-gradient(90deg,#e8e8e2 25%,#f0f0eb 50%,#e8e8e2 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+
+/* ── SIDEBAR ── */
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:1.75rem 1.1rem;background:var(--dark);width:var(--sw);animation:slideIn .5s var(--ease) both}
+.logo{font-family:'Syne',sans-serif;font-size:1.65rem;font-weight:800;letter-spacing:-.03em;color:#fff;text-decoration:none;display:flex;align-items:center;gap:.55rem;margin-bottom:2.25rem}
+.logo-mark{width:32px;height:32px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:glow 3s ease-in-out infinite;font-size:.85rem}
+.nav-label{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:0 .75rem;margin:1.25rem 0 .4rem;display:block}
+.nav-link{display:flex;align-items:center;gap:.75rem;padding:.68rem .875rem;border-radius:var(--radius-xs);color:rgba(255,255,255,.45);text-decoration:none;font-size:.84rem;font-weight:500;transition:all .2s var(--ease);margin-bottom:.1rem;position:relative;overflow:hidden}
+.nav-link::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.06);transform:scaleX(0);transform-origin:left;transition:transform .2s var(--ease)}
+.nav-link:hover::before{transform:scaleX(1)}
+.nav-link:hover{color:#fff}
+.nav-link.active{color:#000;background:#fff;font-weight:700}
+.nav-link.active::before{display:none}
+.nav-link .ni{width:19px;text-align:center;font-size:.88rem;flex-shrink:0}
+.sidebar-bottom{margin-top:auto}
+.user-card{display:flex;align-items:center;gap:.75rem;padding:.875rem;background:rgba(255,255,255,.06);border-radius:var(--radius-sm);text-decoration:none;transition:all .2s;border:1px solid rgba(255,255,255,.07)}
+.user-card:hover{background:rgba(255,255,255,.11);transform:translateY(-1px)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#fff;flex-shrink:0;transition:transform .2s}
+.user-card:hover .avatar{transform:scale(1.1) rotate(-5deg)}
+.user-name{font-size:.81rem;font-weight:700;color:#fff}
+.user-sub{font-size:.65rem;color:rgba(255,255,255,.38)}
+
+/* ── LAYOUT ── */
+.app{display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh}
+.main{padding:2rem 2.25rem 5rem;max-width:1100px;overflow-x:hidden}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap;animation:fadeUp .5s var(--ease) both}
+.page-title{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;letter-spacing:-.03em;line-height:1.1;color:var(--dark)}
+.page-sub{color:var(--text-soft);font-size:.84rem;margin-top:.3rem}
+.topbar-actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.25rem;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.81rem;font-weight:700;cursor:pointer;border:none;transition:all .22s var(--ease);text-decoration:none;white-space:nowrap;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.15);transform:scale(0);border-radius:99px;transition:transform .3s}
+.btn:active::after{transform:scale(2);opacity:0;transition:transform .5s,opacity .4s}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(255,107,53,.35)}
+.btn-primary:hover{background:#e85d28;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,53,.45)}
+.btn-primary:active{transform:translateY(0)}
+.btn-ghost{background:var(--surface);color:var(--text-soft);border:1.5px solid var(--border);box-shadow:var(--shadow)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text);transform:translateY(-1px)}
+.btn-dark{background:var(--dark);color:#fff}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.btn-danger{background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2)}
+.btn-danger:hover{background:rgba(239,68,68,.15)}
+
+/* ── PANELS ── */
+.panel{background:var(--surface);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);transition:box-shadow .2s}
+.panel:hover{box-shadow:var(--shadow-md)}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;gap:.5rem;flex-wrap:wrap}
+.panel-title{font-family:'Syne',sans-serif;font-size:.93rem;font-weight:800;color:var(--dark)}
+
+/* ── STAT CARDS ── */
+.stat-card{background:var(--surface);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow);cursor:pointer;transition:all .25s var(--ease);position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;top:-50%;right:-50%;width:120%;height:120%;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 65%);pointer-events:none;opacity:0;transition:opacity .3s}
+.stat-card:hover::after{opacity:1}
+.stat-card:hover{transform:translateY(-4px) scale(1.01);box-shadow:var(--shadow-lg)}
+.stat-card:active{transform:translateY(-1px) scale(.99)}
+.stat-card.dark{background:var(--dark)}
+.stat-card.orange{background:var(--accent);box-shadow:0 8px 24px rgba(255,107,53,.3)}
+.stat-card.orange:hover{box-shadow:0 16px 40px rgba(255,107,53,.45)}
+.stat-label{font-size:.6rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.5rem}
+.stat-card.dark .stat-label,.stat-card.orange .stat-label{color:rgba(255,255,255,.55)}
+.stat-value{font-family:'Syne',sans-serif;font-size:2.3rem;font-weight:800;line-height:1;letter-spacing:-.025em;color:var(--dark);animation:countUp .6s var(--ease) both}
+.stat-card.dark .stat-value,.stat-card.orange .stat-value{color:#fff}
+.stat-trend{font-size:.73rem;color:var(--text-muted);margin-top:.3rem}
+.stat-card.dark .stat-trend,.stat-card.orange .stat-trend{color:rgba(255,255,255,.5)}
+.stat-icon{width:40px;height:40px;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:.75rem;transition:transform .3s var(--ease)}
+.stat-card:hover .stat-icon{transform:rotate(-8deg) scale(1.15)}
+.stat-card.dark .stat-icon{background:rgba(255,255,255,.1)}
+.stat-card.orange .stat-icon{background:rgba(255,255,255,.2)}
+
+/* ── FORM ── */
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:.61rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.4rem}
+.form-input{width:100%;padding:.78rem 1rem;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:all .2s var(--ease)}
+.form-input:focus{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px rgba(255,107,53,.1);transform:translateY(-1px)}
+.form-input::placeholder{color:var(--text-muted)}
+select.form-input{cursor:pointer}
+select.form-input option{background:#fff}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:3.5rem 2rem;animation:scaleIn .5s var(--ease) both}
+.empty-icon{font-size:3rem;display:block;margin-bottom:1rem;animation:float 3s ease-in-out infinite}
+.empty-state h3{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:var(--dark);margin-bottom:.4rem}
+.empty-state p{font-size:.82rem;color:var(--text-soft);margin-bottom:1.25rem}
+
+/* ── MOBILE NAV ── */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--dark);padding:.55rem 1rem calc(.55rem + env(safe-area-inset-bottom));justify-content:space-around;z-index:100;border-top:1px solid rgba(255,255,255,.06)}
+.mobile-item{display:flex;flex-direction:column;align-items:center;gap:.16rem;color:rgba(255,255,255,.35);text-decoration:none;font-size:.52rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transition:all .2s var(--ease);padding:.2rem .5rem;min-width:48px}
+.mobile-item.active,.mobile-item:hover{color:var(--accent)}
+.mobile-item.active .mobile-icon{transform:translateY(-2px) scale(1.15)}
+.mobile-icon{font-size:1.15rem;transition:transform .2s var(--ease)}
+.mobile-item.active .mobile-dot{display:block}
+.mobile-dot{display:none;width:4px;height:4px;border-radius:50%;background:var(--accent);margin:-2px auto 0}
+
+/* ── LOTTIE ── */
+.lottie-float{animation:float 4s ease-in-out infinite}
+.lottie-pulse{animation:pulse 2s ease-in-out infinite}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .app{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:flex}
+  .main{padding:1.25rem 1rem 5.5rem;max-width:100%}.page-title{font-size:1.75rem}
+  .charts-row,.bottom-row,.two-col{grid-template-columns:1fr!important}
+  .stats-grid{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:480px){
+  .main{padding:.875rem .875rem 5rem}.page-title{font-size:1.45rem}
+  .stat-value{font-size:1.85rem}.topbar-actions{width:100%}
+  .topbar-actions .btn{flex:1;justify-content:center}
+  .panel-header{flex-direction:column;align-items:flex-start}
+  .stats-grid{grid-template-columns:1fr 1fr!important}
+}
+
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1.25rem}
+.filter-row{display:flex;gap:.4rem;margin-bottom:1.25rem;overflow-x:auto;padding-bottom:.25rem;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.ftab{padding:.38rem 1rem;border-radius:99px;font-size:.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--text-soft);transition:all .18s var(--ease);font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0;box-shadow:var(--shadow)}
+.ftab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 4px 14px rgba(255,107,53,.3)}
+.ftab:hover:not(.active){background:var(--surface2);transform:translateY(-1px)}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:.875rem}
+.wcard{background:var(--surface);border-radius:var(--radius);padding:1.35rem;cursor:pointer;transition:all .25s var(--ease);position:relative;overflow:hidden;box-shadow:var(--shadow);animation:fadeUp .5s var(--ease) both}
+.wcard:hover{transform:translateY(-4px) scale(1.01);box-shadow:var(--shadow-lg)}
+.wcard-stripe{position:absolute;top:0;left:0;right:0;height:4px;transform-origin:left;animation:barGrow .6s var(--ease) both}
+.wcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.875rem;margin-top:.25rem}
+.wcard-date{font-size:.67rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+.wcard-badge{padding:.2rem .65rem;border-radius:99px;font-size:.65rem;font-weight:700;color:#fff}
+.wcard-title{font-family:'Syne',sans-serif;font-size:1.08rem;font-weight:800;color:var(--dark);margin-bottom:.22rem}
+.wcard-sub{font-size:.76rem;color:var(--text-muted);margin-bottom:.875rem}
+.wcard-stats{display:flex;gap:.75rem;flex-wrap:wrap}
+.wcard-stat{font-size:.73rem;color:var(--text-soft);font-weight:500;display:flex;align-items:center;gap:.25rem}
+@media(max-width:480px){.wgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app"><aside class="sidebar">
+  <a href="dashboard.html" class="logo"><div class="logo-mark">🔥</div>FitFlow</a>
+  <span class="nav-label">Main</span>
+  <a href="dashboard.html" class="nav-link "><span class="ni">⚡</span>Dashboard</a><a href="workouts.html" class="nav-link active"><span class="ni">🏋️</span>Workouts</a><a href="exercises.html" class="nav-link "><span class="ni">📋</span>Exercises</a><a href="progress.html" class="nav-link "><span class="ni">📈</span>Progress</a><a href="log-workout.html" class="nav-link "><span class="ni">➕</span>Log Workout</a>
+  <span class="nav-label">Community</span>
+  <a href="social.html" class="nav-link "><span class="ni">👥</span>Social Feed</a><a href="challenges.html" class="nav-link "><span class="ni">🏆</span>Challenges</a>
+  <div class="sidebar-bottom">
+    <a href="profile.html" class="user-card">
+      <div class="avatar" id="sidebarAvatar">?</div>
+      <div><div class="user-name" id="sidebarName">…</div><div class="user-sub">View profile →</div></div>
+    </a>
+  </div>
+</aside><main class="main">
+<div class="topbar">
+  <div><div class="page-title">Workouts</div><div class="page-sub">Your training history</div></div>
+  <div class="topbar-actions"><a href="log-workout.html" class="btn btn-primary">＋ New</a></div>
+</div>
+<div class="stats-grid stagger">
+  <div class="stat-card orange"><div class="stat-icon">🏋️</div><div class="stat-label">Total Sessions</div><div class="stat-value" id="wTot">—</div><div class="stat-trend">all time</div></div>
+  <div class="stat-card dark"><div class="stat-icon">📅</div><div class="stat-label">This Month</div><div class="stat-value" id="wMonth">—</div><div class="stat-trend">sessions</div></div>
+  <div class="stat-card"><div class="stat-icon">⏱️</div><div class="stat-label">Avg Duration</div><div class="stat-value" id="wAvg">—</div><div class="stat-trend">minutes</div></div>
+</div>
+<div class="filter-row">
+  <button class="ftab active" onclick="fw(this,'all')">All Time</button>
+  <button class="ftab" onclick="fw(this,'week')">This Week</button>
+  <button class="ftab" onclick="fw(this,'month')">This Month</button>
+</div>
+<div id="wGrid"><div class="skeleton" style="height:220px;border-radius:var(--radius)"></div></div>
+</main></div>
+<nav class="mobile-nav"><a href="dashboard.html" class="mobile-item "><span class="mobile-icon">⚡</span>Home<span class="mobile-dot"></span></a><a href="workouts.html" class="mobile-item active"><span class="mobile-icon">🏋️</span>Train<span class="mobile-dot"></span></a><a href="log-workout.html" class="mobile-item "><span class="mobile-icon">➕</span>Log<span class="mobile-dot"></span></a><a href="progress.html" class="mobile-item "><span class="mobile-icon">📈</span>Stats<span class="mobile-dot"></span></a><a href="profile.html" class="mobile-item "><span class="mobile-icon">👤</span>Me<span class="mobile-dot"></span></a></nav>
+<script>
+const API_BASE = 'https://fitflow-api-production-c25a.up.railway.app/api';
+
+function getToken() { return localStorage.getItem('fitflow_token'); }
+function getUser() { try { return JSON.parse(localStorage.getItem('fitflow_user')); } catch { return null; } }
+function setAuth(token, user) { localStorage.setItem('fitflow_token', token); localStorage.setItem('fitflow_user', JSON.stringify(user)); }
+function clearAuth() { localStorage.removeItem('fitflow_token'); localStorage.removeItem('fitflow_user'); }
+function logout() { clearAuth(); location.href = 'login.html'; }
+
+async function login(username, password) {
+  const r = await fetch(`${API_BASE}/auth/login/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+  const data = await r.json();
+  if (data.token) setAuth(data.token, data.user);
+  return data;
+}
+
+async function register(payload) {
+  const r = await fetch(`${API_BASE}/auth/register/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const data = await r.json();
+  if (data.token) setAuth(data.token, data.user);
+  return data;
+}
+
+async function authFetch(path, options = {}) {
+  const token = getToken();
+  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (token) headers['Authorization'] = `Token ${token}`;
+  const r = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (r.status === 401) { clearAuth(); location.href = 'login.html'; return null; }
+  return r;
+}
+
+async function getWorkouts(params) {
+  const r = await authFetch('/workouts/workouts/' + (params || ''));
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function createWorkout(payload) {
+  const r = await authFetch('/workouts/workouts/', { method: 'POST', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function addExerciseSet(payload) {
+  const r = await authFetch('/workouts/sets/', { method: 'POST', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getExercises(params) {
+  const r = await authFetch('/workouts/exercises/' + (params || ''));
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getDashboard() {
+  const r = await authFetch('/progress/dashboard/');
+  if (!r || !r.ok) return {};
+  return r.json();
+}
+
+async function getWeightLogs() {
+  const r = await authFetch('/progress/weight/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function logWeight(weight_kg) {
+  const r = await authFetch('/progress/weight/', { method: 'POST', body: JSON.stringify({ weight_kg, date: new Date().toISOString().split('T')[0] }) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getPRs() {
+  const r = await authFetch('/progress/prs/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getProfile() {
+  const r = await authFetch('/auth/profile/');
+  if (!r || !r.ok) return null;
+  return r.json();
+}
+
+async function updateProfile(payload) {
+  const r = await authFetch('/auth/profile/', { method: 'PUT', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getSocialFeed() {
+  const r = await authFetch('/social/feed/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getChallenges() {
+  const r = await authFetch('/social/challenges/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+if(!getToken()){location.href='login.html'}
+const _u=getUser();if(_u){const _av=document.getElementById("sidebarAvatar"),_nm=document.getElementById("sidebarName");if(_av)_av.textContent=(_u.username||"?").substring(0,2).toUpperCase();if(_nm)_nm.textContent=_u.username||"Athlete";}
+
+const COLORS=['#FF6B35','#0D0D0D','#6366f1','#10b981','#f59e0b','#ec4899'];
+let allWs=[];
+function renderWs(ws){
+  const el=document.getElementById('wGrid');
+  if(!ws.length){el.innerHTML='<div class="empty-state"><span class="empty-icon">🏋️</span><h3>No workouts found</h3><p>Start logging to see your history</p><a href="log-workout.html" class="btn btn-primary">＋ Log Workout</a></div>';return}
+  el.innerHTML='<div class="wgrid">'+ws.map((w,i)=>{const c=COLORS[i%COLORS.length];const vol=(w.sets||[]).reduce((a,s)=>a+(parseFloat(s.weight_kg||0)*parseInt(s.sets||1)*parseInt(s.reps||1)),0);return `<div class="wcard" style="animation-delay:${i*.06}s"><div class="wcard-stripe" style="background:${c}"></div><div class="wcard-top"><div class="wcard-date">${new Date(w.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</div><div class="wcard-badge" style="background:${c}">${w.duration_minutes||'—'} min</div></div><div class="wcard-title">${w.notes||'Workout Session'}</div><div class="wcard-sub">${w.total_sets||0} sets completed</div><div class="wcard-stats"><span class="wcard-stat">💪 ${(w.sets||[]).length} ex</span>${vol>0?`<span class="wcard-stat">⚖️ ${Math.round(vol).toLocaleString()} kg</span>`:''}</div></div>`;}).join('')+'</div>';
+}
+function fw(btn,type){document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');const now=new Date();if(type==='all')renderWs(allWs);else if(type==='week')renderWs(allWs.filter(w=>new Date(w.date)>=new Date(now-7*864e5)));else renderWs(allWs.filter(w=>new Date(w.date)>=new Date(now-30*864e5)));}
+async function load(){
+  try{
+    allWs=await getWorkouts();renderWs(allWs);
+    document.getElementById('wTot').textContent=allWs.length;
+    const m=allWs.filter(w=>new Date(w.date)>=new Date(Date.now()-30*864e5));document.getElementById('wMonth').textContent=m.length;
+    const avg=allWs.length?Math.round(allWs.reduce((a,w)=>a+(w.duration_minutes||0),0)/allWs.length):0;document.getElementById('wAvg').textContent=avg||'—';
+  }catch(e){renderWs([]);}
+}
+load();
+
+</script>
+</body>
+</html>

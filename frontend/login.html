@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>FitFlow · Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#F4F4F1;--card:#fff;--card2:#F0F0EC;--orange:#F55F2A;--orange-dim:rgba(245,95,42,.12);--orange-glow:rgba(245,95,42,.3);--dark:#161616;--text:#161616;--soft:#6C6C6C;--muted:#A8A8A8;--border:rgba(0,0,0,.08);--r:22px;--r-sm:14px;--r-pill:999px;--shadow:0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);--shadow-lg:0 8px 32px rgba(0,0,0,.1),0 24px 60px rgba(0,0,0,.1)}
+html{height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;display:flex}
+.split{display:grid;grid-template-columns:1fr 1fr;width:100%;min-height:100vh}
+
+/* LEFT PANEL */
+.left{background:var(--dark);display:flex;flex-direction:column;justify-content:center;padding:3rem 3.5rem;position:relative;overflow:hidden}
+.left::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(245,95,42,.18) 0%,transparent 65%);pointer-events:none}
+.left::after{content:'';position:absolute;bottom:-80px;left:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(245,95,42,.08) 0%,transparent 65%);pointer-events:none}
+.brand{display:flex;align-items:center;gap:.625rem;margin-bottom:3rem;position:relative;z-index:1}
+.brand-mark{width:38px;height:38px;border-radius:11px;background:var(--orange);display:flex;align-items:center;justify-content:center}
+.brand-mark svg{width:20px;height:20px;fill:#fff}
+.brand-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;letter-spacing:-.02em}
+.left-headline{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.8rem;font-weight:800;line-height:1.1;letter-spacing:-.04em;color:#fff;margin-bottom:1rem;position:relative;z-index:1}
+.left-headline em{color:var(--orange);font-style:normal}
+.left-sub{font-size:.9rem;color:rgba(255,255,255,.45);line-height:1.65;margin-bottom:2.5rem;position:relative;z-index:1}
+.features{display:flex;flex-direction:column;gap:.625rem;position:relative;z-index:1}
+.feature{display:flex;align-items:center;gap:.875rem;padding:.875rem 1rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:14px}
+.feature-icon{font-size:1.1rem;flex-shrink:0}
+.feature-text{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.5}
+.feature-text strong{color:rgba(255,255,255,.85);font-weight:600}
+
+/* RIGHT PANEL */
+.right{display:flex;flex-direction:column;justify-content:center;padding:3rem 3.5rem;background:var(--bg)}
+.form-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-.04em;color:var(--dark);margin-bottom:.4rem}
+.form-sub{font-size:.875rem;color:var(--soft);margin-bottom:2rem}
+.form-sub a{color:var(--orange);font-weight:700;text-decoration:none}
+.form-sub a:hover{text-decoration:underline}
+.form-group{margin-bottom:.875rem}
+.form-label{display:block;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.form-input{width:100%;padding:.8rem 1.1rem;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:all .2s;box-shadow:var(--shadow)}
+.form-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px var(--orange-dim),var(--shadow)}
+.form-input::placeholder{color:var(--muted)}
+.btn-login{width:100%;padding:.875rem;background:var(--orange);color:#fff;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:800;border:none;border-radius:var(--r-pill);cursor:pointer;transition:all .2s;margin-top:.5rem;box-shadow:0 6px 20px var(--orange-glow);letter-spacing:.01em}
+.btn-login:hover{background:#e0521e;transform:translateY(-2px);box-shadow:0 10px 28px var(--orange-glow)}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-demo{width:100%;padding:.7rem;background:transparent;color:var(--soft);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;border:1.5px solid var(--border);border-radius:var(--r-pill);cursor:pointer;transition:all .2s;margin-top:.5rem}
+.btn-demo:hover{background:var(--card);color:var(--text)}
+.error-box{background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.2);border-radius:var(--r-sm);padding:.875rem 1rem;font-size:.83rem;color:#dc2626;margin-bottom:1rem;display:none}
+.divider{display:flex;align-items:center;gap:.75rem;margin:.875rem 0;color:var(--muted);font-size:.75rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+@media(max-width:768px){
+  .split{grid-template-columns:1fr;min-height:100vh}
+  .left{display:none}
+  .right{padding:2.5rem 1.5rem;min-height:100vh}
+  .form-title{font-size:1.75rem}
+}
+@media(max-width:480px){.right{padding:2rem 1.25rem}}
+</style>
+</head>
+<body>
+<div class="split">
+  <div class="left">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <span class="brand-name">FitFlow</span>
+    </div>
+    <div class="left-headline">Train smarter.<br/>Track <em>everything.</em></div>
+    <div class="left-sub">Your complete fitness operating system. Log workouts, track weight, hit PRs, and compete with your community.</div>
+    <div class="features">
+      <div class="feature"><span class="feature-icon">🏋️</span><div class="feature-text"><strong>Workout Logging</strong> — track every set, rep and weight</div></div>
+      <div class="feature"><span class="feature-icon">📈</span><div class="feature-text"><strong>Progress Charts</strong> — visualize your improvement over time</div></div>
+      <div class="feature"><span class="feature-icon">🏆</span><div class="feature-text"><strong>Personal Records</strong> — celebrate every new milestone</div></div>
+      <div class="feature"><span class="feature-icon">👥</span><div class="feature-text"><strong>Community</strong> — challenges, leaderboards and social feed</div></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="form-title">Welcome back 👋</div>
+    <div class="form-sub">New here? <a href="register.html">Create a free account →</a></div>
+    <div class="error-box" id="errBox"></div>
+    <div class="form-group"><label class="form-label">Username</label><input class="form-input" type="text" id="un" placeholder="your username" autocomplete="username"/></div>
+    <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" id="pw" placeholder="your password" autocomplete="current-password"/></div>
+    <button class="btn-login" id="loginBtn" onclick="doLogin()">Log In →</button>
+    <div class="divider">or</div>
+    <button class="btn-demo" onclick="fillDemo()">⚡ Use demo account</button>
+  </div>
+</div>
+<script>
+const API_BASE='https://fitflow-api-production-c25a.up.railway.app/api';
+function getToken(){return localStorage.getItem('fitflow_token')}
+function setAuth(t,u){localStorage.setItem('fitflow_token',t);localStorage.setItem('fitflow_user',JSON.stringify(u))}
+if(getToken()){location.href='dashboard.html'}
+function fillDemo(){document.getElementById('un').value='livetest01';document.getElementById('pw').value='FitFlow2026!';}
+async function doLogin(){
+  const un=document.getElementById('un').value.trim();const pw=document.getElementById('pw').value;
+  const err=document.getElementById('errBox');const btn=document.getElementById('loginBtn');
+  err.style.display='none';
+  if(!un||!pw){err.textContent='Please enter username and password';err.style.display='block';return}
+  btn.disabled=true;btn.textContent='Logging in…';
+  try{
+    const r=await fetch(`${API_BASE}/auth/login/`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:un,password:pw})});
+    const data=await r.json();
+    if(data.token){setAuth(data.token,data.user);location.href='dashboard.html';}
+    else{err.textContent=data.non_field_errors?.[0]||data.detail||'Invalid credentials';err.style.display='block';btn.disabled=false;btn.textContent='Log In →';}
+  }catch(e){err.textContent='Connection error. Please try again.';err.style.display='block';btn.disabled=false;btn.textContent='Log In →';}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+</script>
+</body>
+</html>
