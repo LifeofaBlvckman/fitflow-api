@@ -5,8 +5,8 @@ A full-stack fitness tracking web application built with Django REST Framework a
 ## 🌐 Live Demo
 
 - **Frontend:** https://fitflow-api-g4kx.vercel.app/login.html
-- **Backend API:** https://fitflow-api-production-c25a.up.railway.app/api/
-- **Demo Account:** `livetest01` / `FitFlow2026!`
+- **Backend API:** https://fitflow-api-production-c25a.up.railway.app/admin/login/?next=/admin/
+- **Note:** Create a free account on the frontend to get started
 
 ## 📋 Project Overview
 
@@ -44,7 +44,6 @@ FitFlow is a fitness tracking platform that allows users to log workouts, track 
 - **GitHub** — Version control
 
 ## 📁 Project Structure
-
 ```
 fitflow-api/
 ├── fitflow_api/          # Django project settings
@@ -97,7 +96,6 @@ fitflow-api/
 ## 🚀 Setup & Installation
 
 ### Backend
-
 ```bash
 git clone https://github.com/LifeofaBlvckman/fitflow-api.git
 cd fitflow-api
@@ -109,7 +107,6 @@ python manage.py runserver
 ```
 
 ### Environment Variables
-
 ```
 DJANGO_SECRET_KEY=your-secret-key
 DATABASE_URL=your-postgres-url
@@ -120,7 +117,6 @@ ALLOWED_HOSTS=your-domain.com
 ### Frontend
 
 Open any `.html` file from the `frontend/` folder via a local server:
-
 ```bash
 cd frontend
 python3 -m http.server 3000
@@ -129,5 +125,5 @@ python3 -m http.server 3000
 
 ## 👤 Author
 
-**Olaoluwa** — ALX Backend Engineering Program  
+**Olaoluwa** — ALX Backend Engineering Program
 GitHub: [@LifeofaBlvckman](https://github.com/LifeofaBlvckman)
