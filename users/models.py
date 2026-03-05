@@ -5,7 +5,6 @@ class User(AbstractUser):
     height_cm = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     starting_weight_kg = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     fitness_goal = models.TextField(blank=True)
-    date_joined = models.DateField(auto_now_add=True)
     
     def __str__(self):
         return self.username
