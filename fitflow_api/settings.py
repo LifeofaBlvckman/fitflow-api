@@ -115,3 +115,4 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = ['https://fitflow-api-production-c25a.up.railway.app']
