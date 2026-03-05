@@ -1,353 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <title>FitFlow · Social</title>
-<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a0a;--surface:#141414;--surface2:#1c1c1c;--surface3:#242424;--accent:#d4f542;--accent-dim:rgba(212,245,66,.07);--accent-glow:rgba(212,245,66,.18);--orange:#ff6b2b;--blue:#4f8ef7;--text:#f0f0ea;--text-muted:#5a5a5a;--text-soft:#909090;--border:rgba(255,255,255,.055);--border-accent:rgba(212,245,66,.28);--radius:22px;--radius-sm:14px;--sw:248px}
+:root{
+  --body-bg:#F4F4F1;--card-bg:#FFFFFF;--card-bg2:#F0F0EC;
+  --sidebar-bg:#161616;--orange:#F55F2A;--orange-light:#FF7D4F;
+  --orange-dim:rgba(245,95,42,.12);--orange-glow:rgba(245,95,42,.3);
+  --dark:#161616;--dark-card:#1E1E1E;
+  --text:#161616;--text-soft:#6C6C6C;--text-muted:#A8A8A8;
+  --border:rgba(0,0,0,.07);
+  --r:22px;--r-sm:14px;--r-xs:9px;--r-pill:999px;
+  --shadow-sm:0 1px 4px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+  --shadow:0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08),0 16px 40px rgba(0,0,0,.1);
+  --shadow-orange:0 6px 20px rgba(245,95,42,.35);
+  --sidebar-w:248px;
+}
 html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.ambient::before{content:'';position:absolute;top:-300px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(212,245,66,.05) 0%,transparent 65%)}
-.ambient::after{content:'';position:absolute;bottom:-200px;left:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,107,43,.04) 0%,transparent 65%)}
-.app{position:relative;z-index:1;display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh}
-.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:1.75rem 1rem 1.5rem;border-right:1px solid var(--border);background:rgba(10,10,10,.93);backdrop-filter:blur(24px);animation:slideIn .4s ease both}
-@keyframes slideIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
-.logo{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;letter-spacing:-.02em;color:var(--accent);text-decoration:none;display:block;margin-bottom:2.5rem;line-height:1}
-.logo em{color:var(--orange);font-style:normal}
-.nav-label{font-size:.62rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--text-muted);padding:0 .5rem;margin:1.25rem 0 .35rem;display:block}
-.nav-link{display:flex;align-items:center;gap:.75rem;padding:.68rem .875rem;border-radius:var(--radius-sm);color:var(--text-soft);text-decoration:none;font-size:.875rem;font-weight:500;transition:all .18s ease;margin-bottom:.1rem}
-.nav-link .ni{width:18px;text-align:center;font-size:.95rem;flex-shrink:0}
-.nav-link:hover{color:var(--text);background:var(--surface2)}
-.nav-link.active{color:#000;background:var(--accent);font-weight:700}
-.badge{margin-left:auto;background:var(--orange);color:#fff;font-size:.6rem;font-weight:800;padding:.1rem .45rem;border-radius:99px}
-.sidebar-bottom{margin-top:auto}
-.user-card{display:flex;align-items:center;gap:.75rem;padding:.75rem .875rem;background:var(--surface2);border-radius:var(--radius-sm);cursor:pointer;border:1px solid var(--border);transition:background .2s;text-decoration:none}
-.user-card:hover{background:var(--surface3)}
-.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--orange));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#000;flex-shrink:0}
-.user-name{font-size:.825rem;font-weight:600;color:var(--text)}.user-sub{font-size:.68rem;color:var(--text-muted)}
-.main{padding:2.25rem 2.5rem 6rem;max-width:1060px;overflow-x:hidden}
-.topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;gap:1rem}
-.page-title{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;letter-spacing:-.03em;line-height:1.05}
-.page-sub{color:var(--text-soft);font-size:.875rem;margin-top:.4rem}
-.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.6rem 1.25rem;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.825rem;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap}
-.btn-primary{background:var(--accent);color:#000}
-.btn-primary:hover{background:#c8e532;transform:translateY(-1px);box-shadow:0 6px 22px var(--accent-glow)}
-.btn-ghost{background:var(--surface2);color:var(--text-soft);border:1px solid var(--border)}
-.btn-ghost:hover{background:var(--surface3);color:var(--text)}
+body{font-family:'DM Sans',sans-serif;background:var(--body-bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;background:var(--sidebar-bg);display:flex;flex-direction:column;padding:1.75rem 1rem;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;margin-bottom:2.5rem;padding:0 .5rem}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:var(--orange);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark svg{width:18px;height:18px;fill:#fff}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;letter-spacing:-.02em}
+.nav-label{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.22);padding:.875rem .75rem .4rem;display:block}
+.nav-link{display:flex;align-items:center;gap:.7rem;padding:.6rem .75rem;border-radius:var(--r-sm);color:rgba(255,255,255,.45);text-decoration:none;font-size:.82rem;font-weight:500;transition:all .15s;margin-bottom:.1rem}
+.nav-link .icon{font-size:.95rem;width:20px;text-align:center;flex-shrink:0}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.06)}
+.nav-link.active{color:#161616;background:#fff;font-weight:700}
+.sidebar-footer{margin-top:auto;padding-top:1rem}
+.user-pill{display:flex;align-items:center;gap:.625rem;padding:.75rem;background:rgba(255,255,255,.06);border-radius:var(--r-sm);text-decoration:none;border:1px solid rgba(255,255,255,.07);transition:background .2s}
+.user-pill:hover{background:rgba(255,255,255,.1)}
+.user-avatar{width:34px;height:34px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;color:#fff;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif}
+.user-info-name{font-size:.8rem;font-weight:700;color:#fff}
+.user-info-role{font-size:.65rem;color:rgba(255,255,255,.38)}
+.main{padding:2rem 2rem 6rem;min-height:100vh;overflow-x:hidden}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.75rem;gap:1rem;flex-wrap:wrap}
+.page-eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem}
+.page-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.9rem;font-weight:800;letter-spacing:-.035em;line-height:1.1;color:var(--dark)}
+.page-sub{font-size:.82rem;color:var(--text-soft);margin-top:.3rem}
+.topbar-right{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.2rem;border-radius:var(--r-pill);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap}
+.btn-orange{background:var(--orange);color:#fff;box-shadow:var(--shadow-orange)}
+.btn-orange:hover{background:#e0521e;transform:translateY(-1px)}
+.btn-ghost{background:var(--card-bg);color:var(--text-soft);border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.btn-ghost:hover{background:var(--card-bg2);color:var(--text)}
+.btn-dark{background:var(--dark);color:#fff}
+.btn-dark:hover{background:#2a2a2a;transform:translateY(-1px)}
+.btn-danger{background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.15)}
+.card{background:var(--card-bg);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.card-dark{background:var(--dark-card);border-radius:var(--r);box-shadow:var(--shadow-md);overflow:hidden}
+.card-orange{background:var(--orange);border-radius:var(--r);overflow:hidden}
+.card-pad{padding:1.4rem}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;gap:.5rem}
+.card-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:800;color:var(--dark)}
+.stat-eyebrow{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem}
+.stat-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.8rem;font-weight:800;line-height:1;letter-spacing:-.04em}
+.stat-sub{font-size:.72rem;margin-top:.3rem;opacity:.5}
+.icon-badge{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.icon-badge-orange{background:var(--orange-dim)}
+.icon-badge-white{background:rgba(255,255,255,.15)}
+.chip{display:inline-flex;align-items:center;padding:.22rem .7rem;border-radius:var(--r-pill);font-size:.65rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.chip-orange{background:var(--orange-dim);color:var(--orange)}
+.chip-dark{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8)}
+.chip-green{background:rgba(34,197,94,.12);color:#16a34a}
+.form-group{margin-bottom:.875rem}
+.form-label{display:block;font-size:.6rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.4rem}
+.form-input{width:100%;padding:.75rem 1rem;background:var(--card-bg2);border:1.5px solid var(--border);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:all .2s}
+.form-input:focus{border-color:var(--orange);background:var(--card-bg);box-shadow:0 0 0 3px var(--orange-dim)}
+.form-input::placeholder{color:var(--text-muted)}
+select.form-input{cursor:pointer}
+.empty-state{text-align:center;padding:3rem 1.5rem}
+.empty-icon{font-size:2.5rem;display:block;margin-bottom:.75rem}
+.empty-state h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800;color:var(--dark);margin-bottom:.3rem}
+.empty-state p{font-size:.8rem;color:var(--text-soft);margin-bottom:1.1rem}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--sidebar-bg);padding:.625rem 1rem calc(.625rem + env(safe-area-inset-bottom));justify-content:space-around;z-index:100}
+.mob-item{display:flex;flex-direction:column;align-items:center;gap:.15rem;color:rgba(255,255,255,.35);text-decoration:none;font-size:.52rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transition:color .15s;min-width:44px}
+.mob-item.active,.mob-item:hover{color:var(--orange)}
+.mob-icon{font-size:1.1rem}
+@media(max-width:960px){.app{grid-template-columns:1fr}.sidebar{display:none}.mobile-nav{display:flex}.main{padding:1.25rem 1rem 5.5rem}.page-title{font-size:1.6rem}}
+@media(max-width:600px){.main{padding:1rem .875rem 5rem}.page-title{font-size:1.45rem}.stat-num{font-size:2.2rem}}
 
-/* Layout */
-.social-layout{display:grid;grid-template-columns:1fr 320px;gap:1.25rem}
-
-/* Feed */
-.feed-tabs{display:flex;gap:.4rem;margin-bottom:1.25rem}
-.feed-tab{padding:.45rem 1.1rem;border-radius:99px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--text-muted);transition:all .18s;font-family:'DM Sans',sans-serif}
-.feed-tab.active{background:var(--accent);color:#000}
-.feed-tab:hover:not(.active){background:var(--surface2);color:var(--text)}
-
-/* Compose */
-.compose-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.25rem;animation:fadeUp .4s ease both}
-.compose-top{display:flex;gap:.875rem;margin-bottom:.875rem}
-.compose-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--orange));display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;color:#000;flex-shrink:0}
-.compose-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--text);resize:none;outline:none;transition:all .2s}
-.compose-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(212,245,66,.1)}
-.compose-footer{display:flex;align-items:center;justify-content:space-between}
-.post-type-row{display:flex;gap:.4rem}
-.post-type-btn{padding:.3rem .75rem;border-radius:99px;font-size:.72rem;font-weight:700;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-muted);transition:all .18s;font-family:'DM Sans',sans-serif}
-.post-type-btn.active{background:var(--surface2);color:var(--text);border-color:rgba(255,255,255,.12)}
-
-/* Post card */
-.post-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:.875rem;animation:fadeUp .4s ease both;transition:border-color .2s}
-.post-card:hover{border-color:rgba(255,255,255,.09)}
-.post-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.875rem}
-.post-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0}
-.post-username{font-size:.875rem;font-weight:700}
-.post-time{font-size:.72rem;color:var(--text-muted)}
-.post-type-tag{margin-left:auto;padding:.2rem .625rem;border-radius:99px;font-size:.65rem;font-weight:700}
-.tag-workout{background:rgba(212,245,66,.12);color:var(--accent)}
-.tag-achievement{background:rgba(255,107,43,.12);color:var(--orange)}
-.tag-status{background:rgba(79,142,247,.12);color:var(--blue)}
-.post-content{font-size:.875rem;line-height:1.6;color:var(--text-soft);margin-bottom:1rem}
-.post-footer{display:flex;align-items:center;gap:1rem}
-.post-action{display:flex;align-items:center;gap:.35rem;font-size:.78rem;color:var(--text-muted);cursor:pointer;padding:.3rem .5rem;border-radius:var(--radius-xs);border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .18s}
-.post-action:hover{background:var(--surface2);color:var(--text)}
-.post-action.liked{color:var(--orange)}
-
-/* Sidebar panels */
-.side-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;animation:fadeUp .45s ease both}
-.side-panel:nth-child(1){animation-delay:.15s}.side-panel:nth-child(2){animation-delay:.25s}
-.side-title{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:1rem}
-
-/* Search */
-.search-bar{display:flex;gap:.5rem;margin-bottom:.875rem}
-.search-input{flex:1;padding:.6rem .875rem;background:var(--surface2);border:1px solid var(--border);border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.825rem;color:var(--text);outline:none;transition:all .2s}
-.search-input:focus{border-color:var(--accent)}
-.search-btn{padding:.6rem 1rem;border-radius:99px;background:var(--accent);color:#000;font-weight:700;font-size:.78rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.search-btn:hover{background:#c8e532}
-
-/* Suggested user */
-.suggested-user{display:flex;align-items:center;gap:.75rem;padding:.625rem 0;border-bottom:1px solid var(--border)}
-.suggested-user:last-child{border-bottom:none;padding-bottom:0}
-.su-info{flex:1;min-width:0}
-.su-name{font-size:.825rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.su-meta{font-size:.7rem;color:var(--text-muted)}
-.follow-btn{padding:.3rem .875rem;border-radius:99px;background:transparent;color:var(--accent);border:1px solid var(--accent);font-size:.72rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap}
-.follow-btn:hover,.follow-btn.following{background:var(--accent);color:#000}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,10,.96);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:.625rem 1.5rem 1.1rem;justify-content:space-around;z-index:100}
-.mobile-item{display:flex;flex-direction:column;align-items:center;gap:.2rem;color:var(--text-muted);text-decoration:none;font-size:.6rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:color .2s}
-.mobile-item.active,.mobile-item:hover{color:var(--accent)}
-.mobile-icon{font-size:1.15rem}
-
-
-/* ── FULL MOBILE RESPONSIVE ── */
-@media(max-width:900px){
-  .app{grid-template-columns:1fr}
-  .sidebar{display:none}
-  .mobile-nav{display:flex}
-  .main{padding:1.25rem 1rem 5.5rem;max-width:100%}
-  .page-title{font-size:1.9rem;letter-spacing:-.02em}
-  .topbar{flex-direction:column;gap:.875rem;margin-bottom:1.5rem}
-  .topbar-actions{width:100%;justify-content:flex-start}
-  .charts-row,.bottom-row{grid-template-columns:1fr}
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .panel{padding:1.1rem}
-  .filter-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:.25rem;-webkit-overflow-scrolling:touch}
-  .filter-row::-webkit-scrollbar{display:none}
-  .workout-grid{grid-template-columns:1fr}
-  .cards-grid{grid-template-columns:1fr}
-  .challenges-grid{grid-template-columns:1fr}
-  .profile-grid{grid-template-columns:1fr}
-  .social-grid{grid-template-columns:1fr}
-  .feed-layout{grid-template-columns:1fr}
-  .activity-grid{grid-template-columns:1fr}
-  .actions-grid{grid-template-columns:1fr 1fr}
-  .muscle-grid{grid-template-columns:1fr}
-}
-@media(max-width:480px){
-  .main{padding:1rem .875rem 5rem}
-  .page-title{font-size:1.6rem}
-  .stats-grid{grid-template-columns:1fr}
-  .stat-value{font-size:2rem}
-  .actions-grid{grid-template-columns:1fr}
-  .btn{font-size:.775rem;padding:.55rem 1rem}
-  .topbar-actions .btn{width:100%}
-  .panel-header{flex-direction:column;align-items:flex-start;gap:.5rem}
-  .period-pills{align-self:flex-start}
-  .wc-stats{flex-wrap:wrap;gap:.5rem}
-  .chart-wrap{height:140px}
-  .form-row-2{grid-template-columns:1fr}
-  .profile-hero{padding:1.5rem 1rem}
-  .hero-name{font-size:1.5rem}
-}
-
+.feed{display:flex;flex-direction:column;gap:.875rem}
+.post{background:var(--card-bg);border-radius:var(--r);padding:1.35rem;box-shadow:var(--shadow);transition:box-shadow .2s}
+.post:hover{box-shadow:var(--shadow-md)}
+.post-hdr{display:flex;align-items:center;gap:.75rem;margin-bottom:.875rem}
+.post-av{width:38px;height:38px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif}
+.post-user{font-size:.87rem;font-weight:700;color:var(--dark)}
+.post-time{font-size:.68rem;color:var(--text-muted)}
+.post-body{font-size:.875rem;line-height:1.65;color:var(--text-soft);margin-bottom:.875rem}
+.post-actions{display:flex;gap:.625rem}
+.post-btn{background:var(--card-bg2);border:none;padding:.35rem .875rem;border-radius:var(--r-pill);font-size:.73rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.35rem;color:var(--text-soft);font-family:'DM Sans',sans-serif;transition:all .15s}
+.post-btn:hover{background:var(--orange-dim);color:var(--orange)}
 </style>
 </head>
 <body>
-<div class="ambient"></div>
-<div class="app">
-<aside class="sidebar">
-  <a href="dashboard.html" class="logo">Fit<em>flow</em></a>
-  <span class="nav-label">Main</span>
-  <a href="dashboard.html" class="nav-link"><span class="ni">⚡</span> Dashboard</a>
-  <a href="workouts.html"  class="nav-link"><span class="ni">🏋️</span> Workouts</a>
-  <a href="exercises.html" class="nav-link"><span class="ni">📋</span> Exercises</a>
-  <a href="progress.html"  class="nav-link"><span class="ni">📈</span> Progress</a>
-  <span class="nav-label">Community</span>
-  <a href="social.html"     class="nav-link active"><span class="ni">👥</span> Social Feed <span class="badge">3</span></a>
-  <a href="challenges.html" class="nav-link"><span class="ni">🏆</span> Challenges</a>
-  <div class="sidebar-bottom">
-    <a href="profile.html" class="user-card">
-      <div class="avatar" id="sidebarAvatar">OA</div>
-      <div><div class="user-name" id="sidebarName">Athlete</div><div class="user-sub">View profile →</div></div>
-    </a>
-  </div>
-</aside>
-<main class="main">
-  <div class="topbar">
-    <div>
-      <div class="page-title">Social Feed</div>
-      <div class="page-sub">Connect with your fitness community</div>
-    </div>
-  </div>
-
-  <div class="social-layout">
-    <!-- Feed column -->
-    <div>
-      <!-- Compose -->
-      <div class="compose-box">
-        <div class="compose-top">
-          <div class="compose-avatar" id="composeAvatar">OA</div>
-          <textarea class="compose-input" id="postContent" rows="3" placeholder="Share your fitness journey…"></textarea>
-        </div>
-        <div class="compose-footer">
-          <div class="post-type-row">
-            <button class="post-type-btn active" onclick="setType(this,'status')">Status</button>
-            <button class="post-type-btn" onclick="setType(this,'workout')">Workout</button>
-            <button class="post-type-btn" onclick="setType(this,'achievement')">Achievement</button>
-          </div>
-          <button class="btn btn-primary" onclick="createPost()" style="padding:.5rem 1.1rem">Post →</button>
-        </div>
-      </div>
-
-      <!-- Feed tabs -->
-      <div class="feed-tabs">
-        <button class="feed-tab active" onclick="switchTab(this,'following')">Following</button>
-        <button class="feed-tab" onclick="switchTab(this,'popular')">Popular</button>
-        <button class="feed-tab" onclick="switchTab(this,'my')">My Posts</button>
-      </div>
-
-      <!-- Posts -->
-      <div id="feedContainer">
-        <div style="color:var(--text-muted);font-size:.875rem;padding:2rem 0;text-align:center">Loading feed…</div>
-      </div>
-    </div>
-
-    <!-- Right sidebar -->
-    <div>
-      <!-- Search -->
-      <div class="side-panel">
-        <div class="side-title">Find Friends</div>
-        <div class="search-bar">
-          <input class="search-input" id="searchInput" placeholder="Search athletes…" onkeydown="if(event.key==='Enter')searchUsers()"/>
-          <button class="search-btn" onclick="searchUsers()">Go</button>
-        </div>
-        <div id="searchResults"></div>
-      </div>
-
-      <!-- Suggested -->
-      <div class="side-panel">
-        <div class="side-title">Suggested Athletes</div>
-        <div id="suggestedUsers">
-          <div style="color:var(--text-muted);font-size:.825rem">Loading…</div>
-        </div>
-      </div>
-
-      <!-- Lottie motivator -->
-      <div class="side-panel" style="text-align:center">
-        <dotlottie-wc src="https://lottie.host/58f778cd-1c8e-47cf-9cc0-ff22a1cbfea8/FfQGJVTIHC.lottie" style="width:80px;height:80px;margin:0 auto .75rem" autoplay loop></dotlottie-wc>
-        <div style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.35rem">Stay Consistent!</div>
-        <div style="font-size:.78rem;color:var(--text-muted)">Your community is watching. Log today's session.</div>
-        <a href="log-workout.html" class="btn btn-primary" style="margin-top:.875rem;width:100%;justify-content:center">＋ Log Workout</a>
-      </div>
-    </div>
-  </div>
-</main>
-</div>
-
+<div class="app"><aside class="sidebar"><a href="dashboard.html" class="logo"><div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span class="logo-text">FitFlow</span></a><span class="nav-label">Main</span><a href="dashboard.html" class="nav-link "><span class="icon">⚡</span>Dashboard</a>
+<a href="workouts.html" class="nav-link "><span class="icon">🏋️</span>Workouts</a>
+<a href="exercises.html" class="nav-link "><span class="icon">📋</span>Exercises</a>
+<a href="progress.html" class="nav-link "><span class="icon">📈</span>Progress</a>
+<a href="log-workout.html" class="nav-link "><span class="icon">➕</span>Log Workout</a><span class="nav-label">Community</span><a href="social.html" class="nav-link active"><span class="icon">👥</span>Social</a>
+<a href="challenges.html" class="nav-link "><span class="icon">🏆</span>Challenges</a><div class="sidebar-footer"><a href="profile.html" class="user-pill"><div class="user-avatar" id="sidebarAvatar">?</div><div><div class="user-info-name" id="sidebarName">…</div><div class="user-info-role">Athlete · View profile</div></div></a></div></aside><main class="main">
+<div class="topbar"><div><div class="page-eyebrow">Community</div><div class="page-title">Social Feed</div><div class="page-sub">What your community is up to</div></div></div>
+<div id="feedEl"><div class="empty-state"><span class="empty-icon">⏳</span><h3>Loading feed…</h3></div></div>
+</main></div>
 <nav class="mobile-nav">
-  <a href="dashboard.html" class="mobile-item"><span class="mobile-icon">⚡</span>Home</a>
-  <a href="workouts.html"  class="mobile-item"><span class="mobile-icon">🏋️</span>Workouts</a>
-  <a href="progress.html"  class="mobile-item"><span class="mobile-icon">📈</span>Progress</a>
-  <a href="social.html"    class="mobile-item active"><span class="mobile-icon">👥</span>Social</a>
-  <a href="profile.html"   class="mobile-item"><span class="mobile-icon">👤</span>Profile</a>
+  <a href="dashboard.html" class="mob-item "><span class="mob-icon">⚡</span>Home</a>
+  <a href="workouts.html" class="mob-item "><span class="mob-icon">🏋️</span>Train</a>
+  <a href="log-workout.html" class="mob-item "><span class="mob-icon">➕</span>Log</a>
+  <a href="progress.html" class="mob-item "><span class="mob-icon">📈</span>Stats</a>
+  <a href="profile.html" class="mob-item "><span class="mob-icon">👤</span>Me</a>
 </nav>
-
-<script src="api.js"></script>
 <script>
+const API_BASE = 'https://fitflow-api-production-c25a.up.railway.app/api';
 
-function getToken(){return localStorage.getItem('fitflow_token')}
-function getUser(){try{return JSON.parse(localStorage.getItem('fitflow_user'))}catch{return null}}
-// Auth guard
-if(!localStorage.getItem('fitflow_token')){location.href='login.html'}
-const u=getUser();
-if(u){
-  const i=(u.username||'OA').substring(0,2).toUpperCase();
-  document.getElementById('sidebarAvatar').textContent=i;
-  document.getElementById('sidebarName').textContent=u.username?.split(' ')[0]||'Athlete';
-  document.getElementById('composeAvatar').textContent=i;
+function getToken() { return localStorage.getItem('fitflow_token'); }
+function getUser() { try { return JSON.parse(localStorage.getItem('fitflow_user')); } catch { return null; } }
+function setAuth(token, user) { localStorage.setItem('fitflow_token', token); localStorage.setItem('fitflow_user', JSON.stringify(user)); }
+function clearAuth() { localStorage.removeItem('fitflow_token'); localStorage.removeItem('fitflow_user'); }
+function logout() { clearAuth(); location.href = 'login.html'; }
+
+async function login(username, password) {
+  const r = await fetch(`${API_BASE}/auth/login/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+  const data = await r.json();
+  if (data.token) setAuth(data.token, data.user);
+  return data;
 }
 
-let currentPostType='status';
-function setType(btn,t){document.querySelectorAll('.post-type-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentPostType=t}
-function switchTab(btn,t){document.querySelectorAll('.feed-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadFeed(t)}
-
-const DEMO_POSTS=[
-  {id:1,user:{username:'Alex M.',profile_picture:null},post_type:'workout',content:'Just crushed a new PR on deadlift — 180kg! Hard work paying off 💪',likes_count:24,comments_count:7,created_at:'2026-03-02T09:15:00Z'},
-  {id:2,user:{username:'Sara K.',profile_picture:null},post_type:'achievement',content:'30-day streak achieved! Consistency is everything. Who else is on a streak? 🔥',likes_count:56,comments_count:12,created_at:'2026-03-01T18:30:00Z'},
-  {id:3,user:{username:'Jake T.',profile_picture:null},post_type:'status',content:'Rest day today but already planning tomorrow\'s leg session. Recovery is training too.',likes_count:18,comments_count:4,created_at:'2026-03-01T12:00:00Z'},
-];
-const COLORS=['#4f8ef7','#a78bfa','#ec4899','#34d399','#ff6b2b'];
-const TAG={workout:'tag-workout',achievement:'tag-achievement',status:'tag-status'};
-
-function renderPosts(posts){
-  const el=document.getElementById('feedContainer');
-  if(!posts.length){el.innerHTML='<div style="text-align:center;padding:3rem;color:var(--text-muted)">No posts yet. Be the first to share!</div>';return}
-  el.innerHTML=posts.map((p,i)=>{
-    const ini=(p.user.username||'?').substring(0,2).toUpperCase();
-    const clr=COLORS[i%COLORS.length];
-    const rel=timeSince(new Date(p.created_at));
-    return `<div class="post-card" style="animation-delay:${i*.07}s">
-      <div class="post-header">
-        <div class="post-avatar" style="background:linear-gradient(135deg,${clr},${COLORS[(i+1)%COLORS.length]})">${ini}</div>
-        <div><div class="post-username">${p.user.username}</div><div class="post-time">${rel}</div></div>
-        <span class="post-type-tag ${TAG[p.post_type]||'tag-status'}">${p.post_type}</span>
-      </div>
-      <div class="post-content">${p.content}</div>
-      <div class="post-footer">
-        <button class="post-action" onclick="likePost(this,${p.id})">❤️ ${p.likes_count||0}</button>
-        <button class="post-action">💬 ${p.comments_count||0}</button>
-        <button class="post-action">↗ Share</button>
-      </div>
-    </div>`;
-  }).join('');
+async function register(payload) {
+  const r = await fetch(`${API_BASE}/auth/register/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const data = await r.json();
+  if (data.token) setAuth(data.token, data.user);
+  return data;
 }
 
-function timeSince(d){const s=Math.floor((Date.now()-d)/1000);if(s<60)return'just now';if(s<3600)return`${Math.floor(s/60)}m ago`;if(s<86400)return`${Math.floor(s/3600)}h ago`;return`${Math.floor(s/86400)}d ago`}
-
-function likePost(btn,id){btn.classList.toggle('liked');const n=parseInt(btn.textContent.replace(/\D/g,''));btn.textContent=`❤️ ${btn.classList.contains('liked')?n+1:n-1}`}
-
-function renderSuggested(users){
-  const el=document.getElementById('suggestedUsers');
-  const demo=[{username:'Maria G.',workouts:47},{username:'Chris P.',workouts:32},{username:'Amara D.',workouts:61}];
-  const data=users?.length?users:demo;
-  el.innerHTML=data.slice(0,4).map((u,i)=>`
-    <div class="suggested-user">
-      <div class="post-avatar" style="width:32px;height:32px;font-size:.65rem;background:linear-gradient(135deg,${COLORS[i%COLORS.length]},${COLORS[(i+1)%COLORS.length]})">${(u.username||'?').substring(0,2).toUpperCase()}</div>
-      <div class="su-info"><div class="su-name">${u.username}</div><div class="su-meta">${u.workouts||'—'} workouts</div></div>
-      <button class="follow-btn" onclick="this.classList.toggle('following');this.textContent=this.classList.contains('following')?'Following':'Follow'">Follow</button>
-    </div>`).join('');
+async function authFetch(path, options = {}) {
+  const token = getToken();
+  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (token) headers['Authorization'] = `Token ${token}`;
+  const r = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (r.status === 401) { clearAuth(); location.href = 'login.html'; return null; }
+  return r;
 }
 
-async function loadFeed(tab='following'){
-  renderPosts(DEMO_POSTS);renderSuggested([]);
-  const token=getToken();if(!token)return;
-  try{
-    const ep=tab==='following'?'feed':tab==='my'?'posts':'posts';
-    const r=await fetch(`${API_BASE}/social/${ep}/`,{headers:{'Authorization':`Token ${token}`}});
-    if(r.ok){const d=await r.json();renderPosts(d.results||d)}
-    const su=await fetch(`${API_BASE}/social/friends/suggestions/`,{headers:{'Authorization':`Token ${token}`}});
-    if(su.ok){const d=await su.json();renderSuggested(d.results||d)}
-  }catch(e){}
+async function getWorkouts(params) {
+  const r = await authFetch('/workouts/workouts/' + (params || ''));
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
 }
 
-async function searchUsers(){
-  const q=document.getElementById('searchInput').value.trim();
-  if(!q)return;
-  const token=getToken();if(!token)return;
-  const el=document.getElementById('searchResults');
-  el.innerHTML='<div style="color:var(--text-muted);font-size:.8rem">Searching…</div>';
-  try{
-    const r=await fetch(`${API_BASE}/social/friends/search/?q=${encodeURIComponent(q)}`,{headers:{'Authorization':`Token ${token}`}});
-    if(r.ok){const d=await r.json();renderSuggested(d.results||d)}
-  }catch(e){el.innerHTML='<div style="color:var(--text-muted);font-size:.8rem">No results found</div>'}
+async function createWorkout(payload) {
+  const r = await authFetch('/workouts/workouts/', { method: 'POST', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
 }
 
-async function createPost(){
-  const c=document.getElementById('postContent').value.trim();
-  if(!c)return;
-  const token=getToken();if(!token){alert('Please log in');return}
-  try{
-    const r=await fetch(`${API_BASE}/social/posts/`,{method:'POST',headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},body:JSON.stringify({content:c,post_type:currentPostType})});
-    if(r.ok){document.getElementById('postContent').value='';loadFeed()}
-  }catch(e){}
+async function addExerciseSet(payload) {
+  const r = await authFetch('/workouts/sets/', { method: 'POST', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
 }
 
-loadFeed();
+async function getExercises(params) {
+  const r = await authFetch('/workouts/exercises/' + (params || ''));
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getDashboard() {
+  const r = await authFetch('/progress/dashboard/');
+  if (!r || !r.ok) return {};
+  return r.json();
+}
+
+async function getWeightLogs() {
+  const r = await authFetch('/progress/weight/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function logWeight(weight_kg) {
+  const r = await authFetch('/progress/weight/', { method: 'POST', body: JSON.stringify({ weight_kg, date: new Date().toISOString().split('T')[0] }) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getPRs() {
+  const r = await authFetch('/progress/prs/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getProfile() {
+  const r = await authFetch('/auth/profile/');
+  if (!r || !r.ok) return null;
+  return r.json();
+}
+
+async function updateProfile(payload) {
+  const r = await authFetch('/auth/profile/', { method: 'PUT', body: JSON.stringify(payload) });
+  if (!r) return null;
+  return r.json();
+}
+
+async function getSocialFeed() {
+  const r = await authFetch('/social/feed/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+async function getChallenges() {
+  const r = await authFetch('/social/challenges/');
+  if (!r || !r.ok) return [];
+  const d = await r.json();
+  return d.results || d || [];
+}
+
+if(!getToken()){location.href='login.html'}
+(function(){const u=getUser();if(!u)return;const av=document.getElementById("sidebarAvatar");const nm=document.getElementById("sidebarName");if(av)av.textContent=(u.username||"?").slice(0,2).toUpperCase();if(nm)nm.textContent=u.username||"Athlete";})();
+
+function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return 'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
+function renderFeed(posts){
+  const el=document.getElementById('feedEl');
+  if(!posts.length){el.innerHTML='<div class="empty-state"><span class="empty-icon">👥</span><h3>No posts yet</h3><p>Be the first to share your workout!</p></div>';return}
+  el.innerHTML='<div class="feed">'+posts.map(p=>`<div class="post"><div class="post-hdr"><div class="post-av">${(p.user?.username||'?').slice(0,2).toUpperCase()}</div><div><div class="post-user">${p.user?.username||'Athlete'}</div><div class="post-time">${timeAgo(p.created_at||new Date())}</div></div></div><div class="post-body">${p.content||'Logged a workout 💪'}</div><div class="post-actions"><button class="post-btn">❤️ ${p.likes_count||0} Likes</button><button class="post-btn">💬 ${p.comments_count||0} Comments</button></div></div>`).join('')+'</div>';
+}
+async function load(){try{const posts=await getSocialFeed();renderFeed(posts);}catch(e){document.getElementById('feedEl').innerHTML='<div class="empty-state"><span class="empty-icon">👥</span><h3>Feed unavailable</h3><p>Check back soon!</p></div>';}}
+load();
+
 </script>
 </body>
 </html>

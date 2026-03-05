@@ -1,221 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <title>FitFlow · Login</title>
-<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0a0a0a;--surface:#141414;--surface2:#1c1c1c;
-  --accent:#d4f542;--accent-glow:rgba(212,245,66,.18);--orange:#ff6b2b;
-  --text:#f0f0ea;--text-muted:#5a5a5a;--text-soft:#909090;
-  --border:rgba(255,255,255,.055);--border-accent:rgba(212,245,66,.3);
-  --radius:22px;--radius-sm:14px;
-}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+:root{--bg:#F4F4F1;--card:#fff;--card2:#F0F0EC;--orange:#F55F2A;--orange-dim:rgba(245,95,42,.12);--orange-glow:rgba(245,95,42,.3);--dark:#161616;--text:#161616;--soft:#6C6C6C;--muted:#A8A8A8;--border:rgba(0,0,0,.08);--r:22px;--r-sm:14px;--r-pill:999px;--shadow:0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);--shadow-lg:0 8px 32px rgba(0,0,0,.1),0 24px 60px rgba(0,0,0,.1)}
+html{height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;display:flex}
+.split{display:grid;grid-template-columns:1fr 1fr;width:100%;min-height:100vh}
 
-.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.ambient::before{content:'';position:absolute;top:-200px;left:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(212,245,66,.07) 0%,transparent 65%)}
-.ambient::after{content:'';position:absolute;bottom:-150px;right:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,107,43,.05) 0%,transparent 65%)}
+/* LEFT PANEL */
+.left{background:var(--dark);display:flex;flex-direction:column;justify-content:center;padding:3rem 3.5rem;position:relative;overflow:hidden}
+.left::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(245,95,42,.18) 0%,transparent 65%);pointer-events:none}
+.left::after{content:'';position:absolute;bottom:-80px;left:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(245,95,42,.08) 0%,transparent 65%);pointer-events:none}
+.brand{display:flex;align-items:center;gap:.625rem;margin-bottom:3rem;position:relative;z-index:1}
+.brand-mark{width:38px;height:38px;border-radius:11px;background:var(--orange);display:flex;align-items:center;justify-content:center}
+.brand-mark svg{width:20px;height:20px;fill:#fff}
+.brand-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;letter-spacing:-.02em}
+.left-headline{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.8rem;font-weight:800;line-height:1.1;letter-spacing:-.04em;color:#fff;margin-bottom:1rem;position:relative;z-index:1}
+.left-headline em{color:var(--orange);font-style:normal}
+.left-sub{font-size:.9rem;color:rgba(255,255,255,.45);line-height:1.65;margin-bottom:2.5rem;position:relative;z-index:1}
+.features{display:flex;flex-direction:column;gap:.625rem;position:relative;z-index:1}
+.feature{display:flex;align-items:center;gap:.875rem;padding:.875rem 1rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:14px}
+.feature-icon{font-size:1.1rem;flex-shrink:0}
+.feature-text{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.5}
+.feature-text strong{color:rgba(255,255,255,.85);font-weight:600}
 
-.left-panel{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;padding:4rem;background:var(--surface);border-right:1px solid var(--border);overflow:hidden;animation:slideLeft .6s ease both}
-@keyframes slideLeft{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
-
-.brand{margin-bottom:2.5rem}
-.brand-logo{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-.03em;color:var(--accent);line-height:1;display:block;margin-bottom:.4rem}
-.brand-logo em{color:var(--orange);font-style:normal}
-.brand-tagline{font-size:.875rem;color:var(--text-muted);font-weight:500}
-
-.hero-lottie{display:flex;justify-content:center;margin-bottom:2rem;animation:float 4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-
-.hero-title{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-bottom:.75rem}
-.hero-title em{color:var(--accent);font-style:normal}
-.hero-sub{font-size:.875rem;color:var(--text-muted);line-height:1.65;max-width:360px;margin-bottom:1.75rem}
-
-.features{display:flex;flex-direction:column;gap:.5rem}
-.feature{display:flex;align-items:center;gap:.75rem;font-size:.825rem;color:var(--text-soft)}
-.feature-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:pulse 2s ease-in-out infinite}
-.feature:nth-child(2) .feature-dot{animation-delay:.3s}
-.feature:nth-child(3) .feature-dot{animation-delay:.6s}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
-
-.right-panel{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:3rem 4rem;overflow-y:auto}
-.right-panel::before{content:'';position:absolute;top:-200px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(212,245,66,.04) 0%,transparent 65%);pointer-events:none}
-
-.form-box{width:100%;max-width:400px;animation:fadeUp .5s ease both;animation-delay:.15s;opacity:0}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-.form-header{margin-bottom:1.75rem}
-.form-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.35rem}
-.form-sub{font-size:.875rem;color:var(--text-muted)}
-.form-sub a{color:var(--accent);text-decoration:none;font-weight:600}
+/* RIGHT PANEL */
+.right{display:flex;flex-direction:column;justify-content:center;padding:3rem 3.5rem;background:var(--bg)}
+.form-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-.04em;color:var(--dark);margin-bottom:.4rem}
+.form-sub{font-size:.875rem;color:var(--soft);margin-bottom:2rem}
+.form-sub a{color:var(--orange);font-weight:700;text-decoration:none}
 .form-sub a:hover{text-decoration:underline}
+.form-group{margin-bottom:.875rem}
+.form-label{display:block;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.form-input{width:100%;padding:.8rem 1.1rem;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:all .2s;box-shadow:var(--shadow)}
+.form-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px var(--orange-dim),var(--shadow)}
+.form-input::placeholder{color:var(--muted)}
+.btn-login{width:100%;padding:.875rem;background:var(--orange);color:#fff;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:800;border:none;border-radius:var(--r-pill);cursor:pointer;transition:all .2s;margin-top:.5rem;box-shadow:0 6px 20px var(--orange-glow);letter-spacing:.01em}
+.btn-login:hover{background:#e0521e;transform:translateY(-2px);box-shadow:0 10px 28px var(--orange-glow)}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-demo{width:100%;padding:.7rem;background:transparent;color:var(--soft);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;border:1.5px solid var(--border);border-radius:var(--r-pill);cursor:pointer;transition:all .2s;margin-top:.5rem}
+.btn-demo:hover{background:var(--card);color:var(--text)}
+.error-box{background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.2);border-radius:var(--r-sm);padding:.875rem 1rem;font-size:.83rem;color:#dc2626;margin-bottom:1rem;display:none}
+.divider{display:flex;align-items:center;gap:.75rem;margin:.875rem 0;color:var(--muted);font-size:.75rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-.form-group{margin-bottom:1rem}
-.form-label{display:block;font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.45rem}
-.input-wrap{position:relative;display:flex;align-items:center}
-.input-icon{position:absolute;left:1rem;font-size:.95rem;pointer-events:none;opacity:.45}
-.form-input{width:100%;padding:.82rem 1rem .82rem 2.75rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:all .2s}
-.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(212,245,66,.1)}
-.form-input::placeholder{color:var(--text-muted);opacity:.55}
-
-.form-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
-.remember-label{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text-muted);cursor:pointer}
-.remember-label input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px}
-.forgot-link{font-size:.8rem;color:var(--accent);text-decoration:none;font-weight:600}
-.forgot-link:hover{text-decoration:underline}
-
-.submit-btn{width:100%;padding:.875rem;background:var(--accent);border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:all .2s;margin-bottom:1.25rem;letter-spacing:.02em;position:relative;overflow:hidden}
-.submit-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .5s}
-.submit-btn:hover::after{transform:translateX(100%)}
-.submit-btn:hover:not(:disabled){background:#c8e532;transform:translateY(-1px);box-shadow:0 8px 28px var(--accent-glow)}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed}
-.spinner{width:18px;height:18px;border:2.5px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none;flex-shrink:0}
-.submit-btn.loading .spinner{display:block}
-.submit-btn.loading .btn-text{display:none}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.divider{display:flex;align-items:center;gap:.875rem;margin-bottom:1.25rem}
-.divider-line{flex:1;height:1px;background:var(--border)}
-.divider-text{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
-
-.demo-box{padding:.875rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:1.25rem;transition:border-color .2s}
-.demo-box:hover{border-color:var(--border-accent)}
-.demo-label{font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.45rem}
-.demo-creds{display:flex;justify-content:space-between;align-items:center}
-.demo-user{font-size:.85rem;font-weight:600;font-family:'Syne',sans-serif}
-.demo-use-btn{padding:.3rem .75rem;border-radius:99px;background:var(--accent);color:#000;font-size:.72rem;font-weight:700;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.demo-use-btn:hover{background:#c8e532;transform:scale(1.04)}
-
-.error-msg{display:none;padding:.75rem 1rem;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:var(--radius-sm);font-size:.825rem;color:#f87171;margin-bottom:1rem}
-.error-msg.show{display:block;animation:fadeUp .3s ease}
-.signup-link{text-align:center;font-size:.825rem;color:var(--text-muted)}
-.signup-link a{color:var(--accent);text-decoration:none;font-weight:700}
-.signup-link a:hover{text-decoration:underline}
-
-/* ── MOBILE RESPONSIVE ── */
 @media(max-width:768px){
-  body{
-    grid-template-columns:1fr;
-    grid-template-rows:auto 1fr;
-    overflow-y:auto;
-    overflow-x:hidden;
-  }
-  .left-panel{
-    padding:2rem 1.5rem 1.75rem;
-    border-right:none;
-    border-bottom:1px solid var(--border);
-    animation:fadeUp .5s ease both;
-  }
-  .hero-lottie{margin-bottom:1.25rem}
-  .hero-lottie dotlottie-wc{width:150px!important;height:150px!important}
-  .brand-logo{font-size:2.4rem}
-  .hero-title{font-size:1.65rem}
-  .hero-sub{font-size:.825rem;margin-bottom:1.25rem}
-  .features{flex-direction:row;flex-wrap:wrap;gap:.5rem}
-  .feature{font-size:.75rem}
-  .right-panel{
-    padding:2rem 1.5rem 3rem;
-    justify-content:flex-start;
-    overflow-y:visible;
-  }
-  .form-box{max-width:100%}
+  .split{grid-template-columns:1fr;min-height:100vh}
+  .left{display:none}
+  .right{padding:2.5rem 1.5rem;min-height:100vh}
+  .form-title{font-size:1.75rem}
 }
-
-@media(max-width:480px){
-  .left-panel{padding:1.75rem 1.25rem 1.5rem}
-  .right-panel{padding:1.75rem 1.25rem 2.5rem}
-  .brand-logo{font-size:2rem}
-  .hero-title{font-size:1.45rem}
-  .hero-sub{display:none}
-  .features{display:none}
-  .hero-lottie dotlottie-wc{width:120px!important;height:120px!important}
-}
+@media(max-width:480px){.right{padding:2rem 1.25rem}}
 </style>
 </head>
 <body>
-<div class="ambient"></div>
-
-<div class="left-panel">
-  <div class="brand">
-    <span class="brand-logo">Fit<em>flow</em></span>
-    <div class="brand-tagline">Your fitness operating system</div>
+<div class="split">
+  <div class="left">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <span class="brand-name">FitFlow</span>
+    </div>
+    <div class="left-headline">Train smarter.<br/>Track <em>everything.</em></div>
+    <div class="left-sub">Your complete fitness operating system. Log workouts, track weight, hit PRs, and compete with your community.</div>
+    <div class="features">
+      <div class="feature"><span class="feature-icon">🏋️</span><div class="feature-text"><strong>Workout Logging</strong> — track every set, rep and weight</div></div>
+      <div class="feature"><span class="feature-icon">📈</span><div class="feature-text"><strong>Progress Charts</strong> — visualize your improvement over time</div></div>
+      <div class="feature"><span class="feature-icon">🏆</span><div class="feature-text"><strong>Personal Records</strong> — celebrate every new milestone</div></div>
+      <div class="feature"><span class="feature-icon">👥</span><div class="feature-text"><strong>Community</strong> — challenges, leaderboards and social feed</div></div>
+    </div>
   </div>
-  <div class="hero-lottie">
-    <dotlottie-wc src="https://lottie.host/380885b7-975a-4169-8d23-e352c1385dd6/3ys2OM2UTm.lottie" style="width:210px;height:210px" autoplay loop></dotlottie-wc>
-  </div>
-  <div class="hero-title">Train smarter.<br/>Track <em>everything</em>.</div>
-  <div class="hero-sub">Log workouts, hit personal records, challenge friends and watch your progress compound over time.</div>
-  <div class="features">
-    <div class="feature"><div class="feature-dot"></div>100+ exercises</div>
-    <div class="feature"><div class="feature-dot"></div>Personal records</div>
-    <div class="feature"><div class="feature-dot"></div>Social challenges</div>
-  </div>
-</div>
-
-<div class="right-panel">
-  <div class="form-box">
-    <div class="form-header">
-      <div class="form-title">Welcome back 👋</div>
-      <div class="form-sub">New here? <a href="register.html">Create a free account</a></div>
-    </div>
-    <div class="error-msg" id="errorMsg"></div>
-    <div class="form-group">
-      <label class="form-label">Username</label>
-      <div class="input-wrap">
-        <span class="input-icon">👤</span>
-        <input class="form-input" type="text" id="username" placeholder="Your username" required autocomplete="username"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Password</label>
-      <div class="input-wrap">
-        <span class="input-icon">🔒</span>
-        <input class="form-input" type="password" id="password" placeholder="Your password" required autocomplete="current-password"/>
-      </div>
-    </div>
-    <div class="form-row">
-      <label class="remember-label"><input type="checkbox" id="remember"/> Remember me</label>
-      <a href="#" class="forgot-link">Forgot password?</a>
-    </div>
-    <button class="submit-btn" id="loginBtn" onclick="doLogin()">
-      <span class="btn-text">Log In →</span>
-      <div class="spinner"></div>
-    </button>
-    <div class="divider"><div class="divider-line"></div><div class="divider-text">or try demo</div><div class="divider-line"></div></div>
-    <div class="demo-box">
-      <div class="demo-label">Demo Account</div>
-      <div class="demo-creds">
-        <div class="demo-user">testuser / test123</div>
-        <button class="demo-use-btn" onclick="fillDemo()">Use demo →</button>
-      </div>
-    </div>
-    <div class="signup-link">Don't have an account? <a href="register.html">Sign up free</a></div>
+  <div class="right">
+    <div class="form-title">Welcome back 👋</div>
+    <div class="form-sub">New here? <a href="register.html">Create a free account →</a></div>
+    <div class="error-box" id="errBox"></div>
+    <div class="form-group"><label class="form-label">Username</label><input class="form-input" type="text" id="un" placeholder="your username" autocomplete="username"/></div>
+    <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" id="pw" placeholder="your password" autocomplete="current-password"/></div>
+    <button class="btn-login" id="loginBtn" onclick="doLogin()">Log In →</button>
+    <div class="divider">or</div>
+    <button class="btn-demo" onclick="fillDemo()">⚡ Use demo account</button>
   </div>
 </div>
-
-<script src="api.js"></script>
 <script>
-if(localStorage.getItem('fitflow_token')){location.href='dashboard.html'}
-function showError(msg){const el=document.getElementById('errorMsg');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),4000)}
+const API_BASE='https://fitflow-api-production-c25a.up.railway.app/api';
+function getToken(){return localStorage.getItem('fitflow_token')}
+function setAuth(t,u){localStorage.setItem('fitflow_token',t);localStorage.setItem('fitflow_user',JSON.stringify(u))}
+if(getToken()){location.href='dashboard.html'}
+function fillDemo(){document.getElementById('un').value='livetest01';document.getElementById('pw').value='FitFlow2026!';}
 async function doLogin(){
-  const btn=document.getElementById('loginBtn');
-  const username=document.getElementById('username').value.trim();
-  const password=document.getElementById('password').value;
-  if(!username||!password){showError('Please enter your username and password');return}
-  btn.classList.add('loading');btn.disabled=true;
+  const un=document.getElementById('un').value.trim();const pw=document.getElementById('pw').value;
+  const err=document.getElementById('errBox');const btn=document.getElementById('loginBtn');
+  err.style.display='none';
+  if(!un||!pw){err.textContent='Please enter username and password';err.style.display='block';return}
+  btn.disabled=true;btn.textContent='Logging in…';
   try{
-    const result=await login(username,password);
-    if(result.token){location.href='dashboard.html'}
-    else{showError('Invalid username or password')}
-  }catch(e){showError('Login failed. Please check your credentials.')}
-  finally{btn.classList.remove('loading');btn.disabled=false}
+    const r=await fetch(`${API_BASE}/auth/login/`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:un,password:pw})});
+    const data=await r.json();
+    if(data.token){setAuth(data.token,data.user);location.href='dashboard.html';}
+    else{err.textContent=data.non_field_errors?.[0]||data.detail||'Invalid credentials';err.style.display='block';btn.disabled=false;btn.textContent='Log In →';}
+  }catch(e){err.textContent='Connection error. Please try again.';err.style.display='block';btn.disabled=false;btn.textContent='Log In →';}
 }
-function fillDemo(){document.getElementById('username').value='testuser';document.getElementById('password').value='test123'}
 document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 </script>
 </body>
