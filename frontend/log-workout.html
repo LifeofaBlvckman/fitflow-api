@@ -281,7 +281,7 @@ function filterEx(){const q=document.getElementById('exQ').value.toLowerCase();r
 function renderExList(exs){
   const el=document.getElementById('exList');
   if(!exs.length){el.innerHTML='<div style="color:var(--text-muted);font-size:.81rem;padding:.5rem">No exercises found</div>';return}
-  el.innerHTML=exs.slice(0,60).map(e=>`<div class="lib-item"><div><div class="lib-name">${e.name||'Exercise'}</div><div class="lib-mg">${e.muscle_group||''}</div></div><button class="lib-add" onclick='addEx(${JSON.stringify(e)})'>+ Add</button></div>`).join('');
+  el.innerHTML=exs.slice(0,60).map(e=>`<div class="lib-item"><div><div class="lib-name">${e.name||'Exercise'}</div><div class="lib-mg">${e.muscle_group||''}</div></div><button class="lib-add" onclick='addEx({id:${e.id},name:`${e.name}`,muscle_group:`${e.muscle_group||""}`})'>+ Add</button></div>`).join('');
 }
 function addEx(ex){if(selEx.find(e=>e.id===ex.id))return;selEx.push({...ex,sets:[{reps:'',weight_kg:''}]});renderSel();}
 function removeEx(id){selEx=selEx.filter(e=>e.id!==id);renderSel();}
