@@ -6,7 +6,6 @@ from pathlib import Path
 import os
 import dj_database_url
 
-# Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-fitflow-dev-key-2026')
@@ -22,12 +21,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Third-party
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
     'django_filters',
-    # Local apps
     'users',
     'workouts',
     'progress',
@@ -111,8 +108,11 @@ REST_FRAMEWORK = {
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-if not DEBUG:
-    SECURE_SSL_REDIRECT = False
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ['https://fitflow-api-production-c25a.up.railway.app']
+SECURE_SSL_REDIRECT = False
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+CSRF_TRUSTED_ORIGINS = [
+    'https://fitflow-api-production-c25a.up.railway.app',
+]
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
