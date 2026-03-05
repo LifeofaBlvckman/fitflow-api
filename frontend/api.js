@@ -24,13 +24,21 @@ async function authFetch(path, options = {}) {
   const token = getToken();
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
   if (token) headers['Authorization'] = `Token ${token}`;
-  const r = await fetch(`${API_BASE}${path}`, { ...options, headers });
-  if (r.status === 401) { clearAuth(); location.href = 'login.html'; return null; }
-  return r;
+  try {
+    const r = await fetch(`${API_BASE}${path}`, { ...options, headers });
+    // Only logout on 401 if it's not the profile endpoint (avoid redirect loops)
+    if (r.status === 401 && !path.includes('login')) {
+      clearAuth(); location.href = 'login.html'; return null;
+    }
+    return r;
+  } catch (e) {
+    console.error('Network error:', e);
+    return null;
+  }
 }
 
-async function getWorkouts(params) {
-  const r = await authFetch('/workouts/workouts/' + (params || ''));
+async function getWorkouts() {
+  const r = await authFetch('/workouts/workouts/');
   if (!r || !r.ok) return [];
   const d = await r.json();
   return d.results || d || [];
@@ -48,8 +56,8 @@ async function addExerciseSet(payload) {
   return r.json();
 }
 
-async function getExercises(params) {
-  const r = await authFetch('/workouts/exercises/' + (params || ''));
+async function getExercises() {
+  const r = await authFetch('/workouts/exercises/');
   if (!r || !r.ok) return [];
   const d = await r.json();
   return d.results || d || [];
@@ -106,3 +114,8 @@ async function getChallenges() {
   const d = await r.json();
   return d.results || d || [];
 }
+
+// Keep Railway awake - ping every 4 minutes
+setInterval(() => {
+  fetch(`${API_BASE.replace('/api','')}health/`).catch(() => {});
+}, 4 * 60 * 1000);
