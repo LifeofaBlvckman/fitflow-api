@@ -50,23 +50,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .skeleton{background:linear-gradient(90deg,#e8e8e2 25%,#f0f0eb 50%,#e8e8e2 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
 
 /* ── SIDEBAR ── */
-.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:1.75rem 1.1rem;background:var(--surface);border-right:1.5px solid var(--border);width:var(--sw);animation:slideIn .5s var(--ease) both}
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:1.75rem 1.1rem;background:var(--dark);width:var(--sw);animation:slideIn .5s var(--ease) both}
 .logo{font-family:'Syne',sans-serif;font-size:1.65rem;font-weight:800;letter-spacing:-.03em;color:#fff;text-decoration:none;display:flex;align-items:center;gap:.55rem;margin-bottom:2.25rem}
 .logo-mark{width:32px;height:32px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:glow 3s ease-in-out infinite;font-size:.85rem}
 .nav-label{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:0 .75rem;margin:1.25rem 0 .4rem;display:block}
-.nav-link{display:flex;align-items:center;gap:.75rem;padding:.68rem .875rem;border-radius:var(--radius-xs);color:var(--text-soft);text-decoration:none;font-size:.84rem;font-weight:500;transition:all .2s var(--ease);margin-bottom:.1rem;position:relative;overflow:hidden}
+.nav-link{display:flex;align-items:center;gap:.75rem;padding:.68rem .875rem;border-radius:var(--radius-xs);color:rgba(255,255,255,.45);text-decoration:none;font-size:.84rem;font-weight:500;transition:all .2s var(--ease);margin-bottom:.1rem;position:relative;overflow:hidden}
 .nav-link::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.06);transform:scaleX(0);transform-origin:left;transition:transform .2s var(--ease)}
 .nav-link:hover::before{transform:scaleX(1)}
 .nav-link:hover{color:#fff}
-.nav-link.active{color:var(--accent);background:var(--accent-dim);font-weight:700}
+.nav-link.active{color:#000;background:#fff;font-weight:700}
 .nav-link.active::before{display:none}
 .nav-link .ni{width:19px;text-align:center;font-size:.88rem;flex-shrink:0}
 .sidebar-bottom{margin-top:auto}
 .user-card{display:flex;align-items:center;gap:.75rem;padding:.875rem;background:rgba(255,255,255,.06);border-radius:var(--radius-sm);text-decoration:none;transition:all .2s;border:1px solid rgba(255,255,255,.07)}
 .user-card:hover{background:rgba(255,255,255,.11);transform:translateY(-1px)}
-.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:var(--dark);flex-shrink:0;transition:transform .2s}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#fff;flex-shrink:0;transition:transform .2s}
 .user-card:hover .avatar{transform:scale(1.1) rotate(-5deg)}
-.user-name{font-size:.81rem;font-weight:700;color:var(--dark)}
+.user-name{font-size:.81rem;font-weight:700;color:#fff}
 .user-sub{font-size:.65rem;color:rgba(255,255,255,.38)}
 
 /* ── LAYOUT ── */
@@ -153,7 +153,7 @@ select.form-input option{background:#fff}
   .main{padding:1.25rem 1rem 5.5rem;max-width:100%}.page-title{font-size:1.75rem}
   .charts-row,.bottom-row,.two-col{grid-template-columns:1fr!important}
   
-.log-grid{display:grid;grid-template-columns:320px 1fr;gap:1rem;align-items:start}
+.log-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:1rem;align-items:start}
 .lib-panel{background:var(--surface);border-radius:var(--radius);padding:1.35rem;box-shadow:var(--shadow);position:sticky;top:1rem;max-height:calc(100vh - 3rem);overflow:hidden;display:flex;flex-direction:column}
 .lib-search{width:100%;padding:.65rem .875rem;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--text);outline:none;margin-bottom:.75rem;transition:all .2s}
 .lib-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,107,53,.1)}
